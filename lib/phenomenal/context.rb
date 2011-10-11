@@ -1,15 +1,14 @@
 # Represent a first class context
 class Phenomenal::Context
   @@total_activations = 0
-  attr_accessor :name, :activation_age, :activation_frequency, :priority, 
-    :adaptations, :activation_count
+  attr_accessor :name, :activation_age, :activation_frequency, :priority, :adaptations, :activation_count
   
   def initialize(name, priority=nil)
-    self.name = name
-    self.priority = priority
-    self.activation_age = 0
-    self.activation_count = 0
-    self.adaptations = Array.new
+    @name = name
+    @priority = priority
+    @activation_age = 0
+    @activation_count = 0
+    @adaptations = Array.new
   end
   
   # Add a new method adaptation to the context
@@ -21,7 +20,7 @@ class Phenomenal::Context
         "#{klass.name}:#{method_name}"
       )
     else
-      adaptation = ContextAdaptation.new(self,klass, method_name,implementation)
+      adaptation = Phenomenal::Adaptation.new(self,klass, method_name,implementation)
       adaptations.push(adaptation)
       adaptation
     end
@@ -44,13 +43,13 @@ class Phenomenal::Context
   def activate
     @@total_activations = @@total_activations+1
     activation_age = @@total_activations
-    activation_count = activation_count+1
+    activation_count = activation_count()+1
   end
   
   # Deactivate the context
   def deactivate
     if activation_count>0
-      activation_count = activation_count-1
+      activation_count =  activation_count-1
     end
   end
   

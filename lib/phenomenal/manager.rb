@@ -2,8 +2,9 @@ require 'singleton'
 
 # This class manage the different contexts in the system, their creation
 # (de)activation, composition,....
-class ContextManager
+class Phenomenal::Manager
   include Singleton
+  include Phenomenal::ConflictPolicies
   
   attr_accessor :active_adaptations, :deployed_adaptations, :contexts
   
@@ -15,7 +16,7 @@ class ContextManager
         "There is already a context with name: #{context_name}"
       )
     end
-    contexts[context_name] = Context.new(context_name)
+    contexts[context_name] = Phenomenal::Context.new(context_name)
     nil
   end
 
@@ -64,7 +65,7 @@ class ContextManager
     end
     current_context = find_context(context_name)
     default_adaptation = find_context(:default).adaptations.find do|i| 
-        i.concern(klass,method_name)
+        i.concern?(klass,method_name)
       end
     if context_name!=:default && !default_adaptation
         save_default_adaptation(klass, method_name)
@@ -73,10 +74,105 @@ class ContextManager
       current_context.add_adaptation(klass,method_name,implementation)
     activate_adaptation(adaptation) if current_context.active?
   end
-  
-  #TODO Activate adaptation
 
+  # Remove an adaptation from context 'context_name'
+  def remove_adaptation(context_name,klass, method_name)
+    current_context = find_context(context_name)
+    adaptation = current_context.remove_adaptation(klass,method_name)
+    deactivate_adaptation(adaptation) if current_context.active?
+  end
+  
+  # Activate the context 'context_name' and deploy the related adaptation
+  def activate_context(context_name)
+    current_context = find_context(context_name)
+    current_context.activate
+    begin
+      current_context.adaptations.each{ |i| activate_adaptation(i) }
+    rescue Phenomenal::Error
+      deactivate_context(context_name) # rollback the deployed adaptations
+      raise # throw up the exception
+    end
+    nil
+  end
+  
+  # Deactivate 'context_name'
+  def deactivate_context(context_name)
+    current_context = find_context(context_name)
+    was_active = current_context.active?
+    current_context.deactivate
+    if was_active && !current_context.active?
+      current_context.adaptations.each{ |i| deactivate_adaptation(i) }
+    end
+    nil
+  end
+  
+  # Call the old implementation of the method 'caller.caller_method'
+  def proceed(calling_stack,instance,*args,&block)
+    calling_adaptation = find_adapatation(calling_stack)
+    
+    adaptations_stack = sorted_adaptations_for(calling_adaptation.klass,  
+      calling_adaptation.method_name)
+    calling_adaptation_index = adaptations_stack.find_index(calling_adaptation)
+
+    next_adaptation = adaptations_stack[calling_adaptation_index+1]
+
+    if next_adaptation.instance_adaptation?
+      next_adaptation.implementation
+        .phenomenal_bind(instance).call(*args,&block)
+    else
+      next_adaptation.implementation.phenomenal_bind_class(
+        next_adaptation.klass).call(*args,&block)
+    end
+  end
+
+  # Change the conflict resolution policy.
+  # These can be ones from the ConflictPolicies module or other ones
+  # Other one should return -1 or +1 following the resolution order
+  def change_conflict_policy (&block)
+    self.class.class_eval{define_method(:conflict_policy,&block)}
+  end
+  
   private
+  
+  # Activate the adaptation and redeploy the adaptations to take the new one
+  # one in account
+  def activate_adaptation(adaptation)
+    if !active_adaptations.include?(adaptation)
+      active_adaptations.push(adaptation)
+    end
+    redeploy_adaptation(adaptation.klass,adaptation.method_name)
+  end
+  
+  # Deactivate the adaptation and redeploy the adaptations if necessary
+  def deactivate_adaptation(adaptation)
+    active_adaptations.delete(adaptation)
+    if deployed_adaptations.include?(adaptation)
+      deployed_adaptations.delete(adaptation)
+      redeploy_adaptation(adaptation.klass,adaptation.method_name)
+    end
+  end
+  
+  # Redeploy the adaptations concerning klass.method_name according to the
+  # conflict policy
+  def redeploy_adaptation(klass, method_name)
+    to_deploy = resolve_conflict(klass,method_name)
+    # Do nothing when to_deploy==nil to break at default context deactivation
+    if !deployed_adaptations.include?(to_deploy) && to_deploy!=nil
+      deploy_adaptation(to_deploy)
+    end
+  end
+  
+  # Deploy the adaptation
+  def deploy_adaptation(adaptation)
+    to_undeploy = deployed_adaptations.find do |i|
+                          i.concern?(adaptation.klass,adaptation.method_name)
+                        end
+    if to_undeploy!=adaptation # if new adaptation
+      deployed_adaptations.delete(to_undeploy)
+      deployed_adaptations.push(adaptation)
+      adaptation.deploy
+    end
+  end
   
   # Save the default adaptation of a method, ie: the initial method
   def save_default_adaptation(klass, method_name)
@@ -90,15 +186,67 @@ class ContextManager
     activate_adaptation(adaptation) if default_context.active?
   end
   
-  # Return the context 'context_name'
-    def find_context(context_name)
-      if !has_context?(context_name)
-        Phenomenal::Logger.instance.error(
-          "There is no context with name: #{context_name}"
-        )
+  # Return the adaptation that math the calling_stack, on the basis of the
+  # file and the line number --> proceed is always called under an
+  # adaptation definition
+  def find_adapatation(calling_stack)
+    source = calling_stack[0]
+    source_info = source.scan(/(.+\.rb):(\d+)/)[0]
+    call_file = source_info[0]
+    call_line = source_info[1].to_i
+    i = 0
+    match = nil
+    relevants = active_adaptations.select{ |i| i.src_file == call_file }
+    # Sort by src_line DESC
+    relevants.sort!{ |a,b| b.src_line <=> a.src_line }
+    relevants.each do |adaptation|
+      if adaptation.src_line <= call_line # Find first matching line
+        match = adaptation
+        break
       end
-      contexts[context_name]
     end
+
+    if  match==nil
+      Phenomenal::Logger.instance.error(
+        "Inexistant adaptation for proceed call at #{call_file}:#{call_line}"
+      )
+    end
+#TODO
+#    rescue NameError
+#      Phenomenal::Logger.instance.error(
+#        "Error, proceed can only be called in an adaptation declaration"
+#      )
+#    end
+    match
+  end
+  
+  # Return the context 'context_name'
+  def find_context(context_name)
+    if !has_context?(context_name)
+      Phenomenal::Logger.instance.error(
+        "There is no context with name: #{context_name}"
+      )
+    end
+    contexts[context_name]
+  end
+  
+   # Return the best adaptation according to the resolution policy
+  def resolve_conflict(klass,method_name)
+    sorted_adaptations_for(klass,method_name).first
+  end
+  
+  # Return the adaptations for a particular method sorted with the
+  # conflict policy
+  def sorted_adaptations_for(klass,method_name)
+    relevant_adaptations =
+      active_adaptations.find_all { |i| i.concern?(klass, method_name) }
+    relevant_adaptations.sort!{|a,b| conflict_policy(a,b)}
+  end
+  
+  # Resolution policy
+  def conflict_policy(adaptation1, adaptation2)
+    no_resolution_conflict_policy(adaptation1, adaptation2)
+  end
     
   # Check wether context 'context_name' exist in the context manager
   def has_context?(context_name)
@@ -113,9 +261,9 @@ class ContextManager
 
   # Private constructor because this is a singleton object
   def initialize
-    self.contexts = Hash.new
-    self.deployed_adaptations = Array.new
-    self.active_adaptations = Array.new
+    @contexts = Hash.new
+    @deployed_adaptations = Array.new
+    @active_adaptations = Array.new
     init_default()
   end
 end

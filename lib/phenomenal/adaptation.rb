@@ -4,18 +4,18 @@ class  Phenomenal::Adaptation
                 :src_line
                 
   def initialize(context,klass, method_name, implementation)
-    self.context = context
-    self.klass = klass
-    self.method_name = method_name
-    self.implementation = implementation
+    @context = context
+    @klass = klass
+    @method_name = method_name
+    @implementation = implementation
     
     # Save the source location if any, this is used to find again the adaptation
     # in a ctxt_proceed call. It always exists except for method directly
     # implemented in C -> Not a problem because these one never use ctxt_proceed
     source_location = implementation.source_location
     if source_location
-      self.src_file = implementation.source_location[0]
-      self.src_line = implementation.source_location[1]
+      @src_file = implementation.source_location[0]
+      @src_line = implementation.source_location[1]
     end
   end
 
