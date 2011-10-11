@@ -7,13 +7,14 @@ module Phenomenal::ConflictPolicies
       elsif adaptation2.context.name==:default
         -1
       else #Fail if two non default adaptations
-        raise(ContextError,
-            "Error: Illegal duplicate adapation of #{adaptation1.to_s}")
+        Phenomenal::Logger.instance.error(
+            "Error: Illegal duplicate adapation of #{adaptation1.to_s}"
+        )
       end
     end
 
     # Age based conflict resolution
     def age_conflict_policy(adaptation1, adaptation2)
-       adaptation1.context.activation_age <=> adaptation2.context.activation_age
+       pnml_context_age(adaptation1.context.name) <=> pnml_context_age(adaptation2.context.name)
     end
 end

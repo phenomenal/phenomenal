@@ -109,20 +109,17 @@ class Phenomenal::Manager
   # Call the old implementation of the method 'caller.caller_method'
   def proceed(calling_stack,instance,*args,&block)
     calling_adaptation = find_adapatation(calling_stack)
-    
+    #TODO Problems will appears if proceed called in a file where
+    # adaptations are defined but not in one of them=> how to check?
+    #TODO Problems will also appears if two adaptations are defined on the same
+    # line using the ';' some check needed at add_adaptation ?
     adaptations_stack = sorted_adaptations_for(calling_adaptation.klass,  
       calling_adaptation.method_name)
     calling_adaptation_index = adaptations_stack.find_index(calling_adaptation)
 
     next_adaptation = adaptations_stack[calling_adaptation_index+1]
 
-    if next_adaptation.instance_adaptation?
-      next_adaptation.implementation
-        .phenomenal_bind(instance).call(*args,&block)
-    else
-      next_adaptation.implementation.phenomenal_bind_class(
-        next_adaptation.klass).call(*args,&block)
-    end
+    next_adaptation.bind(instance,*args, &block)
   end
 
   # Change the conflict resolution policy.
@@ -131,9 +128,40 @@ class Phenomenal::Manager
   def change_conflict_policy (&block)
     self.class.class_eval{define_method(:conflict_policy,&block)}
   end
+
+  # Return the activation age of the context:
+  #  The age counter minus the age counter when the context was activated
+  #  for the last time
+  #TODO Good place for this one ?
+  def context_age(context)
+    current_context = find_context(context)
+    if current_context.activation_age == 0
+      Phenomenal::Context.total_activations
+    else
+      Phenomenal::Context.total_activations-current_context.activation_age
+    end
+  end
   
+  
+  # Return context informations:
+  #   - name
+  #   - List of the adaptations names
+  #   - active state
+  #   - activation age
+  def context_informations(context_name)
+    context = find_context(context_name)
+    adaptations_array = Array.new
+    context.adaptations.each{ |i| adaptations_array.push(i.to_s) }
+    {
+      :name=>context.name,
+      :adaptations=>adaptations_array,
+      :active=>context.active?,
+      :activation_age=>context_age(context_name)
+    }
+  end
+  
+  # ==== Private methods ==== #
   private
-  
   # Activate the adaptation and redeploy the adaptations to take the new one
   # one in account
   def activate_adaptation(adaptation)
@@ -211,12 +239,6 @@ class Phenomenal::Manager
         "Inexistant adaptation for proceed call at #{call_file}:#{call_line}"
       )
     end
-#TODO
-#    rescue NameError
-#      Phenomenal::Logger.instance.error(
-#        "Error, proceed can only be called in an adaptation declaration"
-#      )
-#    end
     match
   end
   

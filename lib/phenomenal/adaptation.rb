@@ -22,10 +22,33 @@ class  Phenomenal::Adaptation
   # Deploy actually the adaptation in the target class by overriding the current
   # implementation
   def deploy
+    method_name = self.method_name
+    implementation = self.implementation
     if instance_adaptation?
       klass.class_eval { define_method(method_name, implementation) }
     else
       klass.define_singleton_method(method_name,implementation)
+    end
+  end
+  
+  #TODO check for better implem
+  #TODO we are forced to keep unBoundMethod bind code, 
+  #     so allow user to use unbound meth?
+  # Bind the implementation corresponding to this adaptation to 'instance' when
+  # instance_method or to implementation klass when class method 
+  def bind(instance,*args,&block)
+    if instance_adaptation?
+      if implementation.class==Proc
+        implementation.phenomenal_bind(instance).call(*args,&block)
+      else
+        implementation.bind(instance).call(*args,&block)
+      end
+    else
+      if implementation.class==Proc
+        implementation.phenomenal_class_bind(klass).call(*args,&block)
+      else
+        implementation.call(*args,&block)
+      end
     end
   end
   

@@ -1,0 +1,4 @@
+Build gem command: 
+  gem build phenomenal.gemspec
+Test gem command: 
+  rake test
