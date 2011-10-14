@@ -59,7 +59,7 @@ class Phenomenal::Manager
       Phenomenal::Logger.instance.error(
         "Error: Illegal adaptation for context #{context_name},the adaptation "+ 
         "have to keep the original method arity for method: " +
-        "#{klass.name}.#{method_name}: (#{meth.arity} instead of " +
+        "#{klass.name}.#{method_name}: (#{method.arity} instead of " +
         "#{implementation.arity})" 
       )
     end
@@ -161,15 +161,8 @@ class Phenomenal::Manager
     }
   end
   
-  def deactivate_all_contexts
-    contexts.each do |k,v|
-      if k!=:default
-        while v.active?
-          deactivate_context(k)
-        end
-      end
-    end
-    nil
+  def defined_contexts
+    contexts.keys
   end
   
   # ==== Private methods ==== #
