@@ -168,6 +168,7 @@ class Phenomenal::Manager
           deactivate_context(context.name)
         end
       end
+    end
   end
   
   # ==== Private methods ==== #
