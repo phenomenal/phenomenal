@@ -95,6 +95,7 @@ class Phenomenal::Manager
     nil
   end
   
+  #TODO contexts task
   # Deactivate 'context_name'
   def deactivate_context(context_name)
     current_context = find_context(context_name)
@@ -158,6 +159,15 @@ class Phenomenal::Manager
       :active=>context.active?,
       :activation_age=>context_age(context_name)
     }
+  end
+  
+  def deactivate_all_contexts
+    contexts.each do |context|
+      if context.name!=:default
+        while context.active?
+          deactivate_context(context.name)
+        end
+      end
   end
   
   # ==== Private methods ==== #
