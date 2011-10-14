@@ -162,13 +162,14 @@ class Phenomenal::Manager
   end
   
   def deactivate_all_contexts
-    contexts.each do |context|
-      if context.name!=:default
-        while context.active?
-          deactivate_context(context.name)
+    contexts.each do |k,v|
+      if k!=:default
+        while v.active?
+          deactivate_context(k)
         end
       end
     end
+    nil
   end
   
   # ==== Private methods ==== #
