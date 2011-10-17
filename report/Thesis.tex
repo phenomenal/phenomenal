@@ -1,0 +1,122 @@
+\documentclass[a4paper,11pt,twoside]{ThesisStyle}
+
+\include{formatAndDefs}
+\include{listings}
+\usepackage{titlesec}
+\usepackage{changepage}
+\usepackage{tabularx}
+
+\usepackage{epstopdf}
+
+
+
+
+\newcommand{\fwshort}{Phenomenal gem}
+\newcommand{\fwlong}{A context-oriented language extension for the Ruby language.}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\hRule}{\rule{\linewidth}{0.1mm}}
+\def \doctitle {Phenomenal gem}
+\def \docsubtitle {}
+\def \doccourssigle{LSINF2990}
+\def \doccourstitle{Master Thesis}
+\def \docauthor {Thibault {\sc Poncelet}\\\emph{Year :} SINF 22 MS\\\emph{Noma :} 00-00-07-00}
+\def \docauthor {Thibault {\sc Poncelet}\\\emph{Year :} SINF 22 MS\\\emph{Noma :} 58-14-07-00}
+\def \docprofessor{Kim \textsc{MENS}}
+\def \docassistant{Sebastian Andres \textsc{Gonzalez Montesinos}}
+
+
+
+\usepackage{mdwlist} %reduce itemize item spacing
+\usepackage{placeins} 
+
+\usepackage[plain]{fancyref}
+\def\fref{\Fref} % treat all \frefs as \Frefs
+% Define 'lst' delimiter for fancyref
+\newcommand*{\fancyreflstlabelprefix}{lst}
+\newcommand*{\Freflstname}{\lstlistingname}
+\newcommand*{\freflstname}{\MakeLowercase{\lstlistingname}}
+\Frefformat{vario}{\fancyreflstlabelprefix}%
+ {\Freflstname\fancyrefdefaultspacing#1#3}
+
+\frefformat{vario}{\fancyreflstlabelprefix}%
+ {\freflstname\fancyrefdefaultspacing#1#3}
+\Frefformat{plain}{\fancyreflstlabelprefix}%
+ {\Freflstname\fancyrefdefaultspacing#1}
+\frefformat{plain}{\fancyreflstlabelprefix}%%
+ {\freflstname\fancyrefdefaultspacing#1}
+
+
+
+
+
+\usepackage{wrapfig}
+\includeonly{titlepage}
+%\includeonly{titlepage,content/androidinjava/androidjava}
+%\includeonly{titlepage,content/Intro/abstract,content/Intro/thanks,content/Intro/intro}
+%\includeonly{titlepage,content/Intro/abstract,content/Intro/intro,content/conclusion/futurework,content/conclusion/conclusion}
+%\includeonly{content/cityvisit/cityvisit,content/cityvisit/data}
+%\includeonly{content/scopj/scopj}
+%======================
+%	DOCUMENT
+%======================
+
+\begin{document}
+\dominitoc
+
+
+
+\include{titlepage}
+
+\pagenumbering{arabic}
+
+%\include{content/Intro/abstract}
+%\include{content/Intro/thanks}
+\faketableofcontents
+%\tableofcontents
+
+
+\mainmatter
+%\include{content/Intro/intro}
+
+%==========================
+%       PART 1
+%==========================
+
+%\include{content/cop/cop}
+%\include{content/androidinjava/androidjava}
+%\include{content/comparisonCOP/comparison}
+%\include{content/reflection/reflection}
+
+
+%==========================
+%       PART 2
+%==========================
+
+%\include{content/scopj/scopj}
+%\include{content/scopj/implementation}
+%\include{content/scopj/threading}
+
+
+%==========================
+%       PART 3
+%==========================
+
+%\include{content/cityvisit/cityvisit}
+%\include{content/efficiency/efficiency}
+%\include{content/conclusion/futurework}
+%\include{content/conclusion/conclusion}
+
+
+\appendix
+
+%\include{content/cityvisit/data}
+
+\bibliographystyle{ThesisStyle}
+\bibliography{Thesis}
+
+%\printnomenclature
+
+%\cleardoublepage
+
+
+\end{document}
