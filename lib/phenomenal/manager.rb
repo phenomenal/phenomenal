@@ -5,106 +5,63 @@ require 'singleton'
 class Phenomenal::Manager
   include Singleton
   include Phenomenal::ConflictPolicies
+  include Phenomenal::DSL
   
-  attr_accessor :active_adaptations, :deployed_adaptations, :contexts
+  attr_accessor :active_adaptations, :deployed_adaptations, :contexts, :default_context
   
-  # Create the context 'context_name'
-  # If it doesn't already exist
-  def define_context(context_name)
-    if has_context?(context_name)
+  def register_context(context)
+    if has_context?(context)
       Phenomenal::Logger.instance.error(
-        "There is already a context with name: #{context_name}"
+        "The context #{context} is already registered"
       )
     end
-    contexts[context_name] = Phenomenal::Context.new(context_name)
-    nil
-  end
-
-  # Destroy the context 'context_name', if default context => reset it
-  def forget_context(context_name)
-    if context_active?(context_name)
+    if context.name && has_context?(context.name)
       Phenomenal::Logger.instance.error(
-        "Active context cannot be forgotten"
+        "There is already a context with name: #{context.name}." + 
+        " If you want to have named context it has to be a globally unique name"
+      )
+    end
+    contexts[context.__id__]=context
+  end
+  
+  def unregister_context(context)
+    if context==default_context && !contexts.size==1
+      Phenomenal::Logger.instance.error(
+        "Default context can only be forgotten when alone"
       )
     else
-      if context_name==:default && !contexts.size==1
-        Phenomenal::Logger.instance.error(
-          "Default context can only be forgotten when alone"
-        )
-      else
-        contexts.delete(context_name)
-        init_default() if context_name==:default
-      end
+      contexts.delete(context.__id__)
+      init_default() if context==default_context
     end
   end
   
-  # Check wether context 'context_name' is currently active
-  def context_active?(context_name)
-    find_context(context_name).active?
+  def register_adaptation(adaptation)
+    default_adaptation = default_context.adaptations.find do|i| 
+      i.concern?(adaptation.klass,adaptation.method_name)
+    end
+    if adaptation.context!=default_context && !default_adaptation
+      save_default_adaptation(adaptation.klass, adaptation.method_name)
+    end
+    activate_adaptation(adaptation) if adaptation.context.active?
   end
   
-  # Add a new adaptation to context 'context_name'
-  def add_adaptation(context_name, klass, method_name, &implementation)
-    if klass.instance_methods.include?(method_name)
-      method = klass.instance_method(method_name)
-    elsif klass.methods.include?(method_name)
-      method = klass.method(method_name)
-    else
-      Phenomenal::Logger.instance.error(
-        "Error: Illegal adaptation for context #{context_name},a method with "+
-        "name: #{method_name} should exist in class #{klass.name} to be adapted"
-      )
-    end
-    if method.arity != implementation.arity
-      Phenomenal::Logger.instance.error(
-        "Error: Illegal adaptation for context #{context_name},the adaptation "+ 
-        "have to keep the original method arity for method: " +
-        "#{klass.name}.#{method_name}: (#{method.arity} instead of " +
-        "#{implementation.arity})" 
-      )
-    end
-    current_context = find_context(context_name)
-    default_adaptation = find_context(:default).adaptations.find do|i| 
-        i.concern?(klass,method_name)
-      end
-    if context_name!=:default && !default_adaptation
-        save_default_adaptation(klass, method_name)
-    end
-    adaptation = 
-      current_context.add_adaptation(klass,method_name,implementation)
-    activate_adaptation(adaptation) if current_context.active?
-  end
-
-  # Remove an adaptation from context 'context_name'
-  def remove_adaptation(context_name,klass, method_name)
-    current_context = find_context(context_name)
-    adaptation = current_context.remove_adaptation(klass,method_name)
-    deactivate_adaptation(adaptation) if current_context.active?
+  def unregister_adaptation(adaptation)
+    deactivate_adaptation(adaptation) if adaptation.context.active?
   end
   
-  # Activate the context 'context_name' and deploy the related adaptation
-  def activate_context(context_name)
-    current_context = find_context(context_name)
-    current_context.activate
+  # Activate the context 'context' and deploy the related adaptation
+  def activate_context(context)
     begin
-      current_context.adaptations.each{ |i| activate_adaptation(i) }
+      context.adaptations.each{ |i| activate_adaptation(i) }
     rescue Phenomenal::Error
-      deactivate_context(context_name) # rollback the deployed adaptations
+      context.deactivate # rollback the deployed adaptations
       raise # throw up the exception
     end
-    nil
   end
   
-  #TODO contexts task
-  # Deactivate 'context_name'
-  def deactivate_context(context_name)
-    current_context = find_context(context_name)
-    was_active = current_context.active?
-    current_context.deactivate
-    if was_active && !current_context.active?
-      current_context.adaptations.each{ |i| deactivate_adaptation(i) }
-    end
-    nil
+  def deactivate_context(context)
+    context.adaptations.each{ |i| 
+    deactivate_adaptation(i) }
   end
   
   # Call the old implementation of the method 'caller.caller_method'
@@ -122,49 +79,33 @@ class Phenomenal::Manager
 
     next_adaptation.bind(instance,*args, &block)
   end
-
+  
   # Change the conflict resolution policy.
   # These can be ones from the ConflictPolicies module or other ones
   # Other one should return -1 or +1 following the resolution order
   def change_conflict_policy (&block)
     self.class.class_eval{define_method(:conflict_policy,&block)}
   end
-
-  # Return the activation age of the context:
-  #  The age counter minus the age counter when the context was activated
-  #  for the last time
-  #TODO Good place for this one ?
-  def context_age(context)
-    current_context = find_context(context)
-    if current_context.activation_age == 0
-      Phenomenal::Context.total_activations
+  
+  def find_context(context)
+    find=nil
+    if context.class!=Phenomenal::Context
+      a = contexts.find{|k,v| v.name==context}
+      if a
+        find = a[1]
+      end
     else
-      Phenomenal::Context.total_activations-current_context.activation_age
+      find = context if contexts.has_key?(context.__id__)
+    end
+    if find
+      find
+    else
+      Phenomenal::Logger.instance.error(
+        "Unknown context #{context}"
+      )
     end
   end
-  
-  
-  # Return context informations:
-  #   - name
-  #   - List of the adaptations names
-  #   - active state
-  #   - activation age
-  def context_informations(context_name)
-    context = find_context(context_name)
-    adaptations_array = Array.new
-    context.adaptations.each{ |i| adaptations_array.push(i.to_s) }
-    {
-      :name=>context.name,
-      :adaptations=>adaptations_array,
-      :active=>context.active?,
-      :activation_age=>context_age(context_name)
-    }
-  end
-  
-  def defined_contexts
-    contexts.keys
-  end
-  
+
   # ==== Private methods ==== #
   private
   # Activate the adaptation and redeploy the adaptations to take the new one
@@ -209,14 +150,12 @@ class Phenomenal::Manager
   
   # Save the default adaptation of a method, ie: the initial method
   def save_default_adaptation(klass, method_name)
-    default_context = find_context(:default)
     if klass.instance_methods.include?(method_name)
       method = klass.instance_method(method_name)
     else
       method = klass.method(method_name)
     end
     adaptation = default_context.add_adaptation(klass,method_name,method)
-    activate_adaptation(adaptation) if default_context.active?
   end
   
   # Return the adaptation that math the calling_stack, on the basis of the
@@ -247,16 +186,6 @@ class Phenomenal::Manager
     match
   end
   
-  # Return the context 'context_name'
-  def find_context(context_name)
-    if !has_context?(context_name)
-      Phenomenal::Logger.instance.error(
-        "There is no context with name: #{context_name}"
-      )
-    end
-    contexts[context_name]
-  end
-  
    # Return the best adaptation according to the resolution policy
   def resolve_conflict(klass,method_name)
     sorted_adaptations_for(klass,method_name).first
@@ -275,15 +204,20 @@ class Phenomenal::Manager
     no_resolution_conflict_policy(adaptation1, adaptation2)
   end
     
-  # Check wether context 'context_name' exist in the context manager
-  def has_context?(context_name)
-    contexts.has_key?(context_name)
+  # Check wether context 'context' exist in the context manager
+  # Context can be either the context name or the context instance itself
+  def has_context?(context)
+    if context.class==Phenomenal::Context
+      contexts.has_key?(context.__id__)
+    else
+      contexts.find{|k,v| v.name==context}!=nil
+    end
   end
   
    # Set the default context
   def init_default
-    define_context(:default)
-    activate_context(:default)
+    self.default_context= Phenomenal::Context.new(nil,nil,self)
+    self.default_context.activate
   end
 
   # Private constructor because this is a singleton object

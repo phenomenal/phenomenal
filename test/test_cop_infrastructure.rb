@@ -14,6 +14,7 @@ class TestCopInfrastructure < Test::Unit::TestCase
     assert_respond_to(context, :deactivate,
       "The deactivate method doesn't exist")
     assert_respond_to(context, :active?, "The is_active method doesn't exist")
+    @cm.unregister_context(context)
   end
 
   def test_creation
@@ -24,20 +25,22 @@ class TestCopInfrastructure < Test::Unit::TestCase
       (context.active?.is_a?(TrueClass) || context.active?.is_a?(FalseClass)),
       "The context should be either active (true) or inactive (false).")
     assert(!context.active?, "A fresh context should not be initially active.")
+    @cm.unregister_context(context)
   end
 
   def test_activation
     context_name=:test
     context = Phenomenal::Context.new(context_name)
     assert(!context.active?, "A fresh context should not be initially active.")
-    assert_equal(context_name,context.activate,
-      "Phenomenal::Context activation should return the name of the context")
+    assert_equal(context,context.activate,
+      "Phenomenal::Context activation should return the context")
     assert(context.active?,
       "Activation should leave the context in an active state")
-    assert_equal(context_name,context.deactivate,
-      "Phenomenal::Context deactivation should return the name of the context")
+    assert_equal(context,context.deactivate,
+      "Phenomenal::Context deactivation should return the context")
     assert(!context.active?,
       "Deactivation should leave the context in an inactive state")
+      @cm.unregister_context(context)
   end
 
   def test_redundant_activation
@@ -52,6 +55,7 @@ class TestCopInfrastructure < Test::Unit::TestCase
     context.deactivate
     assert(!context.active?,
       "Should become inactive after matching number of deactivations")
+      @cm.unregister_context(context)
   end
 
   def test_redundant_deactivation
@@ -69,6 +73,7 @@ class TestCopInfrastructure < Test::Unit::TestCase
 	  context.deactivate
 	  assert(!context.active?,
 	    "Deactivation does not accumulate once the context is already inactive")
+	    @cm.unregister_context(context)
   end
 
   def test_context_name
@@ -77,51 +82,47 @@ class TestCopInfrastructure < Test::Unit::TestCase
     assert_respond_to(context, :name, "Contexts should have a name")
     assert_equal(context_name,context.name,
       "A fresh context should be the definition name")
+      @cm.unregister_context(context)
   end
 
   def test_default
    assert_nothing_raised(Phenomenal::Error,"Default context should exist"){
-    @cm.context_informations(:default)[:name]}
+    @cm.default_context.informations[:name]}
 
-    assert(@cm.context_active?(:default),
+    assert(@cm.default_context.active?,
       "The default context should normally be active")
   end
 
   def test_default_forget
-    old_informations = @cm.context_informations(:default)
-    assert_respond_to(@cm, :forget_context,
+    old_informations = @cm.default_context.informations
+    assert_respond_to(@cm, :unregister_context,
       "Method to drop unneeded contexts should exist")
-    assert(@cm.context_active?(:default),
+    assert(@cm.default_context.active?,
       "The default context should be initialy active")
     assert_raise(Phenomenal::Error,
       "An active context cannot be thrown away"){
-      @cm.forget_context(:default) }
-	  @cm.deactivate_context(:default)
-    assert(!@cm.context_active?(:default), "Default should be inactive")
+      @cm.default_context.forget }
+	  @cm.default_context.deactivate
+    assert(!@cm.default_context.active?, "Default should be inactive")
     assert_nothing_raised(Phenomenal::Error,
       "It should be possible to forget an inactive context"){
-      @cm.forget_context(:default) }
+      @cm.default_context.forget }
   	assert_nothing_raised(Phenomenal::Error,
   	  %(Default context assumptions should hold for freshly
   	  created default context)){
-  	  @cm.activate_context(:default) }
+  	  @cm.default_context.activate }
   	  #TODO
 		#assert(old_informations[:creation_time]!=
 		  #@cm.context_informations(:default)[:creation_time],
 		  #"Fresh default context should not be the default context just forgotten")
-		assert(@cm.context_active?(:default), "Default should be active")
+		assert(@cm.default_context.activate, "Default should be active")
 	end
 
-	def test_default_name
-	  assert_equal(:default, @cm.context_informations(:default)[:name],
-	    "Phenomenal::Context default name should be :default")
-  end
-
   def test_adaptation_api
-    assert_respond_to(@cm, :add_adaptation,
+    assert_respond_to(@cm, :register_adaptation,
       "Phenomenal::Context manager should allow to adapt methods")
 
-    assert_respond_to(@cm, :remove_adaptation,
+    assert_respond_to(@cm, :unregister_adaptation,
       "Phenomenal::Context manager should allow to deadapt methods")
   end
 end

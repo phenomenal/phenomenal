@@ -2,9 +2,9 @@
 module Phenomenal::ConflictPolicies
   # Prefer not default adaptation, error if two not default ones
     def no_resolution_conflict_policy(adaptation1,adaptation2)
-      if adaptation1.context.name==:default
+      if adaptation1.context==default_context()
         1
-      elsif adaptation2.context.name==:default
+      elsif adaptation2.context.name==default_context()
         -1
       else #Fail if two non default adaptations
         Phenomenal::Logger.instance.error(
@@ -15,6 +15,6 @@ module Phenomenal::ConflictPolicies
 
     # Age based conflict resolution
     def age_conflict_policy(adaptation1, adaptation2)
-       pnml_context_age(adaptation1.context.name) <=> pnml_context_age(adaptation2.context.name)
+       adaptation1.context.age <=> adaptation2.context.age
     end
 end

@@ -1,5 +1,4 @@
 require_relative 'lib/phenomenal.rb'
-
 class Foo
   def initialize
     @inst_var = "bar"

@@ -36,19 +36,21 @@ class TestCopConflictPolicy < Test::Unit::TestCase
   end
 
   def test_protocol_age_policy
-    assert(pnml_context_informations(:default)[:activation_age].kind_of?(Fixnum),
+    assert(pnml_context_informations(pnml_default_context)[:activation_age].kind_of?(Fixnum),
       "Contexts should have the age property")
   end
 
   def test_activation_age_policy
     pnml_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
-    assert(pnml_context_active?(:default), "Default context should normally be active")
+    puts "llll #{pnml_default_context.class}"
+    assert(pnml_context_active?(pnml_default_context), 
+      "Default context should normally be active")
     assert(!pnml_context_active?(:screening), "Context1 should be inactive")
     assert(!pnml_context_active?(:quiet),"Context2 should be inactive")
 
     pnml_activate_context(:screening)
     assert(pnml_context_informations(:screening)[:activation_age] <
-            pnml_context_informations(:default)[:activation_age],
+            pnml_context_informations(pnml_default_context)[:activation_age],
             "screening context has been activated more recently than default")
 
     pnml_activate_context(:quiet)
@@ -56,7 +58,7 @@ class TestCopConflictPolicy < Test::Unit::TestCase
             pnml_context_informations(:screening)[:activation_age],
             "quiet context has been activated more recently than screening")
     assert(pnml_context_informations(:screening)[:activation_age] <
-            pnml_context_informations(:default)[:activation_age],
+            pnml_context_informations(pnml_default_context)[:activation_age],
             "quiet context has still been activated more recently than default")
     pnml_deactivate_context(:quiet)
     pnml_deactivate_context(:screening)
