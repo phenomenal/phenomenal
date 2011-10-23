@@ -2,7 +2,8 @@
 class Phenomenal::Context
   @@total_activations = 0
    
-  attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, :activation_count
+  attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
+    :activation_count
   attr_reader :manager,:name
   
   def initialize(name=nil, priority=nil,manager=nil)
@@ -15,6 +16,10 @@ class Phenomenal::Context
     @manager.register_context(self)
   end
   
+  # Unregister the context from the context manager,
+  # This context shoudn't be used after.
+  # The context has to be inactive before being forgetted
+  # TODO Find a way to avoid the use of forgeted context (use forgeted flag?)
   def forget
     if active?
       Phenomenal::Logger.instance.error(
@@ -44,7 +49,8 @@ class Phenomenal::Context
       else
         Phenomenal::Logger.instance.error(
           "Error: Illegal adaptation for context #{self},a method with "+
-          "name: #{method_name} should exist in class #{klass.name} to be adapted"
+          "name: #{method_name} should exist in class #{klass.name} to "+ 
+          "be adapted"
         )
       end
       if method.arity != implementation.arity
@@ -56,7 +62,9 @@ class Phenomenal::Context
         )
       end
       
-      adaptation = Phenomenal::Adaptation.new(self,klass, method_name,implementation)
+      adaptation = Phenomenal::Adaptation.new(
+        self, klass, method_name, implementation
+      )
       adaptations.push(adaptation)
       manager.register_adaptation(adaptation)
       adaptation
@@ -107,7 +115,6 @@ class Phenomenal::Context
   # Return the activation age of the context:
   #  The age counter minus the age counter when the context was activated
   #  for the last time
-  #TODO Good place for this one ?
   def age
     if activation_age == 0
       @@total_activations
@@ -130,6 +137,7 @@ class Phenomenal::Context
     }
   end
   
+  # String representation of the context
   def to_s
     if name
       name.to_s

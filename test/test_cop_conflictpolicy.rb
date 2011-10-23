@@ -36,7 +36,8 @@ class TestCopConflictPolicy < Test::Unit::TestCase
   end
 
   def test_protocol_age_policy
-    assert(pnml_context_informations(pnml_default_context)[:activation_age].kind_of?(Fixnum),
+    assert(pnml_context_informations(
+      pnml_default_context)[:activation_age].kind_of?(Fixnum),
       "Contexts should have the age property")
   end
 

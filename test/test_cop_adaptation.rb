@@ -89,7 +89,9 @@ class TestCopAdaptation < Test::Unit::TestCase
   def test_conflicting_activation
     assert(!pnml_context_active?(:quiet))
     assert_nothing_raised(Phenomenal::Error,
-      "Shoud be OK to activate the quiet context"){ pnml_activate_context(:quiet) }
+      "Shoud be OK to activate the quiet context") do 
+        pnml_activate_context(:quiet) 
+      end
     assert(pnml_context_active?(:quiet))
     assert(!pnml_context_active?(:offHook))
     assert_raise(Phenomenal::Error,

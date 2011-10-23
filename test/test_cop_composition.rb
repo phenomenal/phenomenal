@@ -24,8 +24,9 @@ class TestCopComposition < Test::Unit::TestCase
   end
 
   def test_invalid_proceed
-    assert_raise(Phenomenal::Error, %( Proceed cannot be used outside adaptation of
-                                  other methods)) {pnml_proceed}
+    assert_raise(Phenomenal::Error, %( 
+      Proceed cannot be used outside adaptation of
+     other methods)) {pnml_proceed}
   end
 
   def test_simple_composition_noargs

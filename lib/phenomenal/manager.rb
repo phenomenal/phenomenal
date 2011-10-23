@@ -1,14 +1,14 @@
 require 'singleton'
 
-# This class manage the different contexts in the system, their creation
-# (de)activation, composition,....
+# This class manage the different contexts in the system and their interactions
 class Phenomenal::Manager
   include Singleton
   include Phenomenal::ConflictPolicies
-  include Phenomenal::DSL
   
-  attr_accessor :active_adaptations, :deployed_adaptations, :contexts, :default_context
+  attr_accessor :active_adaptations, :deployed_adaptations, 
+    :contexts, :default_context
   
+  # Register a new context 
   def register_context(context)
     if has_context?(context)
       Phenomenal::Logger.instance.error(
@@ -24,6 +24,7 @@ class Phenomenal::Manager
     contexts[context.__id__]=context
   end
   
+  # Unregister a context (forget)
   def unregister_context(context)
     if context==default_context && !contexts.size==1
       Phenomenal::Logger.instance.error(
@@ -35,6 +36,7 @@ class Phenomenal::Manager
     end
   end
   
+  # Register a new adaptation for a registered context
   def register_adaptation(adaptation)
     default_adaptation = default_context.adaptations.find do|i| 
       i.concern?(adaptation.klass,adaptation.method_name)
@@ -45,6 +47,7 @@ class Phenomenal::Manager
     activate_adaptation(adaptation) if adaptation.context.active?
   end
   
+  # Unregister an adaptation for a registered context
   def unregister_adaptation(adaptation)
     deactivate_adaptation(adaptation) if adaptation.context.active?
   end
@@ -59,6 +62,7 @@ class Phenomenal::Manager
     end
   end
   
+  # Deactivate the adaptations (undeploy if needed)
   def deactivate_context(context)
     context.adaptations.each{ |i| 
     deactivate_adaptation(i) }
@@ -87,6 +91,10 @@ class Phenomenal::Manager
     self.class.class_eval{define_method(:conflict_policy,&block)}
   end
   
+  # Return the corresponding context or raise an error if the context isn't 
+  # currently registered.
+  # The 'context' parameter can be either a reference to a context instance or
+  # a Symbol with the name of a named (not anonymous) context.
   def find_context(context)
     find=nil
     if context.class!=Phenomenal::Context
