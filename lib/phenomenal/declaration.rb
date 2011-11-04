@@ -4,7 +4,7 @@ class Phenomenal::Declaration
   # to get the caller class
   def self.method_missing(method_name, *args, &block)  
     if method_name==:pnml_def
-      context_name=self.class.name
+      context_name=self.name
       if not Phenomenal::Manager.instance.context_defined?(context_name)
         Phenomenal::Context.new(context_name)   
       end
