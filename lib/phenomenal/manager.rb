@@ -1,5 +1,4 @@
 require 'singleton'
-
 # This class manage the different contexts in the system and their interactions
 class Phenomenal::Manager
   include Singleton
@@ -10,12 +9,12 @@ class Phenomenal::Manager
   
   # Register a new context 
   def register_context(context)
-    if has_context?(context)
+    if context_defined?(context)
       Phenomenal::Logger.instance.error(
         "The context #{context} is already registered"
       )
     end
-    if context.name && has_context?(context.name)
+    if context.name && context_defined?(context.name)
       Phenomenal::Logger.instance.error(
         "There is already a context with name: #{context.name}." + 
         " If you want to have named context it has to be a globally unique name"
@@ -113,7 +112,15 @@ class Phenomenal::Manager
       )
     end
   end
-
+  # Check wether context 'context' exist in the context manager
+  # Context can be either the context name or the context instance itself
+  def context_defined?(context)
+    if context.class==Phenomenal::Context
+      contexts.has_key?(context.__id__)
+    else
+      contexts.find{|k,v| v.name==context}!=nil
+    end
+  end
   # ==== Private methods ==== #
   private
   # Activate the adaptation and redeploy the adaptations to take the new one
@@ -210,16 +217,6 @@ class Phenomenal::Manager
   # Resolution policy
   def conflict_policy(adaptation1, adaptation2)
     no_resolution_conflict_policy(adaptation1, adaptation2)
-  end
-    
-  # Check wether context 'context' exist in the context manager
-  # Context can be either the context name or the context instance itself
-  def has_context?(context)
-    if context.class==Phenomenal::Context
-      contexts.has_key?(context.__id__)
-    else
-      contexts.find{|k,v| v.name==context}!=nil
-    end
   end
   
    # Set the default context

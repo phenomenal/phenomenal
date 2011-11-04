@@ -7,5 +7,6 @@ require_relative "./phenomenal/logger.rb"
 require_relative "./phenomenal/manager.rb"
 require_relative "./phenomenal/proc.rb"
 require_relative "./phenomenal/dsl.rb"
+require_relative "./phenomenal/declaration.rb"
 
 
