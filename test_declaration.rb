@@ -4,7 +4,7 @@ class TestClass
   end
 end
 class Phenomenal::TestDeclaration < Phenomenal::Declaration
-  def test
+  def self.test
     pnml_def(TestClass, :print) do |p|
       puts p
     end
@@ -12,5 +12,5 @@ class Phenomenal::TestDeclaration < Phenomenal::Declaration
   end
 end
 
-Phenomenal::TestDeclaration.new.test
+Phenomenal::TestDeclaration.test
 TestClass.new.print("plop")

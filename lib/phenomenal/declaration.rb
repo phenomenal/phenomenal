@@ -2,7 +2,7 @@ class Phenomenal::Declaration
   
   # Catch pnml_def to define context/adaptation, use method_missing 
   # to get the caller class
-  def method_missing(method_name, *args, &block)  
+  def self.method_missing(method_name, *args, &block)  
     if method_name==:pnml_def
       context_name=self.class.name
       if not Phenomenal::Manager.instance.context_defined?(context_name)
