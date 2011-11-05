@@ -142,7 +142,7 @@ class Phenomenal::Context
     if name
       name.to_s
     else
-      "anonymous context"
+      "Anonymous context"
     end
   end
 end
