@@ -3,14 +3,15 @@ class TestClass
   def print(p)
   end
 end
-class Phenomenal::TestDeclaration < Phenomenal::Declaration
-  def self.test
-    pnml_def(TestClass, :print) do |p|
-      puts p
-    end
-    Phenomenal::Manager.instance.find_context(self.class.name).activate
+
+class Phenomenal::TestDeclaration
+  act_as_context
+
+  adaptations_for TestClass
+  adapt :print  do |p|
+    puts p
   end
 end
 
-Phenomenal::TestDeclaration.test
+Phenomenal::Manager.instance.find_context("Phenomenal::TestDeclaration").activate
 TestClass.new.print("plop")

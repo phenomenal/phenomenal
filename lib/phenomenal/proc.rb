@@ -1,4 +1,4 @@
-# Add methods to roc object
+# Add methods to Proc classe
 class Proc
   # Define a bind method on Proc object,
   # This allow to execute a Proc as it was an instance method of reciever

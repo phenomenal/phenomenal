@@ -70,8 +70,27 @@ module Phenomenal::DSL
   end
 end
 
-
 #Load the phenomenal primitives as top level methods
 module Kernel
   include Phenomenal::DSL
+end
+
+# Rails way context definition
+module Phenomenal::Declaration
+  def act_as_context
+    #create context
+    @phenomenal_context  = Phenomenal::Context.new(self.name)
+    def self.adaptations_for(klass)
+      @phenomenal_class=klass
+    end
+    
+    def self.adapt(method,&block)
+      @phenomenal_context.add_adaptation(@phenomenal_class,method,&block)
+    end
+  end
+end 
+
+# Include act_as_context for every class
+class Class
+  include Phenomenal::Declaration
 end

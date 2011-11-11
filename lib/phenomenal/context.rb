@@ -124,10 +124,10 @@ class Phenomenal::Context
   end
   
   # Return context informations:
-  #   - name
-  #   - List of the adaptations names
-  #   - active state
-  #   - activation age
+  #   - Name
+  #   - List of the adaptations
+  #   - Active state
+  #   - Activation age
   def informations
     {
       :name=>name,
