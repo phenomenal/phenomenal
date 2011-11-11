@@ -221,7 +221,7 @@ class Phenomenal::Manager
   
    # Set the default context
   def init_default
-    self.default_context= Phenomenal::Context.new(nil,nil,self)
+    self.default_context= Phenomenal::Context.new(nil,nil,true,self)
     self.default_context.activate
   end
 

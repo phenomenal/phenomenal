@@ -77,9 +77,9 @@ end
 
 # Rails way context definition
 module Phenomenal::Declaration
-  def act_as_context
+  def act_as_context(persistent)
     #create context
-    @phenomenal_context  = Phenomenal::Context.new(self.name)
+    @phenomenal_context  = Phenomenal::Context.new(self.name,nil,persistent)
     def self.adaptations_for(klass)
       @phenomenal_class=klass
     end

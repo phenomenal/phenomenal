@@ -5,7 +5,7 @@ class TestClass
 end
 
 class Phenomenal::TestDeclaration
-  act_as_context
+  act_as_context :persistent
 
   adaptations_for TestClass
   adapt :print  do |p|
@@ -14,4 +14,5 @@ class Phenomenal::TestDeclaration
 end
 
 Phenomenal::Manager.instance.find_context("Phenomenal::TestDeclaration").activate
+puts Phenomenal::Manager.instance.find_context("Phenomenal::TestDeclaration").persistent
 TestClass.new.print("plop")

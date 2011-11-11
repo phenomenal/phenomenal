@@ -3,11 +3,12 @@ class Phenomenal::Context
   @@total_activations = 0
    
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
-    :activation_count
+    :activation_count, :persistent
   attr_reader :manager,:name
   
-  def initialize(name=nil, priority=nil,manager=nil)
-    @manager=manager || Phenomenal::Manager.instance
+  def initialize(name=nil, priority=nil,persistent=false,manager=nil)
+    @persistent = persistent
+    @manager = manager || Phenomenal::Manager.instance
     @name = name
     @priority = priority
     @activation_age = 0
