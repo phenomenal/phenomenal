@@ -1,6 +1,17 @@
 # Represent a first class context
 class Phenomenal::Context
   @@total_activations = 0
+  
+  def self.create(*args,&block)
+    if args.length==1
+      if !Phenomenal::Manager.instance.context_defined?(args[0])
+        context = Phenomenal::Context.new(args[0])     
+      end
+      context.add_adaptations(&block)
+    else #Combined contexts
+      #TODO
+    end
+  end
    
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
     :activation_count, :persistent
@@ -72,6 +83,21 @@ class Phenomenal::Context
     end
   end
 
+  # Add multiple adaptations at definition time
+  def add_adaptations(&block)
+    instance_eval(&block)
+  end
+  
+  # Set the current adapted class for the next adapt calls
+  def adaptations_for(klass)
+    @current_adapted_class = klass
+  end
+  
+  # Adapt a method for @current_adapted_class
+  def adapt(method,&block)
+    add_adaptation(@current_adapted_class,method,&block)
+  end
+  
   # Remove a method adaptation from the context
   def remove_adaptation(klass,method_name)
     adaptation_index =

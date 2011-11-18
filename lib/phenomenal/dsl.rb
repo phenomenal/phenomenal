@@ -7,6 +7,10 @@ module Phenomenal::DSL
       def pnml_define_context(name=nil,priority=nil)
         Phenomenal::Context.new(name,priority)     
       end
+      # Define context with adaptations
+      def pnml_context(*args,&block)
+        Phenomenal::Context.create(*args,&block)
+      end
       
       # Forget Context
       def pnml_forget_context(context)
@@ -77,15 +81,19 @@ end
 
 # Rails way context definition
 module Phenomenal::Declaration
-  def act_as_context(persistent=false)
+  def act_as_feature
     #create context
-    @phenomenal_context  = Phenomenal::Context.new(self.name,nil,persistent)
+    context  = Phenomenal::Context.new(self.name,nil,true)
     def self.adaptations_for(klass)
       @phenomenal_class=klass
     end
     
     def self.adapt(method,&block)
       @phenomenal_context.add_adaptation(@phenomenal_class,method,&block)
+    end
+    
+    def self.context(*args,&block)
+      Phenomenal::Context.create(*args,&block)
     end
   end
 end 
