@@ -12,6 +12,11 @@ class Phenomenal::Context
       #TODO
     end
   end
+  
+  def self.create_feature(*args,&block)
+    context = self.create(*args,&block)
+    context.persistent=true
+  end
    
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
     :activation_count, :persistent
