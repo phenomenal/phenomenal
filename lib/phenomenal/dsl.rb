@@ -83,7 +83,7 @@ end
 module Phenomenal::Declaration
   def act_as_feature
     #create context
-    context  = Phenomenal::Context.new(self.name,nil,true)
+    @phenomenal_context  = Phenomenal::Context.new(self.name,nil,true)
     def self.adaptations_for(klass)
       @phenomenal_class=klass
     end
