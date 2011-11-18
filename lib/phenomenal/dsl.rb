@@ -11,6 +11,14 @@ module Phenomenal::DSL
       def pnml_context(*args,&block)
         Phenomenal::Context.create(*args,&block)
       end
+      alias_method :context, :pnml_context
+      
+      # Define context with adaptations
+      def pnml_feature(*args,&block)
+        Phenomenal::Context.create_feature(*args,&block)
+      end
+      alias_method :feature, :pnml_feature
+      
       
       # Forget Context
       def pnml_forget_context(context)
@@ -79,26 +87,27 @@ module Kernel
   include Phenomenal::DSL
 end
 
-# Rails way context definition
-module Phenomenal::Declaration
-  def act_as_feature
-    #create context
-    @phenomenal_context  = Phenomenal::Context.new(self.name,nil,true)
-    def self.adaptations_for(klass)
-      @phenomenal_class=klass
-    end
-    
-    def self.adapt(method,&block)
-      @phenomenal_context.add_adaptation(@phenomenal_class,method,&block)
-    end
-    
-    def self.context(*args,&block)
-      Phenomenal::Context.create(*args,&block)
-    end
-  end
-end 
+#TODO remove
+## Rails way context definition
+#module Phenomenal::Declaration
+#  def act_as_feature
+#    #create context
+#    @phenomenal_context  = Phenomenal::Context.new(self.name,nil,true)
+#    def self.adaptations_for(klass)
+#      @phenomenal_class=klass
+#    end
+#    
+#    def self.adapt(method,&block)
+#      @phenomenal_context.add_adaptation(@phenomenal_class,method,&block)
+#    end
+#    
+#    def self.context(*args,&block)
+#      Phenomenal::Context.create(*args,&block)
+#    end
+#  end
+#end 
 
-# Include act_as_context for every class
-class Class
-  include Phenomenal::Declaration
-end
+## Include act_as_context for every class
+#class Class
+#  include Phenomenal::Declaration
+#end

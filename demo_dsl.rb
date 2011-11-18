@@ -8,7 +8,7 @@ class Foo
   end
 end
 
-pnml_context :Test do 
+context :Test do 
   adaptations_for Foo
   adapt :print do 
     pnml_proceed + "ADAPT"
