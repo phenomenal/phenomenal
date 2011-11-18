@@ -19,7 +19,7 @@ class Phenomenal::Context
   end
    
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
-    :activation_count, :persistent
+    :activation_count, :persistent, :required, :implied, :guessed, :is_implied, :is_required
   attr_reader :manager,:name
   
   def initialize(name=nil, priority=nil,persistent=false,manager=nil)
@@ -31,6 +31,11 @@ class Phenomenal::Context
     @activation_count = 0
     @adaptations = Array.new
     @manager.register_context(self)
+    @implied = Array.new
+    @is_implied = {}
+    @required = Array.new
+    @is_required = {}
+    @guessed = Array.new
   end
   
   # Unregister the context from the context manager,
@@ -102,6 +107,33 @@ class Phenomenal::Context
   def adapt(method,&block)
     add_adaptation(@current_adapted_class,method,&block)
   end
+
+  # Requires
+  def requires(*args)
+    args.each do |context|
+      if !required.include?(context)
+        required.push(context)
+      end
+    end
+  end
+
+  # Implies
+  def implies(*args)
+    args.each do |context|
+      if !implies.include?(context)
+        implied.push(context)
+      end
+    end
+  end
+
+  # Guess 
+  def guess(*args)
+    args.each do |context|
+      if !guessed.include?(context)
+        guessed.push(context)
+      end
+    end
+  end
   
   # Remove a method adaptation from the context
   def remove_adaptation(klass,method_name)
@@ -120,12 +152,69 @@ class Phenomenal::Context
   
   # Activate the context
   def activate
+    check_required
+    activate_implicated
+    activate_guessed
     @@total_activations = @@total_activations+1
     self.activation_age = @@total_activations
     self.activation_count = self.activation_count+1
     manager.activate_context(self)
     self
   end
+  
+  def check_required
+    required.each do |context_name|
+      context = manager.find_context(context_name)
+      if !context.active?
+        context.is_required[self.__id__] = self
+        Phenomenal::Logger.instance.error(
+          "Error: Required context #{context_name} not active."
+        )
+      end
+    end
+  end
+  
+  def activate_implicated
+    activated = Array.new
+    begin
+      implicated.each do |context_name|
+        context  = manager.find_context(context_name)
+        if !context.active?
+          context.activate
+          context.is_implied[self.__id__] = self
+          activated.push
+        end
+      end
+    rescue PhenomenalError => error
+      activated.reverse.each do |context|
+        context.deactivate
+      end
+      Phenomenal::Logger.instance.error(
+          "Error: Implication not satisfied for context #{name} : \n"+error
+        )
+    end
+  end
+  
+  def activate_guessed 
+    begin
+      implicated.each do |context_name|
+        context  = manager.find_context(context_name)
+        if !context.active?
+          context.activate
+        end
+      end
+    rescue PhenomenalError # Don't care of error in case of guess
+    end
+  end
+  
+  
+  
+  def can_activate
+    #TODO for exclude relations
+    true
+  end
+  
+  
   
   # Deactivate the context
   def deactivate
@@ -137,6 +226,11 @@ class Phenomenal::Context
       manager.deactivate_context(self)
     end
     self
+  end
+  
+  def can_deactivate
+    #TODO for other relations
+    true
   end
   
   # True if the context is active

@@ -9,6 +9,8 @@ class Foo
 end
 
 context :Test do 
+  implies :plop
+  
   adaptations_for Foo
   adapt :print do 
     pnml_proceed + "ADAPT"
