@@ -108,6 +108,7 @@ class Phenomenal::Context
     add_adaptation(@current_adapted_class,method,&block)
   end
 
+
   # Requires
   def requires(*args)
     args.each do |context|
@@ -152,9 +153,10 @@ class Phenomenal::Context
   
   # Activate the context
   def activate
-    check_required
-    activate_implicated
-    activate_guessed
+#TODO
+#    check_required
+#    activate_implicated
+#    activate_guessed
     @@total_activations = @@total_activations+1
     self.activation_age = @@total_activations
     self.activation_count = self.activation_count+1
