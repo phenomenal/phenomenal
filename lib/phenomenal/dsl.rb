@@ -44,12 +44,14 @@ module Phenomenal::DSL
       def phen_activate_context(context)
         Phenomenal::Manager.instance.find_context(context).activate
       end
+      alias_method :activate_context, :phen_activate_context
       
       # Deactivate Context
       def phen_deactivate_context(context)
         Phenomenal::Manager.instance.find_context(context).deactivate   
       end
-
+      alias_method :deactivate_context, :phen_deactivate_context
+      
       # Context is active?
       def phen_context_active?(context)
         Phenomenal::Manager.instance.find_context(context).active?
@@ -87,10 +89,4 @@ end
 #Load the phenomenal primitives as top level methods
 module Kernel
   include Phenomenal::DSL
-end
-
-# Add simplified keywords
-class Phenomenal::Context
-  alias_method :deactivate_context, :phen_deactivate_context
-  alias_method :activate_context, :phen_activate_context
 end
