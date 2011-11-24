@@ -216,7 +216,7 @@ class Phenomenal::Manager
   
   # Resolution policy
   def conflict_policy(adaptation1, adaptation2)
-    no_resolution_conflict_policy(adaptation1, adaptation2)
+    age_conflict_policy(adaptation1, adaptation2)
   end
   
    # Set the default context
