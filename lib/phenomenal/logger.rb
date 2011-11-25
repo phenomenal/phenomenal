@@ -20,7 +20,6 @@ class Phenomenal::Logger
   end
   
   def error(msg)
-    logger.error(msg)
     raise(Phenomenal::Error, msg)
   end
   

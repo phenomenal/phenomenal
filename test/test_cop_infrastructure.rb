@@ -4,6 +4,7 @@ require "test/unit"
 class TestCopInfrastructure < Test::Unit::TestCase
   def setup
     @cm = Phenomenal::Manager.instance
+    phen_change_conflict_policy { |a,b| no_resolution_conflict_policy(a,b) }
   end
 
   def test_protocol

@@ -4,6 +4,7 @@ require "test/unit"
 
 class TestCopAdaptation < Test::Unit::TestCase
   def setup
+    phen_change_conflict_policy { |a,b| no_resolution_conflict_policy(a,b) }
     phen_define_context(:quiet)
     phen_define_context(:offHook)
     phen_add_adaptation(:quiet,Phone,:advertise){|a_call| "vibrator" }

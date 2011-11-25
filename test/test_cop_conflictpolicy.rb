@@ -43,7 +43,6 @@ class TestCopConflictPolicy < Test::Unit::TestCase
 
   def test_activation_age_policy
     phen_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
-    puts "llll #{phen_default_context.class}"
     assert(phen_context_active?(phen_default_context), 
       "Default context should normally be active")
     assert(!phen_context_active?(:screening), "Context1 should be inactive")
