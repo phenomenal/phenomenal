@@ -4,8 +4,8 @@ class Phenomenal::Manager
   include Singleton
   include Phenomenal::ConflictPolicies
   
-  attr_accessor :active_adaptations, :deployed_adaptations, 
-    :contexts, :default_context
+  attr_accessor :active_adaptations, :deployed_adaptations, :contexts, 
+  :default_context, :combined_contexts, :shared_contexts
   
   # Register a new context 
   def register_context(context)
@@ -20,7 +20,18 @@ class Phenomenal::Manager
         " If you want to have named context it has to be a globally unique name"
       )
     end
-    contexts[context.__id__]=context
+    contexts[context]=context
+    
+    # Update shared contexts to use the context object instead of symnbol
+    shared_contexts[context]=shared_contexts[context.name]
+    shared_contexts.delete(context.name)
+    
+    if shared_contexts[context]
+      shared_contexts[context].each do |c|
+        index = combined_contexts[c].find_index(context.name)
+        combined_contexts[c][index]=context
+      end
+    end
   end
   
   # Unregister a context (forget)
@@ -30,7 +41,7 @@ class Phenomenal::Manager
         "Default context can only be forgotten when alone"
       )
     else
-      contexts.delete(context.__id__)
+      contexts.delete(context)
       init_default() if context==default_context
     end
   end
@@ -55,6 +66,17 @@ class Phenomenal::Manager
   def activate_context(context)
     begin
       context.adaptations.each{ |i| activate_adaptation(i) }
+      if shared_contexts[context]
+        shared_contexts[context].each do |combined_context|
+          if !combined_context.active?
+            need_activation=true
+            combined_contexts[combined_context].each do |shared_context|
+              need_activate=false if !shared_context.active?
+            end
+            combined_context.activate if need_activation
+          end
+        end
+      end
     rescue Phenomenal::Error
       context.deactivate # rollback the deployed adaptations
       raise # throw up the exception
@@ -63,8 +85,14 @@ class Phenomenal::Manager
   
   # Deactivate the adaptations (undeploy if needed)
   def deactivate_context(context)
-    context.adaptations.each{ |i| 
-    deactivate_adaptation(i) }
+    context.adaptations.each do |i| 
+      deactivate_adaptation(i) 
+    end
+    if shared_contexts[context]
+      shared_contexts[context].each do |combined_context|
+        combined_context.deactivate
+      end
+    end
   end
   
   # Call the old implementation of the method 'caller.caller_method'
@@ -94,7 +122,27 @@ class Phenomenal::Manager
   # currently registered.
   # The 'context' parameter can be either a reference to a context instance or
   # a Symbol with the name of a named (not anonymous) context.
-  def find_context(context)
+  def find_context(context, *contexts)
+    if contexts.length==0
+      find_simple_context(context)
+    else #Combined contexts
+      contexts.insert(0,context)
+      find_combined_context(contexts)
+    end
+  end
+  # Check wether context 'context' exist in the context manager
+  # Context can be either the context name or the context instance itself
+  def context_defined?(context, *contexts)
+    begin
+      find_context(context,*contexts)
+    rescue Phenomenal::Error
+      return false
+    end
+    return true
+  end
+  # ==== Private methods ==== #
+  private
+  def find_simple_context(context)
     find=nil
     if context.class!=Phenomenal::Context
       a = contexts.find{|k,v| v.name==context}
@@ -102,7 +150,7 @@ class Phenomenal::Manager
         find = a[1]
       end
     else
-      find = context if contexts.has_key?(context.__id__)
+      find = context if contexts.has_key?(context)
     end
     if find
       find
@@ -112,17 +160,35 @@ class Phenomenal::Manager
       )
     end
   end
-  # Check wether context 'context' exist in the context manager
-  # Context can be either the context name or the context instance itself
-  def context_defined?(context)
-    if context.class==Phenomenal::Context
-      contexts.has_key?(context.__id__)
+  
+  def find_combined_context(contexts)
+    list=Array.new
+    contexts.each do |c|
+      # Use the object instance if already available
+      # otherwise use the symbol name
+      c = find_simple_context(c) if context_defined?(c)
+      if shared_contexts[c]==nil
+        list.clear
+        break
+      elsif list.length==0
+        list=shared_contexts[c]
+      else
+          list=shared_contexts[c].find_all{|i| list.include?(i) } 
+      end
+    end
+    if list.length==0
+      Phenomenal::Logger.instance.error(
+        "Unknown combined context #{contexts}"
+      )
+    elsif list.length==1
+      return list.first
     else
-      contexts.find{|k,v| v.name==context}!=nil
+      Phenomenal::Logger.instance.error(
+        "Multiple definition of combined context #{contexts}"
+      )
     end
   end
-  # ==== Private methods ==== #
-  private
+  
   # Activate the adaptation and redeploy the adaptations to take the new one
   # one in account
   def activate_adaptation(adaptation)
@@ -230,6 +296,8 @@ class Phenomenal::Manager
     @contexts = Hash.new
     @deployed_adaptations = Array.new
     @active_adaptations = Array.new
+    @combined_contexts = Hash.new
+    @shared_contexts = Hash.new
     init_default()
   end
 end

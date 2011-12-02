@@ -148,10 +148,10 @@ class TestCopAdaptation < Test::Unit::TestCase
     #TODO
 
     #assert(2==TestClass.klass_var_access, %(Adapted meth should
-    #         acess klass variable and return its value +1))
-    phen_deactivate_context(:test_2)
-     assert(1==TestClass.klass_var_access, %(Default meth should acess var and
-                                            return val))
+    #       acess klass variable and return its value +1))
+    #phen_deactivate_context(:test_2)
+    #  assert(1==TestClass.klass_var_access, %(Default meth should acess var and
+    #                              return val))
   end
 
   def test_class_instance_variable_access

@@ -5,23 +5,43 @@ class Phenomenal::Context
   @@total_activations = 0
   
   def self.create(context,*contexts,&block)
-    if contexts.length==0
-      if !Phenomenal::Manager.instance.context_defined?(context)
+    manager = Phenomenal::Manager.instance
+    contexts.insert(0,context)
+    if contexts.length==1
+      if !manager.context_defined?(context)
         context = Phenomenal::Context.new(context) 
       else
-        context = Phenomenal::Manager.instance.find_context(context)
+        context = manager.find_context(context)
       end
-      context.add_adaptations(&block)
     else #Combined contexts
-      
+      combined_contexts = manager.combined_contexts
+      shared_contexts = manager.shared_contexts
+      if !manager.context_defined?(*contexts) # New combined context
+        context = Phenomenal::Context.new
+        combined_contexts[context] = contexts
+        contexts.each do |c|
+          # Use the object instance if already available
+          # otherwise use the symbol name
+          if manager.context_defined?(c)
+            c = manager.find_context(c)  
+          end
+          shared_contexts[c]= Array.new if !shared_contexts[c]
+          shared_contexts[c].push(context)
+        end
+      else
+        context = manager.find_context(*contexts)
+      end
     end
+    context.add_adaptations(&block)
+    context
   end
   
   def self.create_feature(*args,&block)
     context = self.create(*args,&block)
     context.persistent=true
+    context
   end
-   
+  
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
     :activation_count, :persistent
   attr_reader :manager,:name
