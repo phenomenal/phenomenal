@@ -58,8 +58,8 @@ module Phenomenal::DSL
       end
       
       # Context informations
-      def phen_context_informations(context)
-        Phenomenal::Manager.instance.find_context(context).informations
+      def phen_context_information(context)
+        Phenomenal::Manager.instance.find_context(context).information
       end
       
       # Default Context

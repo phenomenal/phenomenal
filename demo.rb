@@ -8,17 +8,17 @@ class Foo
   end
 end
 
-pnml_define_context(:demo)
-pnml_add_adaptation(:demo, Foo, :print) do
-  pnml_proceed + " adaptation: "+ @inst_var
+phen_define_context(:demo)
+phen_add_adaptation(:demo, Foo, :print) do
+  phen_proceed + " adaptation: "+ @inst_var
 end
 
 f = Foo.new
 puts f.print
 
-pnml_activate_context(:demo)
+phen_activate_context(:demo)
 puts f.print
 
-pnml_deactivate_context(:demo)
+phen_deactivate_context(:demo)
 puts f.print
 

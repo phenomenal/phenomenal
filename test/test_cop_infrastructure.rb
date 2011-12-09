@@ -88,14 +88,14 @@ class TestCopInfrastructure < Test::Unit::TestCase
 
   def test_default
    assert_nothing_raised(Phenomenal::Error,"Default context should exist"){
-    @cm.default_context.informations[:name]}
+    @cm.default_context.information[:name]}
 
     assert(@cm.default_context.active?,
       "The default context should normally be active")
   end
 
   def test_default_forget
-    old_informations = @cm.default_context.informations
+    old_information = @cm.default_context.information
     assert_respond_to(@cm, :unregister_context,
       "Method to drop unneeded contexts should exist")
     assert(@cm.default_context.active?,
@@ -113,8 +113,8 @@ class TestCopInfrastructure < Test::Unit::TestCase
   	  created default context)){
   	  @cm.default_context.activate }
   	  #TODO
-		#assert(old_informations[:creation_time]!=
-		  #@cm.context_informations(:default)[:creation_time],
+		#assert(old_information[:creation_time]!=
+		  #@cm.context_information(:default)[:creation_time],
 		  #"Fresh default context should not be the default context just forgotten")
 		assert(@cm.default_context.activate, "Default should be active")
 	end

@@ -14,20 +14,23 @@ class Phenomenal::Context
         context = manager.find_context(context)
       end
     else #Combined contexts
-      combined_contexts = manager.combined_contexts
-      shared_contexts = manager.shared_contexts
       if !manager.context_defined?(*contexts) # New combined context
         context = Phenomenal::Context.new
-        combined_contexts[context] = contexts
+        instances = Array.new
         contexts.each do |c|
           # Use the object instance if already available
-          # otherwise use the symbol name
+          # otherwise create it
           if manager.context_defined?(c)
-            c = manager.find_context(c)  
+            c = manager.find_context(c) 
+          else
+            # TODO Create feature if needed
+            c = Phenomenal::Context.new(c) 
           end
-          shared_contexts[c]= Array.new if !shared_contexts[c]
-          shared_contexts[c].push(context)
+          instances.push(c)
+          manager.shared_contexts[c]= Array.new if !manager.shared_contexts[c]
+          manager.shared_contexts[c].push(context)
         end
+        manager.combined_contexts[context] = instances
       else
         context = manager.find_context(*contexts)
       end
@@ -38,16 +41,15 @@ class Phenomenal::Context
   
   def self.create_feature(*args,&block)
     context = self.create(*args,&block)
-    context.persistent=true
+    # context.persistent=true #TODO Make sense to ave combined features?
     context
   end
   
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
-    :activation_count, :persistent
+    :activation_count
   attr_reader :manager,:name
   
-  def initialize(name=nil, priority=nil,persistent=false,manager=nil)
-    @persistent = persistent
+  def initialize(name=nil, priority=nil,manager=nil)
     @manager = manager || Phenomenal::Manager.instance
     @name = name
     @priority = priority
@@ -62,6 +64,7 @@ class Phenomenal::Context
   # This context shoudn't be used after.
   # The context has to be inactive before being forgetted
   # TODO Find a way to avoid the use of forgeted context (use forgeted flag?)
+  #TODO Handle combined contexts
   def forget
     if active?
       Phenomenal::Logger.instance.error(
@@ -111,6 +114,17 @@ class Phenomenal::Context
       manager.register_adaptation(adaptation)
       adaptation
     end
+  end
+  
+  # Catch nested context and feature calls and transform them in nested contexts
+  # creation
+  def context(context,*contexts,&block)
+    contexts.insert(0, context)
+    Phenomenal::Context.create(self,*contexts,&block)
+  end
+  def feature(context,*contexts,&block)
+    contexts.insert(0, context)
+    Phenomenal::Context.create_feature(self,*contexts,&block)
   end
 
   # Add multiple adaptations at definition time
@@ -194,7 +208,7 @@ class Phenomenal::Context
   #   - Active state
   #   - Activation age
   #   - Activation count
-  def informations
+  def information
     {
       :name=>name,
       :adaptations=>adaptations,

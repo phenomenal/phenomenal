@@ -9,15 +9,45 @@ class Foo
   end
 end
 
-context :a
-context :b
-context :c
-
-context :a,:b,:c do 
+context :b,:c do # TODO Question: b is a feature automatically?
   adaptations_for Foo
   adapt :print do
-    "COMBINED"
+    "B + C"
   end
 end
 
+feature :a do
+  feature :b do
+    context :c do 
+      adaptations_for Foo
+      adapt :print do
+        "A + B + C"
+      end
+    end
+  end
+  
+  adaptations_for Foo
+  adapt :print do
+    "A"
+  end
+end
+
+f = Foo.new
+puts f.print
+
+activate_context :b
+puts f.print
+activate_context :c
 activate_context :a
+puts f.print
+deactivate_context :a
+puts f.print
+deactivate_context :c
+deactivate_context :b
+puts f.print
+activate_context :b
+puts f.print
+activate_context :a
+puts f.print
+activate_context :c
+puts f.print

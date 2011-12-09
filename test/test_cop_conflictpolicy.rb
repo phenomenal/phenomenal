@@ -36,7 +36,7 @@ class TestCopConflictPolicy < Test::Unit::TestCase
   end
 
   def test_protocol_age_policy
-    assert(phen_context_informations(
+    assert(phen_context_information(
       phen_default_context)[:activation_age].kind_of?(Fixnum),
       "Contexts should have the age property")
   end
@@ -49,22 +49,22 @@ class TestCopConflictPolicy < Test::Unit::TestCase
     assert(!phen_context_active?(:quiet),"Context2 should be inactive")
 
     phen_activate_context(:screening)
-    assert(phen_context_informations(:screening)[:activation_age] <
-            phen_context_informations(phen_default_context)[:activation_age],
+    assert(phen_context_information(:screening)[:activation_age] <
+            phen_context_information(phen_default_context)[:activation_age],
             "screening context has been activated more recently than default")
 
     phen_activate_context(:quiet)
-    assert(phen_context_informations(:quiet)[:activation_age] <
-            phen_context_informations(:screening)[:activation_age],
+    assert(phen_context_information(:quiet)[:activation_age] <
+            phen_context_information(:screening)[:activation_age],
             "quiet context has been activated more recently than screening")
-    assert(phen_context_informations(:screening)[:activation_age] <
-            phen_context_informations(phen_default_context)[:activation_age],
+    assert(phen_context_information(:screening)[:activation_age] <
+            phen_context_information(phen_default_context)[:activation_age],
             "quiet context has still been activated more recently than default")
     phen_deactivate_context(:quiet)
     phen_deactivate_context(:screening)
     phen_activate_context(:screening)
-    assert(phen_context_informations(:screening)[:activation_age] <
-            phen_context_informations(:quiet)[:activation_age],
+    assert(phen_context_information(:screening)[:activation_age] <
+            phen_context_information(:quiet)[:activation_age],
             "screening context has now been activated more recently than quiet")
   end
 

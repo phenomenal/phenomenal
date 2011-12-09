@@ -9,20 +9,20 @@ class Foo
 end
 
 context :Test do 
-  implies :plop
+   #implies :plop
   
   adaptations_for Foo
   adapt :print do 
-    pnml_proceed + "ADAPT"
+    phen_proceed + "ADAPT"
   end
 end
 
 f = Foo.new
 puts f.print
 
-pnml_activate_context(:Test)
+phen_activate_context(:Test)
 puts f.print
 
-pnml_deactivate_context(:Test)
+phen_deactivate_context(:Test)
 puts f.print
 

@@ -21,17 +21,6 @@ class Phenomenal::Manager
       )
     end
     contexts[context]=context
-    
-    # Update shared contexts to use the context object instead of symnbol
-    shared_contexts[context]=shared_contexts[context.name]
-    shared_contexts.delete(context.name)
-    
-    if shared_contexts[context]
-      shared_contexts[context].each do |c|
-        index = combined_contexts[c].find_index(context.name)
-        combined_contexts[c][index]=context
-      end
-    end
   end
   
   # Unregister a context (forget)
@@ -71,7 +60,7 @@ class Phenomenal::Manager
           if !combined_context.active?
             need_activation=true
             combined_contexts[combined_context].each do |shared_context|
-              need_activate=false if !shared_context.active?
+              need_activation=false if !shared_context.active?
             end
             combined_context.activate if need_activation
           end
@@ -287,7 +276,7 @@ class Phenomenal::Manager
   
    # Set the default context
   def init_default
-    self.default_context= Phenomenal::Context.new(nil,nil,true,self)
+    self.default_context= Phenomenal::Context.new(nil,nil,self)
     self.default_context.activate
   end
 

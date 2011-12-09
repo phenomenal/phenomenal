@@ -13,9 +13,9 @@ activate_context(:belgium)
 
 deactivate_context(:brussels)
 
-puts phen_context_informations(:brussels)
+puts phen_context_information(:brussels)
 
-puts phen_context_informations(:belgium)
+puts phen_context_information(:belgium)
 
 
 context :brussels, :sablon do
