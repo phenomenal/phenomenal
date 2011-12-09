@@ -9,14 +9,14 @@ module Phenomenal::DSL
       end
       # Define context with adaptations
       def phen_context(context,*contexts,&block)
-        Phenomenal::Context.create(context,*contexts,&block)
+        Phenomenal::Context.create(context,*contexts,false,&block)
       end
       #TODO check kernel repond to method
       alias_method :context, :phen_context
       
       # Define context with adaptations
       def phen_feature(context,*contexts,&block)
-        Phenomenal::Feature.create(context,*contexts,&block)
+        Phenomenal::Feature.create(context,*contexts,false,&block)
       end
       alias_method :feature, :phen_feature
       

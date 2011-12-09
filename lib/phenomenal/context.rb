@@ -3,28 +3,37 @@ class Phenomenal::Context
   include Phenomenal::Relationships
   
   @@total_activations = 0
-  
-  def self.create(context,*contexts,&block)
+  def self.create(context,*contexts,nested,&block)
     manager = Phenomenal::Manager.instance
     contexts.insert(0,context)
     if contexts.length==1
       if !manager.context_defined?(context)
-        context = Phenomenal::Context.new(context) 
+        context = self.new(context) 
       else
         context = manager.find_context(context)
+        if !context.instance_of?(self)
+          Phenomenal::Logger.instance.error(
+            "Only #{self.name} can be used in the declaration"
+          )
+        end
       end
     else #Combined contexts
       if !manager.context_defined?(*contexts) # New combined context
-        context = Phenomenal::Context.new
+        context = self.new
         instances = Array.new
+        first = contexts.first
         contexts.each do |c|
           # Use the object instance if already available
           # otherwise create it
           if manager.context_defined?(c)
             c = manager.find_context(c) 
+            if !nested && c!=first && !c.instance_of?(self)
+              Phenomenal::Logger.instance.error(
+                "Only #{self.name} can be used in the declaration"
+              )
+            end
           else
-            # TODO Create feature if needed
-            c = Phenomenal::Context.new(c) 
+            c = self.new(c) 
           end
           instances.push(c)
           manager.shared_contexts[c]= Array.new if !manager.shared_contexts[c]
@@ -113,10 +122,9 @@ class Phenomenal::Context
   # Catch nested context and feature calls and transform them in nested contexts
   # creation
   def context(context,*contexts,&block)
-    contexts.insert(0, context)
-    Phenomenal::Context.create(self,*contexts,&block)
+    Phenomenal::Context.create(self,context,*contexts,true,&block)
   end
-  
+  alias_method :phen_context,:context
 
   # Add multiple adaptations at definition time
   def add_adaptations(&block)
@@ -153,8 +161,8 @@ class Phenomenal::Context
     check_requirements
     activate_implications
     activate_suggestions
-    @@total_activations = @@total_activations+1
-    self.activation_age = @@total_activations
+    @@total_activations +=1
+    self.activation_age =@@total_activations
     self.activation_count = self.activation_count+1
     manager.activate_context(self)
     self
@@ -186,11 +194,7 @@ class Phenomenal::Context
   #  The age counter minus the age counter when the context was activated
   #  for the last time
   def age
-    if activation_age == 0
-      @@total_activations
-    else
-      @@total_activations-activation_age
-    end
+    @@total_activations-activation_age
   end
   
   # Return context informations:
@@ -205,7 +209,8 @@ class Phenomenal::Context
       :adaptations=>adaptations,
       :active=>active?,
       :activation_age=>age,
-      :activation_count=>activation_count
+      :activation_count=>activation_count,
+      :type=>self.class.name
     }
   end
   

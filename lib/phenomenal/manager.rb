@@ -55,17 +55,18 @@ class Phenomenal::Manager
   def activate_context(context)
     begin
       context.adaptations.each{ |i| activate_adaptation(i) }
+      #puts "activation of #{context}"
       if shared_contexts[context]
+        #puts "trigger activation of #{shared_contexts[context].first.information}"
         shared_contexts[context].each do |combined_context|
-          if !combined_context.active?
-            need_activation=true
-            combined_contexts[combined_context].each do |shared_context|
-              need_activation=false if !shared_context.active?
-            end
-            combined_context.activate if need_activation
+          need_activation=true
+          combined_contexts[combined_context].each do |shared_context|
+            need_activation=false if !shared_context.active?
           end
+          combined_context.activate if need_activation
         end
       end
+      
     rescue Phenomenal::Error
       context.deactivate # rollback the deployed adaptations
       raise # throw up the exception
@@ -79,7 +80,9 @@ class Phenomenal::Manager
     end
     if shared_contexts[context]
       shared_contexts[context].each do |combined_context|
-        combined_context.deactivate
+        while combined_context.active? do
+         combined_context.deactivate
+        end
       end
     end
   end
@@ -160,7 +163,8 @@ class Phenomenal::Manager
         list.clear
         break
       elsif list.length==0
-        list=shared_contexts[c]
+        # clone otherwise list.clear empty shared_contexts[c]
+        list=shared_contexts[c].clone 
       else
           list=shared_contexts[c].find_all{|i| list.include?(i) } 
       end
@@ -276,7 +280,7 @@ class Phenomenal::Manager
   
    # Set the default context
   def init_default
-    self.default_context= Phenomenal::Context.new(nil,nil,self)
+    self.default_context= Phenomenal::Feature.new(nil,nil,self)
     self.default_context.activate
   end
 

@@ -1,10 +1,6 @@
 class Phenomenal::Feature < Phenomenal::Context
-  def self.create(*args,&block)
-    feature = super(*args,&block)
-    feature
+  def feature(feature,*features, &block)
+    Phenomenal::Feature.create(self,feature,*features,true,&block)
   end
-  def feature(context,*contexts,&block)
-    contexts.insert(0, context)
-    Phenomenal::Context.create_feature(self,*contexts,&block)
-  end
+  alias_method :phen_feature,:feature
 end
