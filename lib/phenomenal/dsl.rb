@@ -16,7 +16,7 @@ module Phenomenal::DSL
       
       # Define context with adaptations
       def phen_feature(context,*contexts,&block)
-        Phenomenal::Context.create_feature(context,*contexts,&block)
+        Phenomenal::Feature.create(context,*contexts,&block)
       end
       alias_method :feature, :phen_feature
       

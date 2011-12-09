@@ -133,7 +133,7 @@ class Phenomenal::Manager
   private
   def find_simple_context(context)
     find=nil
-    if context.class!=Phenomenal::Context
+    if !context.kind_of?(Phenomenal::Context)
       a = contexts.find{|k,v| v.name==context}
       if a
         find = a[1]

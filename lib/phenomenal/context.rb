@@ -39,12 +39,6 @@ class Phenomenal::Context
     context
   end
   
-  def self.create_feature(*args,&block)
-    context = self.create(*args,&block)
-    # context.persistent=true #TODO Make sense to ave combined features?
-    context
-  end
-  
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
     :activation_count
   attr_reader :manager,:name
@@ -122,10 +116,7 @@ class Phenomenal::Context
     contexts.insert(0, context)
     Phenomenal::Context.create(self,*contexts,&block)
   end
-  def feature(context,*contexts,&block)
-    contexts.insert(0, context)
-    Phenomenal::Context.create_feature(self,*contexts,&block)
-  end
+  
 
   # Add multiple adaptations at definition time
   def add_adaptations(&block)
