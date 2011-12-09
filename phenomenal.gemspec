@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
    s.name = "phenomenal"
    s.summary = "A context oriented programming framework for ruby"
    s.description = "A context oriented programming framework for ruby"
-   s.version = "0.11.11.25.0"
+   s.version = "0.11.12.10.0"
    s.authors = "Loic Vigneron - Thibault Poncelet"
    s.email = "thibault.poncelet@student.uclouvain.be - loic.vigneron@student.uclouvain.be"
    s.date = "2011-11-24"
