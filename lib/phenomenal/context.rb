@@ -1,6 +1,5 @@
 # Represent a first class context
 class Phenomenal::Context
-  include Phenomenal::Relationships
   
   @@total_activations = 0
   def self.create(context,*contexts,nested,&block)
@@ -49,7 +48,7 @@ class Phenomenal::Context
   end
   
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
-    :activation_count
+    :activation_count,:is_required,:is_implied,:activated_suggested,:parent
   attr_reader :manager,:name
   
   def initialize(name=nil, priority=nil,manager=nil)
@@ -60,7 +59,12 @@ class Phenomenal::Context
     @activation_count = 0
     @adaptations = Array.new
     @manager.register_context(self)
-    initialize_relationships
+    
+    #relationships
+    @parent = nil
+    @is_implied = {}
+    @is_required = {}
+    @activated_suggested={}
   end
   
   # Unregister the context from the context manager,
@@ -122,7 +126,9 @@ class Phenomenal::Context
   # Catch nested context and feature calls and transform them in nested contexts
   # creation
   def context(context,*contexts,&block)
-    Phenomenal::Context.create(self,context,*contexts,true,&block)
+    c = Phenomenal::Context.create(self,context,*contexts,true,&block)
+    c.parent = self
+    c
   end
   alias_method :phen_context,:context
 
@@ -158,9 +164,6 @@ class Phenomenal::Context
   
   # Activate the context
   def activate
-    check_requirements
-    activate_implications
-    activate_suggestions
     @@total_activations +=1
     self.activation_age =@@total_activations
     self.activation_count = self.activation_count+1
@@ -172,10 +175,6 @@ class Phenomenal::Context
   def deactivate(caller_context=nil)
     was_active = active?
     if self.activation_count>0
-      #Deactivation of relations
-      deactivate_requirements
-      deactivate_implications(caller_context)
-      deactivate_suggestions
       #Deactivation
       self.activation_count =  self.activation_count-1
     end
@@ -212,6 +211,18 @@ class Phenomenal::Context
       :activation_count=>activation_count,
       :type=>self.class.name
     }
+  end
+  
+  def parent_feature
+    c = parent
+    while c!=nil && !c.is_a?(Phenomenal::Feature) do
+      c=c.parent
+    end
+    if c==nil
+      @manager.default_context
+    else
+      c
+    end
   end
   
   # String representation of the context

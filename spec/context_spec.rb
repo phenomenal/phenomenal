@@ -99,5 +99,19 @@ describe Phenomenal::Context do
       end
     end
   end
+  
+  describe "parent feature" do
+    it "should be the default feature for basic contexts" do
+      @context.parent_feature.should be Phenomenal::Manager.instance.default_context
+    end
+    
+    it "should be the closest feature for in-feature contexts" do
+      c =nil
+      feature :f do
+        c = context :a
+      end
+      c.parent_feature.should be feature(:f)
+    end
+  end
 end
 

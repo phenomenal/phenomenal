@@ -5,7 +5,7 @@ class Phenomenal::Manager
   include Phenomenal::ConflictPolicies
   
   attr_accessor :active_adaptations, :deployed_adaptations, :contexts, 
-  :default_context, :combined_contexts, :shared_contexts
+  :default_context, :combined_contexts, :shared_contexts, :linked_contexts
   
   # Register a new context 
   def register_context(context)
@@ -21,6 +21,11 @@ class Phenomenal::Manager
       )
     end
     contexts[context]=context
+    
+    # Update linked_contexts in order to have the reference on the actual context
+    #TODO
+    i = linked_contexts.find_index(context.name)
+    linked_contexts[i]=context if !i.nil?
   end
   
   # Unregister a context (forget)
@@ -54,6 +59,10 @@ class Phenomenal::Manager
   # Activate the context 'context' and deploy the related adaptation
   def activate_context(context)
     begin
+      # Activate Relationships
+      # Requirements
+      context.parent_feature.activate_requirements(context)
+      
       context.adaptations.each{ |i| activate_adaptation(i) }
       #puts "activation of #{context}"
       if shared_contexts[context]
@@ -131,6 +140,23 @@ class Phenomenal::Manager
       return false
     end
     return true
+  end
+  
+  # Too bad to specify
+  def linked_context_id(context)
+    id=nil
+    c = find_context(context)
+    if !c.nil?
+      id = linked_contexts.find_index(c)
+    else 
+      id = linked_contexts.find_index(context)
+    end
+    if id.nil?
+      linked_contexts.push(context)
+      return linked_contexts.size-1
+    else
+      return id
+    end
   end
   # ==== Private methods ==== #
   private
@@ -291,6 +317,7 @@ class Phenomenal::Manager
     @active_adaptations = Array.new
     @combined_contexts = Hash.new
     @shared_contexts = Hash.new
+    @linked_contexts = Array.new
     init_default()
   end
 end
