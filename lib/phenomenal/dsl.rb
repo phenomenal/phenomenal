@@ -83,6 +83,7 @@ module Phenomenal::DSL
         Phenomenal::Manager.instance.change_conflict_policy(&block) 
       end
     end
+    # Add relationships specific DSL
     define_relationships(klass)
   end
 end
