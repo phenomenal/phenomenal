@@ -67,25 +67,31 @@ class Phenomenal::Feature < Phenomenal::Context
   # source context is a context instance  
   def activate_requirements(source_context)
     puts "ACTIVATION  #{self.required} for #{source_context} in #{self}"
-    activated = Array.new
-    if required[source_context].nil?
+    activated = {}
+    if required[manager.linked_contexts[source_context]].nil?
       return
     end
     begin 
-      required[source_context].each do |context_name|
-        context = manager.find_context(context_name)
-        if context.active?
-          context.is_required[source_context] = source_context
-          activated.push(context)
-        else
-          Phenomenal::Logger.instance.error(
-            "Error: Required context #{context_name} not active."
-          )    
+      manager.shared_contexts[source_context].each do |shared_context|
+        activated[shared_context] = Array.new
+        
+        required[manager.linked_contexts[shared_context]].each do |context_id|
+         # context = manager.find_context(context_name)
+          if context.active?
+            manager.linked_contexts[context_id].is_required[source_context] = source_context
+            activated[shared_context].push(context)
+          else
+            Phenomenal::Logger.instance.error(
+              "Error: Required context #{context_name} not active."
+            )    
+          end
         end
       end
     rescue Phenomenal::Error  # Rollback
-      activated.each do |context|
-        context.is_required.delete(source_context)
+      activated.keys.each do |k|
+        activated[k].each do |context|
+          context.is_required.delete(source_context)
+        end
       end
       raise
     end

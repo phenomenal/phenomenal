@@ -229,8 +229,10 @@ class Phenomenal::Context
   def to_s
     if name
       name.to_s
+    elsif self==manager.default_context
+      "'Default context'"
     else
-      "Anonymous context"
+      "'Anonymous context'"
     end
   end
 end
