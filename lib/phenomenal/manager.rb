@@ -5,7 +5,7 @@ class Phenomenal::Manager
   include Phenomenal::ConflictPolicies
   
   attr_accessor :active_adaptations, :deployed_adaptations, :contexts, 
-  :default_context, :combined_contexts, :shared_contexts, :linked_contexts
+  :default_context, :combined_contexts, :shared_contexts, :rmanager
   
   # Register a new context 
   def register_context(context)
@@ -21,11 +21,6 @@ class Phenomenal::Manager
       )
     end
     contexts[context]=context
-    
-    # Update linked_contexts in order to have the reference on the actual context
-    #TODO
-    i = linked_contexts.find_index(context.name)
-    linked_contexts[i]=context if !i.nil?
   end
   
   # Unregister a context (forget)
@@ -59,10 +54,10 @@ class Phenomenal::Manager
   # Activate the context 'context' and deploy the related adaptation
   def activate_context(context)
     begin
-      # Activate Relationships
-      # Requirements
-      context.parent_feature.activate_requirements(context)
+      # Relationships managment
+      rmanager.activate_relationships(context) if context.just_activated?
       
+      # Activation of adaptations
       context.adaptations.each{ |i| activate_adaptation(i) }
       #puts "activation of #{context}"
       if shared_contexts[context]
@@ -84,6 +79,9 @@ class Phenomenal::Manager
   
   # Deactivate the adaptations (undeploy if needed)
   def deactivate_context(context)
+    #Relationships managment
+    rmanager.deactivate_relationships(context)
+    #Adaptations deactivation
     context.adaptations.each do |i| 
       deactivate_adaptation(i) 
     end
@@ -131,32 +129,17 @@ class Phenomenal::Manager
       find_combined_context(contexts)
     end
   end
+  
   # Check wether context 'context' exist in the context manager
   # Context can be either the context name or the context instance itself
   def context_defined?(context, *contexts)
+    c=nil
     begin
-      find_context(context,*contexts)
+      c = find_context(context,*contexts)
     rescue Phenomenal::Error
-      return false
+      return nil
     end
-    return true
-  end
-  
-  # Too bad to specify
-  def linked_context_id(context)
-    id=nil
-    c = find_context(context)
-    if !c.nil?
-      id = linked_contexts.find_index(c)
-    else 
-      id = linked_contexts.find_index(context)
-    end
-    if id.nil?
-      linked_contexts.push(context)
-      return linked_contexts.size-1
-    else
-      return id
-    end
+    return c
   end
   # ==== Private methods ==== #
   private
@@ -317,7 +300,7 @@ class Phenomenal::Manager
     @active_adaptations = Array.new
     @combined_contexts = Hash.new
     @shared_contexts = Hash.new
-    @linked_contexts = Array.new
+    @rmanager = Phenomenal::RelationshipsManager.instance
     init_default()
   end
 end

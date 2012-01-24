@@ -1,8 +1,8 @@
 # Represent a first class context
 class Phenomenal::Context
-  
+  include Phenomenal::ContextRelationships
   @@total_activations = 0
-  def self.create(context,*contexts,nested,&block)
+  def self.create(context,*contexts,nested,closest_feature,&block)
     manager = Phenomenal::Manager.instance
     contexts.insert(0,context)
     if contexts.length==1
@@ -19,6 +19,7 @@ class Phenomenal::Context
     else #Combined contexts
       if !manager.context_defined?(*contexts) # New combined context
         context = self.new
+        context.parent=closest_feature # Set parent
         instances = Array.new
         first = contexts.first
         contexts.each do |c|
@@ -48,9 +49,10 @@ class Phenomenal::Context
   end
   
   attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
-    :activation_count,:is_required,:is_implied,:activated_suggested,:parent
+    :activation_count, :parent
   attr_reader :manager,:name
   
+  #TODO remove priority ?
   def initialize(name=nil, priority=nil,manager=nil)
     @manager = manager || Phenomenal::Manager.instance
     @name = name
@@ -59,12 +61,7 @@ class Phenomenal::Context
     @activation_count = 0
     @adaptations = Array.new
     @manager.register_context(self)
-    
-    #relationships
-    @parent = nil
-    @is_implied = {}
-    @is_required = {}
-    @activated_suggested={}
+    @parent=nil
   end
   
   # Unregister the context from the context manager,
@@ -72,6 +69,7 @@ class Phenomenal::Context
   # The context has to be inactive before being forgetted
   # TODO Find a way to avoid the use of forgeted context (use forgeted flag?)
   #TODO Handle combined contexts
+  #TODO handle relationships references
   def forget
     if active?
       Phenomenal::Logger.instance.error(
@@ -126,9 +124,7 @@ class Phenomenal::Context
   # Catch nested context and feature calls and transform them in nested contexts
   # creation
   def context(context,*contexts,&block)
-    c = Phenomenal::Context.create(self,context,*contexts,true,&block)
-    c.parent = self
-    c
+    Phenomenal::Context.create(self,context,*contexts,true,self,&block)
   end
   alias_method :phen_context,:context
 
@@ -189,6 +185,16 @@ class Phenomenal::Context
     activation_count>0
   end
   
+  # True if the context has just became active
+  def just_activated?
+    activation_count==1
+  end
+  
+  # True if the context is anonymous
+  def anonymous?
+    name.nil?
+  end
+  
   # Return the activation age of the context:
   #  The age counter minus the age counter when the context was activated
   #  for the last time
@@ -213,15 +219,16 @@ class Phenomenal::Context
     }
   end
   
+  #TODO comment
   def parent_feature
-    c = parent
-    while c!=nil && !c.is_a?(Phenomenal::Feature) do
-      c=c.parent
+    p = parent
+    while p!=nil && !p.is_a?(Phenomenal::Feature) do
+      p=p.parent
     end
-    if c==nil
-      @manager.default_context
+    if p.nil?
+      manager.default_context
     else
-      c
+      p
     end
   end
   
@@ -231,6 +238,8 @@ class Phenomenal::Context
       name.to_s
     elsif self==manager.default_context
       "'Default context'"
+    elsif manager.combined_contexts[self]
+       "'Combined context : #{manager.combined_contexts[self]}'"
     else
       "'Anonymous context'"
     end
