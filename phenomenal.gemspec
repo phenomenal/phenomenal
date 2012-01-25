@@ -4,8 +4,8 @@ require "phenomenal/version"
 
 Gem::Specification.new do |s|
    s.name = "phenomenal"
-   s.summary = "A context oriented programming framework for ruby"
-   s.description = "A context oriented programming framework for ruby"
+   s.summary = "A context oriented programming framework for Ruby"
+   s.description = "A context oriented programming framework for Ruby"
    s.version = Phenomenal::VERSION
    s.authors = "Loic Vigneron - Thibault Poncelet"
    s.email = "thibault.poncelet@student.uclouvain.be - loic.vigneron@student.uclouvain.be"

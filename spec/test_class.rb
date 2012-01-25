@@ -1,0 +1,2 @@
+class TestString < String 
+end

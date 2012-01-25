@@ -1,14 +1,16 @@
 # Represent a method adaptation for a particular context
 class  Phenomenal::Adaptation
   attr_accessor :context, :klass, :method_name, :implementation, :src_file,
-                :src_line
+                :src_line,:instance_adaptation
                 
-  def initialize(context,klass, method_name, implementation)
+  def initialize(context,klass, method_name,instance_adapatation , implementation)
     @context = context
     @klass = klass
     @method_name = method_name
     @implementation = implementation
+    @instance_adaptation=instance_adapatation
     
+    check_validity
     # Save the source location if any, this is used to find again the adaptation
     # in a ctxt_proceed call. It always exists except for method directly
     # implemented in C -> Not a problem because these one never use ctxt_proceed
@@ -50,18 +52,28 @@ class  Phenomenal::Adaptation
     end
   end
   
-  # True if the adapted method is an instance method
-  def instance_adaptation?
-    klass.instance_methods.include?(method_name)
-  end
-  
   #True if the adaptation concern the class n_klass and method n_method
-  def concern?(klass,method_name)
-    self.klass==klass && self.method_name==method_name
+  def concern?(klass,method_name,instance_adaptation)
+    self.klass==klass && 
+    self.method_name==method_name && 
+    self.instance_adaptation==instance_adaptation
   end
 
+  alias_method :instance_adaptation?, :instance_adaptation
+  
   # String representation
   def to_s
    ":#{context.name} => #{klass.name}.#{method_name} :: #{src_file}:#{src_line}"
+  end
+  
+  private
+  def check_validity
+    if klass.instance_methods.include?(method_name) && !instance_adaptation? ||
+      !klass.instance_methods.include?(method_name) &&  instance_adaptation?
+      Phenomenal::Logger.instance.error(
+        "Illegal adaptation for context: #{context}" +
+        " for #{klass.name}.#{method_name}, type mismatch"
+      )
+    end
   end
 end

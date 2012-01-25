@@ -17,12 +17,12 @@ class TestCopAdaptation < Test::Unit::TestCase
     end
 
     phen_define_context(:test_2)
-    phen_add_adaptation(:test_2,TestClass,:klass_var_access) do
+    phen_add_class_adaptation(:test_2,TestClass,:klass_var_access) do
       @@klass_var+1
     end
 
     phen_define_context(:test_3)
-    phen_add_adaptation(:test_3,TestClass,:klass_inst_var_access) do
+    phen_add_class_adaptation(:test_3,TestClass,:klass_inst_var_access) do
       @klass_inst_var+1
     end
   end

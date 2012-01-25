@@ -28,14 +28,26 @@ module Phenomenal::DSL
       # Add adaptation
       def phen_add_adaptation(context,klass, method_name, &implementation)
         Phenomenal::Manager.instance.find_context(context).add_adaptation(
-          klass, method_name, &implementation
+          klass, method_name,true, &implementation
+        )
+      end
+      
+      def phen_add_class_adaptation(context,klass, method_name, &implementation)
+        Phenomenal::Manager.instance.find_context(context).add_adaptation(
+          klass, method_name,false, &implementation
         )
       end
       
       # Remove Adaptation
       def phen_remove_adaptation(context,klass,method_name) 
         Phenomenal::Manager.instance.find_context(context).remove_adaptation(
-          klass,method_name
+          klass,method_name,true
+        )
+      end
+      
+      def phen_remove_class_adaptation(context,klass,method_name) 
+        Phenomenal::Manager.instance.find_context(context).remove_adaptation(
+          klass,method_name,false
         )
       end
       
