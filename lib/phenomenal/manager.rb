@@ -48,10 +48,10 @@ class Phenomenal::Manager
   # Register a new adaptation for a registered context
   def register_adaptation(adaptation)
     default_adaptation = default_context.adaptations.find do|i| 
-      i.concern?(adaptation.klass,adaptation.method_name)
+      i.concern?(adaptation.klass,adaptation.method_name,adaptation.instance_adaptation?)
     end
     if adaptation.context!=default_context && !default_adaptation
-      save_default_adaptation(adaptation.klass, adaptation.method_name)
+      save_default_adaptation(adaptation.klass, adaptation.method_name,adaptation.instance_adaptation?)
     end
     activate_adaptation(adaptation) if adaptation.context.active?
   end
@@ -112,7 +112,7 @@ class Phenomenal::Manager
     # IMPROVE Problems will also appears if two adaptations are defined on the same
     # line using the ';' some check needed at add_adaptation ?
     adaptations_stack = sorted_adaptations_for(calling_adaptation.klass,  
-      calling_adaptation.method_name)
+      calling_adaptation.method_name,calling_adaptation.instance_adaptation?)
     calling_adaptation_index = adaptations_stack.find_index(calling_adaptation)
 
     next_adaptation = adaptations_stack[calling_adaptation_index+1]
@@ -207,7 +207,7 @@ class Phenomenal::Manager
     if !active_adaptations.include?(adaptation)
       active_adaptations.push(adaptation)
     end
-    redeploy_adaptation(adaptation.klass,adaptation.method_name)
+    redeploy_adaptation(adaptation.klass,adaptation.method_name,adaptation.instance_adaptation?)
   end
   
   # Deactivate the adaptation and redeploy the adaptations if necessary
@@ -215,14 +215,14 @@ class Phenomenal::Manager
     active_adaptations.delete(adaptation)
     if deployed_adaptations.include?(adaptation)
       deployed_adaptations.delete(adaptation)
-      redeploy_adaptation(adaptation.klass,adaptation.method_name)
+      redeploy_adaptation(adaptation.klass,adaptation.method_name,adaptation.instance_adaptation?)
     end
   end
   
   # Redeploy the adaptations concerning klass.method_name according to the
   # conflict policy
-  def redeploy_adaptation(klass, method_name)
-    to_deploy = resolve_conflict(klass,method_name)
+  def redeploy_adaptation(klass, method_name,instance)
+    to_deploy = resolve_conflict(klass,method_name,instance)
     # Do nothing when to_deploy==nil to break at default context deactivation
     if !deployed_adaptations.include?(to_deploy) && to_deploy!=nil
       deploy_adaptation(to_deploy)
@@ -232,7 +232,7 @@ class Phenomenal::Manager
   # Deploy the adaptation
   def deploy_adaptation(adaptation)
     to_undeploy = deployed_adaptations.find do |i|
-                          i.concern?(adaptation.klass,adaptation.method_name)
+                          i.concern?(adaptation.klass,adaptation.method_name,adaptation.instance_adaptation?)
                         end
     if to_undeploy!=adaptation # if new adaptation
       deployed_adaptations.delete(to_undeploy)
@@ -242,13 +242,13 @@ class Phenomenal::Manager
   end
   
   # Save the default adaptation of a method, ie: the initial method
-  def save_default_adaptation(klass, method_name)
-    if klass.instance_methods.include?(method_name)
+  def save_default_adaptation(klass, method_name,instance)
+    if instance
       method = klass.instance_method(method_name)
     else
       method = klass.method(method_name)
     end
-    adaptation = default_context.add_adaptation(klass,method_name,method)
+    adaptation = default_context.add_adaptation(klass,method_name,instance,method)
   end
   
   # Return the adaptation that math the calling_stack, on the basis of the
@@ -280,15 +280,15 @@ class Phenomenal::Manager
   end
   
    # Return the best adaptation according to the resolution policy
-  def resolve_conflict(klass,method_name)
-    sorted_adaptations_for(klass,method_name).first
+  def resolve_conflict(klass,method_name,instance)
+    sorted_adaptations_for(klass,method_name,instance).first
   end
   
   # Return the adaptations for a particular method sorted with the
   # conflict policy
-  def sorted_adaptations_for(klass,method_name)
+  def sorted_adaptations_for(klass,method_name,instance)
     relevant_adaptations =
-      active_adaptations.find_all { |i| i.concern?(klass, method_name) }
+      active_adaptations.find_all { |i| i.concern?(klass, method_name,instance) }
     relevant_adaptations.sort!{|a,b| conflict_policy(a,b)}
   end
   

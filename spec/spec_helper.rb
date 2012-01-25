@@ -3,7 +3,7 @@ require "phenomenal"
 
 RSpec.configure do |config|
   config.color_enabled = true
-  config.formatter     = 'documentation'
+  config.formatter     = 'progress'
 end
 
 def force_forget_context(context)
@@ -11,4 +11,8 @@ def force_forget_context(context)
     phen_deactivate_context(context)
   end
   phen_forget_context(context)
+end
+
+def define_test_class 
+  load "test_class.rb"
 end

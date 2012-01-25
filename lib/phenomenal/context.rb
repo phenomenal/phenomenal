@@ -80,19 +80,20 @@ class Phenomenal::Context
   
   # Add a new method adaptation to the context
   # Return the adaptation just created
-  def add_adaptation(klass, method_name,umeth=nil, &implementation)
+  def add_adaptation(klass, method_name,instance,umeth=nil, &implementation)
     if umeth
       implementation = umeth
+      instance = klass.instance_methods.include?(method_name)
     end
-    if adaptations.find{ |i| i.concern?(klass,method_name) }
+    if adaptations.find{ |i| i.concern?(klass,method_name,instance) }
       Phenomenal::Logger.instance.error(
         "Error: Illegal duplicated adaptation in context: #{self} for " + 
         "#{klass.name}:#{method_name}"
       )
     else
-      if klass.instance_methods.include?(method_name)
+      if klass.instance_methods.include?(method_name) && instance
         method = klass.instance_method(method_name)
-      elsif klass.methods.include?(method_name)
+      elsif klass.methods.include?(method_name) && !instance
         method = klass.method(method_name)
       else
         Phenomenal::Logger.instance.error(
@@ -111,7 +112,7 @@ class Phenomenal::Context
       end
       
       adaptation = Phenomenal::Adaptation.new(
-        self, klass, method_name, implementation
+        self, klass, method_name,instance, implementation
       )
       adaptations.push(adaptation)
       manager.register_adaptation(adaptation)
@@ -145,13 +146,18 @@ class Phenomenal::Context
   
   # Adapt a method for @current_adapted_class
   def adapt(method,&block)
-    add_adaptation(@current_adapted_class,method,&block)
+    add_adaptation(@current_adapted_class,method,true,&block)
+  end
+  
+  # Adapt a method for @current_adapted_class
+  def adapt_klass(method,&block)
+    add_adaptation(@current_adapted_class,method,false,&block)
   end
 
   # Remove a method adaptation from the context
-  def remove_adaptation(klass,method_name)
+  def remove_adaptation(klass,method_name,instance)
     adaptation_index =
-      adaptations.find_index{ |i| i.concern?(klass, method_name) }
+      adaptations.find_index{ |i| i.concern?(klass, method_name,instance) }
     if !adaptation_index
       Phenomenal::Logger.instance.error(
         "Error: Illegal deleting of an inexistent adaptation in context: " +

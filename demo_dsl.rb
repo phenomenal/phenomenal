@@ -9,7 +9,7 @@ class Foo
 end
 
 context :Test do 
-   #implies :plop
+   implies :plop # TODO what if the feature is already active?
   
   adaptations_for Foo
   adapt :print do 
