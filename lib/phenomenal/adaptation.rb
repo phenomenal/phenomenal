@@ -31,9 +31,7 @@ class  Phenomenal::Adaptation
     end
   end
   
-  #TODO check for better implem
-  #TODO we are forced to keep unBoundMethod bind code, 
-  #     so allow user to use unbound meth?
+  # IMPROVE check for better implementation
   # Bind the implementation corresponding to this adaptation to 'instance' when
   # instance_method or to implementation klass when class method 
   def bind(instance,*args,&block)

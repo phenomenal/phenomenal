@@ -11,20 +11,14 @@ class Phenomenal::RelationshipsManager
       import_relationships(context)
     end
     # Step 2: Apply relationships
-    relationships.get_for_source(context).each do |relationship|
-      relationship.activate_context(context)
-    end
-    relationships.get_for_target(context).each do |relationship|
+    relationships.get_for(context).each do |relationship|
       relationship.activate_context(context)
     end
   end
   
   def deactivate_relationships(context)
     # Step 1: Unapply relationships
-    relationships.get_for_source(context).each do |relationship|
-      relationship.deactivate_context(context)
-    end
-    relationships.get_for_target(context).each do |relationship|
+    relationships.get_for(context).each do |relationship|
       relationship.deactivate_context(context)
     end
     # Step 2: Remove relationships

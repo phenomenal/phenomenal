@@ -31,6 +31,16 @@ class Phenomenal::Manager
       )
     else
       contexts.delete(context)
+      
+      # Forgot combined contexts
+      combined_contexts.delete(context)
+      if shared_contexts[context]
+        shared_contexts[context].each do |c|
+          c.forget
+        end
+      end
+      
+      # Restore default context
       init_default() if context==default_context
     end
   end
@@ -97,9 +107,9 @@ class Phenomenal::Manager
   # Call the old implementation of the method 'caller.caller_method'
   def proceed(calling_stack,instance,*args,&block)
     calling_adaptation = find_adapatation(calling_stack)
-    #TODO Problems will appears if proceed called in a file where
+    # IMPROVE Problems will appears if proceed called in a file where
     # adaptations are defined but not in one of them=> how to check?
-    #TODO Problems will also appears if two adaptations are defined on the same
+    # IMPROVE Problems will also appears if two adaptations are defined on the same
     # line using the ';' some check needed at add_adaptation ?
     adaptations_stack = sorted_adaptations_for(calling_adaptation.klass,  
       calling_adaptation.method_name)
@@ -289,7 +299,7 @@ class Phenomenal::Manager
   
    # Set the default context
   def init_default
-    self.default_context= Phenomenal::Feature.new(nil,nil,self)
+    self.default_context= Phenomenal::Feature.new(nil,self)
     self.default_context.activate
   end
 

@@ -22,18 +22,18 @@ class Phenomenal::Relationship
     self.target=t if !t.nil?
   end
   
-  def deactivate_context(context)
-  end
-  
   def activate_context(context)
   end
   
-  def deactivate_feature
+  def deactivate_context(context)
   end
   
   def activate_feature
   end
   
+  def deactivate_feature
+  end
+
   def to_s
     "#{self.class.name} between #{source.class.name}:#{source} and #{target.class.name}:#{target}"
   end

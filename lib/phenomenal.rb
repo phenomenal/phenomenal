@@ -2,6 +2,7 @@
 module Phenomenal end
 #Relationships
 require_relative "./phenomenal/relationships/context_relationships.rb"
+require_relative "./phenomenal/relationships/feature_relationships.rb"
 require_relative "./phenomenal/relationships/relationships_store.rb"
 require_relative "./phenomenal/relationships/relationships_manager.rb"
 require_relative "./phenomenal/relationships/relationship.rb"

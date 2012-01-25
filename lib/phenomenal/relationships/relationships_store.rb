@@ -39,6 +39,11 @@ class Phenomenal::RelationshipsStore
     @targets[context]=@targets.delete(context.name)
   end
   
+  def get_for(context)
+    get_for_source(context).concat(get_for_target(context))
+  end
+  
+  private
   # Return an array of relationships
   def get_for_source(source)
     rel = @sources[source]

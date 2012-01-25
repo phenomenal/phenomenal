@@ -12,14 +12,14 @@ feature :a
 context :b
 context :c
 
-context :b,:c do # TODO Question: b is a feature automatically?
+context :b,:c do
   adaptations_for Foo
   adapt :print do
     "B + C"
   end
 end
 
-context :b,:e do # TODO Question: b is a feature automatically?
+context :b,:e do
   adaptations_for Foo
   adapt :print do
     "B + E"

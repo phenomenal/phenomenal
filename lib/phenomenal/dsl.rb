@@ -11,14 +11,13 @@ module Phenomenal::DSL
       def phen_context(context,*contexts,&block)
         Phenomenal::Context.create(context,*contexts,false,nil,&block)
       end
-      #TODO check kernel repond to method
-      alias_method :context, :phen_context
+      Phenomenal::DSL.phen_alias(:context,klass)
       
       # Define context with adaptations
       def phen_feature(context,*contexts,&block)
         Phenomenal::Feature.create(context,*contexts,false,nil,&block)
       end
-      alias_method :feature, :phen_feature
+      Phenomenal::DSL.phen_alias(:feature,klass)
       
       
       # Forget Context
@@ -44,13 +43,13 @@ module Phenomenal::DSL
       def phen_activate_context(context)
         Phenomenal::Manager.instance.find_context(context).activate
       end
-      alias_method :activate_context, :phen_activate_context
+      Phenomenal::DSL.phen_alias(:activate_context,klass)
       
       # Deactivate Context
       def phen_deactivate_context(context)
         Phenomenal::Manager.instance.find_context(context).deactivate   
       end
-      alias_method :deactivate_context, :phen_deactivate_context
+      Phenomenal::DSL.phen_alias(:deactivate_context,klass)
       
       # Context is active?
       def phen_context_active?(context)
@@ -76,7 +75,7 @@ module Phenomenal::DSL
       def phen_proceed(*args,&block)
         Phenomenal::Manager.instance.proceed(caller,self,*args,&block)
       end
-      alias_method :proceed, :phen_proceed
+      Phenomenal::DSL.phen_alias(:proceed,klass)
 
       # Change conflict resolution policy (for the proceed call)
       def phen_change_conflict_policy(&block)
@@ -85,6 +84,19 @@ module Phenomenal::DSL
     end
     # Add relationships specific DSL
     define_relationships(klass)
+  end
+  
+  private
+  def self.phen_alias(method,klass)
+    if Kernel.respond_to? method
+      Phenomenal::Logger.instance.warn(
+        "The Phenomenal DSL keyword #{method} wasn't defined, use phen_#{method} instead"
+      )
+    else
+      klass.class_eval do
+        alias_method method, "phen_#{method}"
+      end
+    end
   end
 end
 

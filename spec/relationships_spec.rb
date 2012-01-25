@@ -23,20 +23,16 @@ describe "Relationships" do
       @feature.should respond_to :requirements_for
       @feature.method(:requirements_for).arity.should be(2), "Bad arity, should be 2"
     end
-#    it "should be able to add implications for contexts" do
-#      @feature.should respond_to :implications_for
-#      @feature.method(:implications_for).arity.should be(2), "Bad arity, should be 2"
-#    end
-#    it "should be able to add suggestions for contexts" do
-#      @feature.should respond_to :suggestions_for
-#      @feature.method(:suggestions_for).arity.should be(2), "Bad arity, should be 2"
-#    end
+    it "should be able to add implications for contexts" do
+      @feature.should respond_to :implications_for
+      @feature.method(:implications_for).arity.should be(2), "Bad arity, should be 2"
+    end
+    it "should be able to add suggestions for contexts" do
+      @feature.should respond_to :suggestions_for
+      @feature.method(:suggestions_for).arity.should be(2), "Bad arity, should be 2"
+    end
     
     describe "Requirements" do
-      before :each do
-        @feature.requirements_for :a, :on=>[:b,:c]
-      end
-    
       it "should store requirements" do
         @feature.requirements_for :a, :on=>[:b,:c,:d]
         @feature.requirements_for :a, :on=>:e
@@ -44,6 +40,7 @@ describe "Relationships" do
       end
       
       it "should avoid activation with missing requirements" do
+        @feature.requirements_for :a, :on=>[:b,:c]
         phen_activate_context(:feature)
         expect {phen_activate_context(:a)}.to raise_error Phenomenal::Error
         phen_context_active?(:a).should be_false
@@ -58,6 +55,7 @@ describe "Relationships" do
       end
       
       it "should deactivate source when target requirement is deactivated" do
+        @feature.requirements_for :a, :on=>[:b,:c]
         phen_activate_context(:feature)
         phen_activate_context(:b)
         phen_activate_context(:c)
@@ -67,6 +65,7 @@ describe "Relationships" do
       end
       
       it "should avoid feature activation when it add a not satisfied requirement" do
+        @feature.requirements_for :a, :on=>[:b,:c]
         phen_activate_context(:a)
         expect {phen_activate_context(:feature)}.to raise_error Phenomenal::Error
         phen_context_active?(:feature).should be_false
@@ -83,52 +82,121 @@ describe "Relationships" do
       end
       
       it "should be possible to put requirements in the nested contexts" do
-        c=nil
-        f = feature :feature2 do 
-          c=context :a do
+        feature :feature do 
+          context :a do
             requires :b
           end
         end
-        f.relationships.should have(1).items
+        @feature.relationships.should have(1).items
       end
       
       it "should be possible to put requirements in combined nested contexts" do
-        c=nil
-        f= feature :feature3 do 
-          c=context :a,:b do
-            requires :c
+        feature :feature do 
+          context :a,:b do
+            requires :c,:d,:e
           end
         end
-        f.relationships.should have(2).items
+        @feature.relationships.should have(3).items
+      end
+    end
+    describe "Implications" do
+      it "should store implications" do
+        @feature.implications_for :a, :on=>[:b,:c,:d]
+        @feature.implications_for :a, :on=>:e
+        @feature.relationships.should have(4).items
+      end
+      
+      it "should activate target when source is activated" do
+        @feature.implications_for :a, :on=>:b
+        @feature.activate
+        expect {phen_activate_context(:a)}.to_not raise_error
+        phen_context_active?(:a).should be_true
+        phen_context_active?(:b).should be_true
+      end
+      
+      it "should deactivate target when source is deactivated" do
+        @feature.implications_for :a, :on=>:b
+        @feature.activate
+        phen_activate_context(:a)
+        phen_deactivate_context(:a)
+        phen_context_active?(:b).should be_false
+      end
+      
+      it "should deactivate source when target is deactivated" do
+        @feature.implications_for :a, :on=>:b
+        @feature.activate
+        phen_activate_context(:a)
+        phen_deactivate_context(:b)
+        phen_context_active?(:a).should be_false
+      end
+      
+      it "should be possible to put implications in the nested contexts" do
+        feature :feature do 
+          context :a do
+            implies :b
+          end
+        end
+        @feature.relationships.should have(1).items
+      end
+      
+      it "should be possible to put implications in combined nested contexts" do
+        feature :feature do 
+          context :a,:b do
+            implies :c,:d,:e
+          end
+        end
+        @feature.relationships.should have(3).items
       end
     end
     
-#    describe "Implications" do
-#      it "should store implications" do
-#        @feature.implications_for :b, :on=>[:c,:d]
-#        @feature.implications_for :b, :on=>[:c,:d,:e]
-#        @feature.implications_for :b, :on=>:f
-#        @feature.implied[:b].should include(:c,:d,:e,:f)
-#        @feature.implied[:b].should have(4).items
-#      end
-#    end
-#    
-#    describe "Suggestions" do
-#      it "should store suggestions" do
-#        @feature.suggestions_for :c, :on=>[:d,:e]
-#        @feature.suggestions_for :c, :on=>[:d,:e,:f]
-#        @feature.suggestions_for :c, :on=>:g
-#        @feature.suggested[:c].should include(:d,:e,:f,:g)
-#        @feature.suggested[:c].should have(4).items
-#      end
-#    end
+    describe "Suggestions" do
+      it "should store suggestions" do
+        @feature.suggestions_for :a, :on=>[:b,:c,:d]
+        @feature.suggestions_for :a, :on=>:e
+        @feature.relationships.should have(4).items
+      end
+      
+      it "should activate target when source is activated" do
+        @feature.suggestions_for :a, :on=>:b
+        @feature.activate
+        expect {phen_activate_context(:a)}.to_not raise_error
+        phen_context_active?(:a).should be_true
+        phen_context_active?(:b).should be_true
+      end
+      
+      it "should deactivate target when source is deactivated" do
+        @feature.suggestions_for :a, :on=>:b
+        @feature.activate
+        phen_activate_context(:a)
+        phen_deactivate_context(:a)
+        phen_context_active?(:b).should be_false
+      end
+      
+      it "should not deactivate source when target is deactivated" do
+        @feature.suggestions_for :a, :on=>:b
+        @feature.activate
+        phen_activate_context(:a)
+        phen_deactivate_context(:b)
+        phen_context_active?(:a).should be_true
+      end
+      
+      it "should be possible to put suggestions in the nested contexts" do
+        feature :feature do 
+          context :a do
+            suggests :b
+          end
+        end
+        @feature.relationships.should have(1).items
+      end
+      
+      it "should be possible to put suggestions in combined nested contexts" do
+        feature :feature do 
+          context :a,:b do
+            suggests :c,:d,:e
+          end
+        end
+        @feature.relationships.should have(3).items
+      end
+    end
   end
 end
-
-
-#feature   
-#  requirements_for :a, :on=>:x,:y,:z
-#  suggestions_for :a, :on=>:x,:y,:z
-#  implications_for :a, :on=>:x,:y,:z
-#  exlusion_between :a,:b,:c
-#end

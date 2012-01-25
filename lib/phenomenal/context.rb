@@ -12,7 +12,7 @@ class Phenomenal::Context
         context = manager.find_context(context)
         if !context.instance_of?(self)
           Phenomenal::Logger.instance.error(
-            "Only #{self.name} can be used in the declaration"
+            "Only #{self.name} can be used with this keyword"
           )
         end
       end
@@ -29,7 +29,7 @@ class Phenomenal::Context
             c = manager.find_context(c) 
             if !nested && c!=first && !c.instance_of?(self)
               Phenomenal::Logger.instance.error(
-                "Only #{self.name} can be used in the declaration"
+                "Only #{self.name} can be used with this keyword"
               )
             end
           else
@@ -48,28 +48,25 @@ class Phenomenal::Context
     context
   end
   
-  attr_accessor :activation_age, :activation_frequency, :priority, :adaptations, 
-    :activation_count, :parent
+  attr_accessor :activation_age, :activation_frequency, :adaptations, 
+    :activation_count, :parent,:forgotten
   attr_reader :manager,:name
   
-  #TODO remove priority ?
-  def initialize(name=nil, priority=nil,manager=nil)
+  def initialize(name=nil, manager=nil)
     @manager = manager || Phenomenal::Manager.instance
     @name = name
-    @priority = priority
     @activation_age = 0
     @activation_count = 0
     @adaptations = Array.new
     @manager.register_context(self)
     @parent=nil
+    @forgotten=false
   end
   
   # Unregister the context from the context manager,
   # This context shoudn't be used after.
   # The context has to be inactive before being forgetted
-  # TODO Find a way to avoid the use of forgeted context (use forgeted flag?)
-  #TODO Handle combined contexts
-  #TODO handle relationships references
+  # TODO handle relationships references
   def forget
     if active?
       Phenomenal::Logger.instance.error(
@@ -77,6 +74,7 @@ class Phenomenal::Context
       )
     else
       manager.unregister_context(self)
+      forgotten=true
     end
   end
   
@@ -121,12 +119,19 @@ class Phenomenal::Context
     end
   end
   
-  # Catch nested context and feature calls and transform them in nested contexts
-  # creation
+  # Catch nested context calls and transform them in nested contexts creation
   def context(context,*contexts,&block)
+    check_validity
     Phenomenal::Context.create(self,context,*contexts,true,self,&block)
   end
   alias_method :phen_context,:context
+  
+  # Catch nested feature calls and transform them in nested contexts creation
+  def feature(feature,*features, &block)
+    check_validity
+    Phenomenal::Feature.create(self,feature,*features,true,self,&block)
+  end
+  alias_method :phen_feature,:feature
 
   # Add multiple adaptations at definition time
   def add_adaptations(&block)
@@ -160,6 +165,7 @@ class Phenomenal::Context
   
   # Activate the context
   def activate
+    check_validity
     @@total_activations +=1
     self.activation_age =@@total_activations
     self.activation_count = self.activation_count+1
@@ -169,6 +175,7 @@ class Phenomenal::Context
   
   # Deactivate the context
   def deactivate(caller_context=nil)
+    check_validity
     was_active = active?
     if self.activation_count>0
       #Deactivation
@@ -219,7 +226,7 @@ class Phenomenal::Context
     }
   end
   
-  #TODO comment
+  # Return the closest parent feature of the context
   def parent_feature
     p = parent
     while p!=nil && !p.is_a?(Phenomenal::Feature) do
@@ -239,9 +246,18 @@ class Phenomenal::Context
     elsif self==manager.default_context
       "'Default context'"
     elsif manager.combined_contexts[self]
-       "'Combined context : #{manager.combined_contexts[self]}'"
+       "'Combined context : #{manager.combined_contexts[self].flatten}'"
     else
       "'Anonymous context'"
+    end
+  end
+  
+  private
+  def check_validity
+    if forgotten
+      Phenomenal::Logger.instance.error(
+        "Action not allowed anymore when context has been forgotten"
+      )
     end
   end
 end
