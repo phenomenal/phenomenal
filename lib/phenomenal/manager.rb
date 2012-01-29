@@ -5,7 +5,7 @@ class Phenomenal::Manager
   include Phenomenal::ConflictPolicies
   
   attr_accessor :active_adaptations, :deployed_adaptations, :contexts, 
-  :default_context, :combined_contexts, :shared_contexts, :rmanager
+:default_context, :combined_contexts, :shared_contexts, :rmanager
   
   # Register a new context 
   def register_context(context)

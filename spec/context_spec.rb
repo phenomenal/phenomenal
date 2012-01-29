@@ -53,27 +53,47 @@ describe Phenomenal::Context do
   describe "#add_adaptation" do
     pending "TODO"
   end
-  describe "#context" do
-    pending "TODO"
-  end
-  describe "#feature" do
-    pending "TODO"
-  end
-  describe "#add_adaptations" do
-    pending "TODO"
-  end
-  describe "#adapatations_for" do
-    pending "TODO"
-  end
-  describe "#adapt" do
-    pending "TODO"
-  end
-  describe "#adapt_klass" do
-    pending "TODO"
-  end
+  
   describe "#remove_adaptation" do
     pending "TODO"
   end
+  
+  describe "#context" do
+    pending "TODO"
+    
+    describe "#phen_context" do
+      it "should be an alias of #context" do
+       Phenomenal::Context.instance_method(:context).should==Phenomenal::Context.instance_method(:phen_context)
+      end
+    end
+  end
+  
+  describe "#feature" do
+    pending "TODO"
+    
+    describe "#phen_feature" do
+      it "should be an alias of #feature" do
+       Phenomenal::Context.instance_method(:feature).should==Phenomenal::Context.instance_method(:phen_feature)
+      end
+    end
+  end
+  
+  describe "#add_adaptations" do
+    pending "TODO"
+  end
+  
+  describe "#adapatations_for" do
+    pending "TODO"
+  end
+  
+  describe "#adapt" do
+    pending "TODO"
+  end
+  
+  describe "#adapt_klass" do
+    pending "TODO"
+  end
+  
   
   describe "(de)activation of contexts" do
     it "should initially not be active" do
@@ -151,17 +171,80 @@ describe Phenomenal::Context do
       end
     end
     
-    describe "#just_activated" do
-      pending "TODO"
+    describe "#just_activated?" do
+      it "should be false if the context is inactive" do
+        @context.just_activated?.should be_false
+      end
+      
+      it "should be true if the context has becamed active at the very prior activation" do
+        @context.activate
+        @context.just_activated?.should be_true
+      end
+      
+      it "should be false again for the following activations" do
+        @context.activate.activate
+        @context.just_activated?.should be_false
+      end
     end
   end
   
-  describe "#anonymous" do
-    pending "TODO"
+  describe "#anonymous?" do
+    after do
+      force_forget_context(@context3)
+    end
+    it "should be true when the context has no name" do
+      @context3 = Phenomenal::Context.new
+      @context3.anonymous?.should be_true
+    end
+    
+    it "should be false when the context has a name" do
+      @context.anonymous?.should be_false
+    end
+    
+    it "should be true for the default context" do
+      Phenomenal::Manager.instance.default_context.anonymous?.should be_true
+    end
   end
   
   describe "#information" do
-    pending "TODO"
+    it "should have all and only 6 defined fields " do
+      @context.information.should have(6).items
+    end
+    it "should have a matching :name field" do
+      @context.information[:name].should==:test
+      default = Phenomenal::Manager.instance.default_context
+      default.information[:name].should be_nil
+    end
+    it "should have a matching :adaptation field" do
+      @context.information[:adaptations].should==@context.adaptations
+    end
+    it "should have a matching :active field" do
+      @context.information[:active].should be_false
+      @context.activate 
+      @context.information[:active].should be_true
+    end
+    it "should have a matching :age field" do
+      @context.activate
+      @context.information[:age].should==0
+      @context2.activate
+      @context.information[:age].should==1
+      @context2.information[:age].should==0
+    end
+    it "should have a matching :activation_count field" do
+      @context.information[:activation_count].should==0
+      @context.activate
+      @context.information[:activation_count].should==1
+    end
+    after do
+      force_forget_context(@feature)
+    end
+    it "should have a matching :type field" do
+      @context.information[:type].should=="Phenomenal::Context"
+      @feature = Phenomenal::Feature.new
+      @feature.information[:type].should=="Phenomenal::Feature"
+    end
+    
+      
   end
   describe "#parent_feature" do
     it "should be the default feature parent for simple contexts" do

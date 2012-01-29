@@ -37,7 +37,7 @@ class TestCopConflictPolicy < Test::Unit::TestCase
 
   def test_protocol_age_policy
     assert(phen_context_information(
-      phen_default_context)[:activation_age].kind_of?(Fixnum),
+      phen_default_context)[:age].kind_of?(Fixnum),
       "Contexts should have the age property")
   end
 
@@ -49,22 +49,22 @@ class TestCopConflictPolicy < Test::Unit::TestCase
     assert(!phen_context_active?(:quiet),"Context2 should be inactive")
 
     phen_activate_context(:screening)
-    assert(phen_context_information(:screening)[:activation_age] <
-            phen_context_information(phen_default_context)[:activation_age],
+    assert(phen_context_information(:screening)[:age] <
+            phen_context_information(phen_default_context)[:age],
             "screening context has been activated more recently than default")
 
     phen_activate_context(:quiet)
-    assert(phen_context_information(:quiet)[:activation_age] <
-            phen_context_information(:screening)[:activation_age],
+    assert(phen_context_information(:quiet)[:age] <
+            phen_context_information(:screening)[:age],
             "quiet context has been activated more recently than screening")
-    assert(phen_context_information(:screening)[:activation_age] <
-            phen_context_information(phen_default_context)[:activation_age],
+    assert(phen_context_information(:screening)[:age] <
+            phen_context_information(phen_default_context)[:age],
             "quiet context has still been activated more recently than default")
     phen_deactivate_context(:quiet)
     phen_deactivate_context(:screening)
     phen_activate_context(:screening)
-    assert(phen_context_information(:screening)[:activation_age] <
-            phen_context_information(:quiet)[:activation_age],
+    assert(phen_context_information(:screening)[:age] <
+            phen_context_information(:quiet)[:age],
             "screening context has now been activated more recently than quiet")
   end
 

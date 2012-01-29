@@ -1,0 +1,13 @@
+require "spec_helper"
+
+describe Phenomenal::DSL do
+  describe "#requirements_for" do
+    pending "TODO"
+  end
+  describe "#implications_for" do
+    pending "TODO"
+  end
+  describe "#suggestions_for" do
+    pending "TODO"
+  end
+end

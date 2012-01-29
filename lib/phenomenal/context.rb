@@ -226,7 +226,7 @@ class Phenomenal::Context
       :name=>name,
       :adaptations=>adaptations,
       :active=>active?,
-      :activation_age=>age,
+      :age=>age,
       :activation_count=>activation_count,
       :type=>self.class.name
     }

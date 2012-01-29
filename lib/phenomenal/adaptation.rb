@@ -3,7 +3,7 @@ class  Phenomenal::Adaptation
   attr_accessor :context, :klass, :method_name, :implementation, :src_file,
                 :src_line,:instance_adaptation
                 
-  def initialize(context,klass, method_name,instance_adapatation , implementation)
+  def initialize(context,klass, method_name,instance_adapatation,implementation)
     @context = context
     @klass = klass
     @method_name = method_name

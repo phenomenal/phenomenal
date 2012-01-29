@@ -1,7 +1,7 @@
 require "spec_helper"
 describe Phenomenal::Adaptation do
   before :each do
-   load "test_class.rb"
+   define_test_classes
   end
   
   describe "#deploy" do
@@ -54,6 +54,11 @@ describe Phenomenal::Adaptation do
    it "should return true if the adaptation concern the class n_klass and method n_method and is instance method if instance=true" do
      adaptation = Phenomenal::Adaptation.new(nil,TestString,:length,true,Proc.new{-10})
      adaptation.concern?(TestString,:length,true).should be_true
+   end
+   
+   it "should return false if the adaptation doesn't concern the class n_klass and method n_method and is instance method if instance=true" do
+     adaptation = Phenomenal::Adaptation.new(nil,TestString,:size,true,Proc.new{-10})
+     adaptation.concern?(TestString,:length,true).should be_false
    end
   end
 end

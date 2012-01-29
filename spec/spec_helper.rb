@@ -13,6 +13,6 @@ def force_forget_context(context)
   phen_forget_context(context)
 end
 
-def define_test_class 
-  load "test_class.rb"
+def define_test_classes
+  load "test_classes.rb"
 end
