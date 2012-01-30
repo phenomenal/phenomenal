@@ -142,6 +142,7 @@ class Phenomenal::Manager
   
   # Check wether context 'context' exist in the context manager
   # Context can be either the context name or the context instance itself
+  # Return the context if found, or nil otherwise
   def context_defined?(context, *contexts)
     c=nil
     begin
