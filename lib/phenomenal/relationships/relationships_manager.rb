@@ -34,27 +34,26 @@ class Phenomenal::RelationshipsManager
   
   private
   def import_relationships(feature)
-    feature.relationships.each do |relationship|
-      # Update references
-      relationship.refresh 
-      # Activate relationship
-      relationship.activate_feature
-    end
-    
-    # Import
-    feature.relationships.each do |relationship|
-      relationships.add(relationship)
+    begin
+      feature.relationships.each do |relationship|
+        relationship.refresh # Update references
+        relationship.activate_feature # Activate relationship
+        relationships.add(relationship)
+      end
+    rescue Phenomenal::Error => m
+      feature.deactivate
+      Phenomenal::Logger.instance.debug(
+        "Unable to activate the feature #{feature} \n #{m}"
+      )
     end
   end
   
   def remove_relationships(feature)
-   feature.relationships.each do |relationship|
-      # Deactivate relationship
-      relationship.deactivate_feature
-    end
-    # Remove
     feature.relationships.each do |relationship|
-      relationships.remove(relationship)
+      if relationships.include?(relationship)
+        relationship.deactivate_feature
+        relationships.remove(relationship)
+      end
     end
   end
   

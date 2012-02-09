@@ -27,10 +27,16 @@ module Phenomenal::FeatureRelationships
       )
     end
     targets[:on].each do |target|      
-      r = type.new(source,target)
+      r = type.new(source,target,self)
       if relationships.find{|o| o==r}.nil?
         relationships.push(r)
+        if self.active?
+          r.refresh
+          manager.rmanager.relationships.add(r)
+          r.activate_feature 
+        end
       end
     end
+    
   end
 end

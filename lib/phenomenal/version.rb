@@ -1,3 +1,3 @@
 module Phenomenal
-  VERSION = "0.12.1.21.0"
+  VERSION = "0.9.0"
 end
