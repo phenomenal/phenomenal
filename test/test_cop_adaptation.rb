@@ -5,23 +5,23 @@ require "test/unit"
 class TestCopAdaptation < Test::Unit::TestCase
   def setup
     phen_change_conflict_policy { |a,b| no_resolution_conflict_policy(a,b) }
-    phen_define_context(:quiet)
-    phen_define_context(:offHook)
+    phen_context(:quiet)
+    phen_context(:offHook)
     phen_add_adaptation(:quiet,Phone,:advertise){|a_call| "vibrator" }
     phen_add_adaptation(:offHook,Phone,:advertise) do |a_call|
                                                       "call waiting signal"
                                                     end
-    phen_define_context(:test)
+    phen_context(:test)
     phen_add_adaptation(:test,TestClass,:to_s) do
       @value + " @access " + value + " attr_accessor_access"
     end
 
-    phen_define_context(:test_2)
+    phen_context(:test_2)
     phen_add_class_adaptation(:test_2,TestClass,:klass_var_access) do
       @@klass_var+1
     end
 
-    phen_define_context(:test_3)
+    phen_context(:test_3)
     phen_add_class_adaptation(:test_3,TestClass,:klass_inst_var_access) do
       @klass_inst_var+1
     end
@@ -78,7 +78,7 @@ class TestCopAdaptation < Test::Unit::TestCase
   end
 
   def test_invalid_adaptation
-    phen_define_context(:temp)
+    phen_context(:temp)
     assert_raise(Phenomenal::Error,
       "Adaptation of inexistent methods should be forbidden.") do
         phen_add_adaptation(:temp,Phone,:phonyAdvertise){|a_call| "vibrator"}

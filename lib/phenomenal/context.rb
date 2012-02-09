@@ -42,6 +42,11 @@ class Phenomenal::Context
         manager.combined_contexts[context] = instances
       else
         context = manager.find_context(*contexts)
+        if !context.instance_of?(self)
+          Phenomenal::Logger.instance.error(
+            "Only #{self.name} can be used with this keyword"
+          )
+        end
       end
     end
     context.add_adaptations(&block)
@@ -74,7 +79,7 @@ class Phenomenal::Context
       )
     else
       manager.unregister_context(self)
-      forgotten=true
+      self.forgotten=true
     end
   end
   
@@ -95,6 +100,7 @@ class Phenomenal::Context
         method = klass.instance_method(method_name)
       elsif klass.methods.include?(method_name) && !instance
         method = klass.method(method_name)
+
       else
         Phenomenal::Logger.instance.error(
           "Error: Illegal adaptation for context #{self},a method with "+
@@ -150,7 +156,7 @@ class Phenomenal::Context
   end
   
   # Adapt a method for @current_adapted_class
-  def adapt_klass(method,&block)
+  def adapt_class(method,&block)
     add_adaptation(@current_adapted_class,method,false,&block)
   end
 

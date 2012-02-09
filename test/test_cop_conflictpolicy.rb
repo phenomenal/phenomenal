@@ -4,12 +4,12 @@ require "test/unit"
 
 class TestCopConflictPolicy < Test::Unit::TestCase
   def setup
-    phen_define_context(:screening)
+    phen_context(:screening)
     phen_add_adaptation(:screening,Phone,:advertise) do |a_call|
       phen_proceed(a_call)+" with screening"
     end
 
-    phen_define_context(:quiet)
+    phen_context(:quiet)
     phen_add_adaptation(:quiet,Phone,:advertise){|a_call| "vibrator" }
 
   end
@@ -134,22 +134,22 @@ class TestCopConflictPolicy < Test::Unit::TestCase
 
   def test_4_level_age_policy
     phen_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
-    phen_define_context(:level1)
+    phen_context(:level1)
     phen_add_adaptation(:level1,TestClass,:print) do |arg|
       phen_proceed(arg) + " 1 -> ARG1: #{arg.to_s}"
     end
 
-    phen_define_context(:level2)
+    phen_context(:level2)
     phen_add_adaptation(:level2,TestClass,:print) do |arg|
       phen_proceed(arg) + " 2 -> ARG2: #{arg.to_s}"
     end
 
-    phen_define_context(:level3)
+    phen_context(:level3)
     phen_add_adaptation(:level3,TestClass,:print) do |arg|
       phen_proceed(arg) + " 3 -> ARG3: #{arg.to_s}"
     end
 
-    phen_define_context(:level4)
+    phen_context(:level4)
     phen_add_adaptation(:level4,TestClass,:print) do |arg|
       phen_proceed(arg) + " 4 -> ARG4: #{arg.to_s}"
     end

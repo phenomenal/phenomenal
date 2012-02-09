@@ -8,7 +8,6 @@ describe "Relationships" do
     @context_names.each do |name|
       @feature.context(name)
     end
-    
   end
   
   after :each  do
@@ -76,10 +75,6 @@ describe "Relationships" do
         phen_context_active?(:feature).should be_false
       end
       
-      after do
-        @manager.default_context.deactivate
-        @manager.default_context.forget
-      end
       it "should be possible to add requirements to the default context" do
         requirements_for :a, :on=>[:b,:c,:d]
         requirements_for :a, :on=>:e

@@ -4,11 +4,11 @@ require "test/unit"
 
 class TestCopComposition < Test::Unit::TestCase
   def setup
-    phen_define_context(:screening)
+    phen_context(:screening)
     phen_add_adaptation(:screening,Phone,:advertise) do |a_call|
       phen_proceed(a_call)+" with screening"
     end
-    phen_define_context(:test)
+    phen_context(:test)
   end
 
   def teardown

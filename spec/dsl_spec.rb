@@ -1,17 +1,10 @@
 require "spec_helper"
 
 describe Phenomenal::DSL do
-  
-  describe "#phen_define_context" do
-    pending "TODO"
-  end
-  
   describe "#phen_context" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_context
     end
-    
-    pending "TODO"
     
     describe "#context" do
       it "should exist in Kernel" do 
@@ -29,8 +22,6 @@ describe Phenomenal::DSL do
       Kernel.should respond_to :phen_feature
     end
     
-    pending "TODO"
-    
     describe "#feature" do
       it "should exist in Kernel" do 
         Kernel.should respond_to :feature
@@ -46,47 +37,35 @@ describe Phenomenal::DSL do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_forget_context
     end
-    
-    pending "TODO"
   end
   describe "#phen_add_adaptation" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_add_adaptation
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_add_class_adaptation" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_add_class_adaptation
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_remove_adaptation" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_remove_adaptation
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_remove_class_adaptation" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_remove_class_adaptation
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_activate_context" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_activate_context
     end
-    
-    pending "TODO"
     
     describe "#activate_context" do
       it "should exist in Kernel" do 
@@ -104,8 +83,6 @@ describe Phenomenal::DSL do
       Kernel.should respond_to :phen_deactivate_context
     end
     
-    pending "TODO"
-    
     describe "#deactivate_context" do
       it "should exist in Kernel" do 
         Kernel.should respond_to :deactivate_context
@@ -121,40 +98,30 @@ describe Phenomenal::DSL do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_context_active?
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_context_information" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_context_information
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_default_context" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_default_context
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_defined_contexts" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_defined_contexts
     end
-    
-    pending "TODO"
   end
   
   describe "#phen_proceed" do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_proceed
     end
-    
-    pending "TODO"
     
     describe "#proceed" do
       it "should exist in Kernel" do 
@@ -171,11 +138,5 @@ describe Phenomenal::DSL do
     it "should exist in Kernel" do 
       Kernel.should respond_to :phen_change_conflict_policy
     end
-    
-    pending "TODO"
-  end
-  
-  describe ".phen_alias" do
-    pending "TODO"
   end
 end

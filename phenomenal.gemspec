@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
    s.description = "A context oriented programming framework for Ruby"
    s.version = Phenomenal::VERSION
    s.authors = "Loic Vigneron - Thibault Poncelet"
-   s.email = "thibault.poncelet@student.uclouvain.be - loic.vigneron@student.uclouvain.be"
+   s.email = "team@phenomenal-gem.com"
    s.date = "2011-11-24"
    s.platform = Gem::Platform::RUBY
    s.required_ruby_version = '>=1.9.2'

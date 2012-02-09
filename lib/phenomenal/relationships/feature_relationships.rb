@@ -37,6 +37,5 @@ module Phenomenal::FeatureRelationships
         end
       end
     end
-    
   end
 end

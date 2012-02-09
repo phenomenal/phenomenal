@@ -16,6 +16,8 @@ describe Phenomenal::Relationship do
       a.should_not == d
       e = Phenomenal::Relationship.new(:other_source,:target,nil)
       a.should_not == e
+      e = Phenomenal::Relationship.new(:other_source,:target,:test)
+      a.should_not == e
     end
     
     it "should be false for relationships of different types" do
@@ -26,6 +28,16 @@ describe Phenomenal::Relationship do
   end
   
   describe "#refresh" do
-    pending "TODO"
+    it "should update the references of the source and the target contexts" do
+      a = Phenomenal::Implication.new(:source,:target,nil)
+      expect{a.refresh}.to_not raise_error
+      context :source
+      context :target
+      a.refresh
+      a.source.should==context(:source)
+      a.target.should==context(:target)
+      force_forget_context(:source)
+      force_forget_context(:target)
+    end
   end
 end

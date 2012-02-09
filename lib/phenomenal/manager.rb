@@ -25,7 +25,7 @@ class Phenomenal::Manager
   
   # Unregister a context (forget)
   def unregister_context(context)
-    if context==default_context && !contexts.size==1
+    if context==default_context && contexts.size>1
       Phenomenal::Logger.instance.error(
         "Default context can only be forgotten when alone"
       )

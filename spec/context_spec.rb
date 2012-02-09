@@ -5,6 +5,7 @@ describe Phenomenal::Context do
   before :each do
     @context = Phenomenal::Context.new(:test)
     @context2 = Phenomenal::Context.new(:test2)
+    @manager = Phenomenal::Manager.instance
   end
   
   after :each  do
@@ -34,7 +35,9 @@ describe Phenomenal::Context do
     end
     
     it "should be anonymous if the name wasn't set" do
-      Phenomenal::Context.new.name.should be_nil
+      context = Phenomenal::Context.new
+      context.name.should be_nil
+      force_forget_context(context)
     end
     
     it "should be anonymous if it is the default context" do
@@ -42,24 +45,76 @@ describe Phenomenal::Context do
     end
   end
   
-  describe ".create" do
-    pending "TODO"
-  end
-  
   describe "#forget" do
-    pending "TODO"
+    it "should raise an error if the context is active" do
+      @context.activate
+      expect{@context.forget}.to raise_error Phenomenal::Error
+    end
+    
+    it "should unregister the context from the manager" do
+      @context.forget
+      @manager.contexts[@context].should be_nil
+      @context = Phenomenal::Context.new(:test)
+    end
+    
+    it "should raise an error if used after being forgotted" do
+      @context.forget
+      expect{@context.activate}.to raise_error Phenomenal::Error
+      @context = Phenomenal::Context.new(:test)
+    end
   end
   
   describe "#add_adaptation" do
-    pending "TODO"
+    it "should save the default behavior in the default context" do
+      @context.add_adaptation(TestString, :size,true) do
+        42
+      end
+      a = phen_default_context.adaptations.find{|a| a.concern?(TestString,:size,true)}
+      a.bind(TestString.new("1234")).should==4
+    end
+    
+    it "should activate the adaptation if the context is active"do
+      string = TestString.new("1234")
+      string.size.should==4
+      @context.activate
+      string.size.should==4
+      @context.add_adaptation(TestString, :size,true) do
+        42
+      end
+      string.size.should==42
+    end
+    
+    it "should  not activate the adaptation if the context is inactive"do
+      string = TestString.new("1234")
+      string.size.should==4
+      @context.add_adaptation(TestString, :size,true) do
+        42
+      end
+      string.size.should==4
+    end
   end
   
   describe "#remove_adaptation" do
-    pending "TODO"
+    it "should deactivate the adaptation if the context is active" do
+      string = TestString.new("1234")
+      string.size.should==4
+      @context.activate
+      @context.add_adaptation(TestString, :size,true) do
+        42
+      end
+      string.size.should==42
+      phen_remove_adaptation(:test, TestString, :size)
+      string.size.should==4
+      context(:test).active?.should be_true
+    end
   end
   
   describe "#context" do
-    pending "TODO"
+    it "should create a combined context of itself and the argument context" do
+      c = phen_context(:test).context(:new_context)
+      phen_context(:test,:new_context).should==c
+      force_forget_context(:new_context)
+    end
     
     describe "#phen_context" do
       it "should be an alias of #context" do
@@ -69,7 +124,11 @@ describe Phenomenal::Context do
   end
   
   describe "#feature" do
-    pending "TODO"
+    it "should create a combined context of itself and the feature" do
+      c = phen_context(:test).feature(:new_feature)
+      phen_context(:test).feature(:new_feature).should==c
+      force_forget_context(:new_feature)
+    end
     
     describe "#phen_feature" do
       it "should be an alias of #feature" do
@@ -79,19 +138,28 @@ describe Phenomenal::Context do
   end
   
   describe "#add_adaptations" do
-    pending "TODO"
+    it "should be able to adapt multiple instance method" do
+      @context.should respond_to :add_adaptations
+    end
   end
   
   describe "#adapatations_for" do
-    pending "TODO"
+    it "should set the current adapted class" do
+      @context.adaptations_for String
+      @context.instance_variable_get("@current_adapted_class").should == String
+    end
   end
   
   describe "#adapt" do
-    pending "TODO"
+    it "should be able to adapt an instance method" do
+      @context.should respond_to :adapt
+    end
   end
   
-  describe "#adapt_klass" do
-    pending "TODO"
+  describe "#adapt_class" do
+    it "should be able to adapt a  method" do
+      @context.should respond_to :adapt_class
+    end
   end
   
   
@@ -189,14 +257,6 @@ describe Phenomenal::Context do
   end
   
   describe "#anonymous?" do
-    after do
-      force_forget_context(@context3)
-    end
-    it "should be true when the context has no name" do
-      @context3 = Phenomenal::Context.new
-      @context3.anonymous?.should be_true
-    end
-    
     it "should be false when the context has a name" do
       @context.anonymous?.should be_false
     end
@@ -204,6 +264,12 @@ describe Phenomenal::Context do
     it "should be true for the default context" do
       Phenomenal::Manager.instance.default_context.anonymous?.should be_true
     end
+    
+    it "should be true when the context has no name" do
+      @context3 = Phenomenal::Context.new
+      @context3.anonymous?.should be_true
+      force_forget_context(@context3)
+    end    
   end
   
   describe "#information" do
@@ -235,13 +301,12 @@ describe Phenomenal::Context do
       @context.activate
       @context.information[:activation_count].should==1
     end
-    after do
-      force_forget_context(@feature)
-    end
+
     it "should have a matching :type field" do
       @context.information[:type].should=="Phenomenal::Context"
       @feature = Phenomenal::Feature.new
       @feature.information[:type].should=="Phenomenal::Feature"
+      force_forget_context(@feature)
     end
     
       
@@ -260,8 +325,9 @@ describe Phenomenal::Context do
         end
       end
       c.parent_feature.should be f
-      c.forget
+      
       f.forget
+      context(:c).forget
     end
   end
 end

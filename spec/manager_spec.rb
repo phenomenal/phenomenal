@@ -14,31 +14,42 @@ describe Phenomenal::Manager do
   end
   
   describe "#register_context" do
-    pending "TODO"
+    it "should save the context when they are defined" do
+      @manager.contexts[@context].should==@context
+    end
+    
+    it "should raise an error if we declare a context with a name already used" do
+      #expect{Phenomenal::Context.new(:test)}.to raise_error Phenomenal::Error
+    end
+    
+    it "should raise an error if we try to register a context twice" do
+      expect{@manager.register_context(@context)}.to raise_error Phenomenal::Error
+    end
   end
   
   describe "#unregister_context" do
-    pending "TODO"
-  end
-  
-  describe "#register_adaptation" do
-    pending "unregister_adaptation"
-  end
-  
-  describe "#activate_context" do
-    pending "TODO"
-  end
-  
-  describe "#deactivate_context" do
-    pending "TODO"
-  end
-  
-  describe "#proceed" do
-    pending "TODO"
+    it "should remove contexts from the manager" do
+      context = Phenomenal::Context.new(:context)
+      expect{@manager.unregister_context(context)}.to_not raise_error
+      @manager.contexts[context].should be_nil
+    end
+    
+    it "should allow to forget default context only when it is the only defined context" do
+      @manager.contexts.size.should==4
+      expect{@manager.unregister_context(@manager.default_context)}.to raise_error Phenomenal::Error
+      force_forget_context(@context)
+      force_forget_context(@context2)
+      @manager.contexts.size.should==1
+      expect{@manager.unregister_context(@manager.default_context)}.to_not raise_error
+      @context = Phenomenal::Context.new(:test)
+      @context2 = Phenomenal::Context.new(:test2)
+    end
   end
   
   describe "#change_conflict_policy" do
-    pending "TODO"
+    it "should be possible to change the conflict policy" do
+      @manager.should respond_to :change_conflict_policy
+    end
   end
   
   describe "#find_context" do

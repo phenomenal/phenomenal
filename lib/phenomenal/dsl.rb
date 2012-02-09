@@ -3,10 +3,6 @@ module Phenomenal::DSL
   #Override included hook method
   def self.included(klass)
     klass.class_eval do
-      #Define Context
-      def phen_define_context(name=nil,priority=nil)
-        Phenomenal::Context.new(name,priority)     
-      end
       # Define context with adaptations
       def phen_context(context,*contexts,&block)
         Phenomenal::Context.create(context,*contexts,false,nil,&block)
@@ -18,7 +14,6 @@ module Phenomenal::DSL
         Phenomenal::Feature.create(context,*contexts,false,nil,&block)
       end
       Phenomenal::DSL.phen_alias(:feature,klass)
-      
       
       # Forget Context
       def phen_forget_context(context)
