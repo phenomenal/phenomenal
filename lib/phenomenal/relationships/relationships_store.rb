@@ -23,6 +23,13 @@ class Phenomenal::RelationshipsStore
     @targets[relationship.target].delete(relationship) if @targets[relationship.target]
   end
   
+  def include?(relationship)
+    if @sources[relationship.source]
+      @sources[relationship.source].include?(relationship)
+    else
+      false
+    end
+  end
   
   def update_references(context)
     # Do nothing when anonymous, references are already valid

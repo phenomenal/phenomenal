@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
    s.required_ruby_version = '>=1.9.2'
    s.files = Dir["{lib}/**/*"] + ["LICENSE", "Rakefile", "README"]
    s.has_rdoc = true
-   s.test_files  = Dir.glob("{spec,test}/**/*.rb")
+   s.test_files  = Dir.glob("spec/**/*.rb")
    s.homepage    = "http://www.phenomenal-gem.com"
    s.add_development_dependency 'rspec', '~> 2.5'
 end

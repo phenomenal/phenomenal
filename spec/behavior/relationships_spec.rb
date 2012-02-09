@@ -16,6 +16,8 @@ describe "Relationships" do
     @context_names.each do |name|
       force_forget_context(name)
     end
+    @manager.default_context.deactivate
+    @manager.default_context.forget
   end
   
   describe Phenomenal::Feature do
@@ -70,7 +72,7 @@ describe "Relationships" do
       it "should avoid feature activation when adding a not satisfied requirement" do
         @feature.requirements_for :a, :on=>[:b,:c]
         phen_activate_context(:a)
-        expect{phen_activate_context(:feature)}.to raise_error Phenomenal::Error
+        expect{phen_activate_context(:feature)}.to_not raise_error
         phen_context_active?(:feature).should be_false
       end
       
@@ -153,6 +155,48 @@ describe "Relationships" do
     end
     
     describe "Suggestions" do
+      it "should be working on the default feature" do
+        suggestions_for :a,:on=>:b
+        @manager.default_context.relationships.should have(1).items
+        context(:a).active?.should be_false
+        context(:b).active?.should be_false
+        expect {activate_context :a}.to_not raise_error
+        context(:a).active?.should be_true
+        context(:b).active?.should be_true
+        expect {deactivate_context :a}.to_not raise_error
+        context(:a).active?.should be_false
+        context(:b).active?.should be_false
+        #TODO forget default
+      end
+      
+      it "should be possible to add relationships on active features" do
+        context(:a).active?.should be_false
+        context(:b).active?.should be_false
+        expect {activate_context :a}.to_not raise_error
+        suggestions_for :a,:on=>:b
+        @manager.default_context.relationships.should have(1).items
+        context(:a).active?.should be_true
+        context(:b).active?.should be_true
+        expect {deactivate_context :a}.to_not raise_error
+        context(:a).active?.should be_false
+        context(:b).active?.should be_false
+      end
+      
+      it "should apply the relationship on the activation of the feature that contain it" do
+        context(:a).active?.should be_false
+        context(:b).active?.should be_false
+        expect {activate_context :a}.to_not raise_error
+        @feature.suggestions_for :a,:on=>:b
+        context(:a).active?.should be_true
+        context(:b).active?.should be_false
+        expect {activate_context @feature}.to_not raise_error
+        context(:a).active?.should be_true
+        context(:b).active?.should be_true
+        expect {deactivate_context @feature}.to_not raise_error
+        context(:a).active?.should be_true
+        context(:b).active?.should be_false
+      end
+      
       it "should store suggestions" do
         @feature.suggestions_for :a, :on=>[:b,:c,:d]
         @feature.suggestions_for :a, :on=>:e

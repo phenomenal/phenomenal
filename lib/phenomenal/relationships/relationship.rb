@@ -1,17 +1,19 @@
 class Phenomenal::Relationship
-  attr_accessor :source,:target,:manager
+  attr_accessor :source,:target,:manager,:feature
   
-  def initialize(source,target)
+  def initialize(source,target,feature)
     @source=source
     @target=target
     @manager=Phenomenal::Manager.instance
+    @feature=feature
     refresh
   end
   
   def ==(other)
     self.class==other.class && 
     self.source==other.source && 
-    self.target==other.target
+    self.target==other.target &&
+    self.feature==other.feature
   end
   
   def refresh
