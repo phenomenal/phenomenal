@@ -250,11 +250,11 @@ class Phenomenal::Context
     if name
       name.to_s
     elsif self==manager.default_context
-      "'Default context'"
+      "Default context"
     elsif manager.combined_contexts[self]
-       "'Combined context : #{manager.combined_contexts[self].flatten}'"
+       "#{manager.combined_contexts[self].flatten}"
     else
-      "'Anonymous context'"
+      "Anonymous context"
     end
   end
   

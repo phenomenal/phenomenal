@@ -1,5 +1,7 @@
 # Load the gem files in the system
-module Phenomenal end
+module Phenomenal 
+  module Viewer end
+end
 #Relationships
 require_relative "./phenomenal/relationships/context_relationships.rb"
 require_relative "./phenomenal/relationships/feature_relationships.rb"
@@ -22,3 +24,7 @@ require_relative "./phenomenal/proc.rb"
 # DSL
 require_relative "./phenomenal/relationships/dsl.rb"
 require_relative "./phenomenal/dsl.rb"
+
+# Viewer
+require_relative "./phenomenal/viewer/graphical.rb"
+require_relative "./phenomenal/viewer/textual.rb"
