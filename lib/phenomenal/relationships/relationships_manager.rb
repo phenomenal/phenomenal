@@ -1,5 +1,5 @@
 require 'singleton'
-
+# This class manage the different relatiohsips in the system between contexts
 class Phenomenal::RelationshipsManager
   include Singleton
   

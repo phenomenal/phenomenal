@@ -1,3 +1,4 @@
+# Define a first class relationship
 class Phenomenal::Relationship
   attr_accessor :source,:target,:manager,:feature
   
@@ -24,15 +25,27 @@ class Phenomenal::Relationship
     self.target=t if !t.nil?
   end
   
+  # Must be redifined for each type of relation
+  # if necessary
+  # Called when a context is activated
   def activate_context(context)
   end
   
+  # Must be redifined for each type of relation
+  # if necessary
+  # Called when a context is deactivated
   def deactivate_context(context)
   end
   
+  # Must be redifined for each type of relation
+  # if necessary
+  # Called when a feature is activated
   def activate_feature
   end
   
+  # Must be redifined for each type of relation
+  # if necessary
+  # Called when a feature is deactivated
   def deactivate_feature
   end
 

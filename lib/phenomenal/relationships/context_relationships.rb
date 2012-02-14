@@ -1,3 +1,5 @@
+# Define the methods that can be called by a context to 
+# define relationships
 module Phenomenal::ContextRelationships
   def requires(context,*contexts)
     contexts = contexts.push(context)

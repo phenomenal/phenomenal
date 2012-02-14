@@ -1,3 +1,4 @@
+# Define the behavior of the Suggestion relationship
 class Phenomenal::Suggestion < Phenomenal::Relationship
   attr_accessor :activation_counter
   
@@ -25,7 +26,6 @@ class Phenomenal::Suggestion < Phenomenal::Relationship
     rescue
     end
   end
-  
   
   def activate_context(context)
     if source==context

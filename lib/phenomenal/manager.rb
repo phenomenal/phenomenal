@@ -5,7 +5,7 @@ class Phenomenal::Manager
   include Phenomenal::ConflictPolicies
   
   attr_accessor :active_adaptations, :deployed_adaptations, :contexts, 
-:default_context, :combined_contexts, :shared_contexts, :rmanager
+  :default_context, :combined_contexts, :shared_contexts, :rmanager
   
   # Register a new context 
   def register_context(context)
@@ -20,6 +20,9 @@ class Phenomenal::Manager
         " If you want to have named context it has to be a globally unique name"
       )
     end
+    # Update the relationships that concern this context
+    rmanager.update_relationships_references(context)
+    # Store the context at its ID
     contexts[context]=context
   end
   
@@ -31,7 +34,6 @@ class Phenomenal::Manager
       )
     else
       contexts.delete(context)
-      
       # Forgot combined contexts
       combined_contexts.delete(context)
       if shared_contexts[context]
@@ -39,7 +41,6 @@ class Phenomenal::Manager
           c.forget
         end
       end
-      
       # Restore default context
       init_default() if context==default_context
     end
@@ -65,8 +66,7 @@ class Phenomenal::Manager
   def activate_context(context)
     begin
       # Relationships managment
-      rmanager.activate_relationships(context) if context.just_activated?
-      
+      rmanager.activate_relationships(context) if context.just_activated?   
       # Activation of adaptations
       context.adaptations.each{ |i| activate_adaptation(i) }
       #puts "activation of #{context}"
@@ -114,9 +114,7 @@ class Phenomenal::Manager
     adaptations_stack = sorted_adaptations_for(calling_adaptation.klass,  
       calling_adaptation.method_name,calling_adaptation.instance_adaptation?)
     calling_adaptation_index = adaptations_stack.find_index(calling_adaptation)
-
     next_adaptation = adaptations_stack[calling_adaptation_index+1]
-
     next_adaptation.bind(instance,*args, &block)
   end
   
@@ -127,8 +125,8 @@ class Phenomenal::Manager
     self.class.class_eval{define_method(:conflict_policy,&block)}
   end
   
-  # Return the corresponding context or raise an error if the context isn't 
-  # currently registered.
+  # Return the corresponding context (or combined context) or raise an error 
+  # if the context isn't currently registered.
   # The 'context' parameter can be either a reference to a context instance or
   # a Symbol with the name of a named (not anonymous) context.
   def find_context(context, *contexts)
@@ -140,7 +138,7 @@ class Phenomenal::Manager
     end
   end
   
-  # Check wether context 'context' exist in the context manager
+  # Check wether context 'context' (or combined context) exist in the context manager
   # Context can be either the context name or the context instance itself
   # Return the context if found, or nil otherwise
   def context_defined?(context, *contexts)
@@ -152,7 +150,7 @@ class Phenomenal::Manager
     end
     return c
   end
-  # ==== Private methods ==== #
+
   private
   def find_simple_context(context)
     find=nil

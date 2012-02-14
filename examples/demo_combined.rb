@@ -1,100 +1,79 @@
-require_relative "./lib/phenomenal.rb"
+require_relative "../lib/phenomenal.rb"
+require "./foo"
 
-class Foo
-  def initialize
-    @inst_var = "bar"
-  end
-  def print
-    "Base: " +@inst_var
-  end
-end
-feature :a
-context :b
-context :c
+# Define a combined base contexts
+feature :f1
+context :c1
+context :c2
 
-context :b,:c do
+# Define a combined context with c1 and c2
+context :c1,:c2 do
   adaptations_for Foo
-  adapt :print do
-    "B + C"
+  adapt :my_instance_method do
+    "[c1 & c2]:Adapted instance+#{proceed}"
   end
 end
 
-context :b,:e do
+# Define a combined context with c2 and c3
+# => auto declaration of c3
+context :c2,:c3 do
   adaptations_for Foo
-  adapt :print do
-    "B + E"
+  adapt :my_instance_method do
+    "[c2 & c3]:Adapted instance+#{proceed}"
   end
 end
 
-feature :a do
-  context :b,:c do 
+# Define the combined context c1 and c2 IN f1
+# Use open context to add behaviour to f1
+feature :f1 do
+  context :c1,:c2 do 
       adaptations_for Foo
-      adapt :print do
-        "A + B + C"
+      adapt :my_instance_method do
+        "[f1 & c1 & c2]:Adapted instance+#{proceed}"
       end
   end
   
   adaptations_for Foo
-  adapt :print do
-    "A"
+  adapt :my_instance_method do
+    "[f1]:Adapted instance+#{proceed}"
   end
 end
 
-feature :a, :d
-
 f = Foo.new
-puts "============= INIT"
-puts f.print
+puts "===> Default behaviour"
+puts f.my_instance_method
 
-activate_context :a
-puts "============= A"
-puts f.print
+puts "===> :c1 context activated"
+activate_context :c1
+puts f.my_instance_method
 
-deactivate_context :a
+puts "===> :c1 context deactivated"
+deactivate_context :c1
 
-activate_context :b
-activate_context :c
-puts "=============B+C"
-puts f.print
+puts "===> :c2 context activated"
+activate_context :c2
 
-activate_context :a
-puts "============= A+B+C"
-puts f.print
+puts "===> :c3 context activated -> combined c2,c3 is activated"
+activate_context :c3
+puts f.my_instance_method
 
-deactivate_context :a
-puts "============= B+C"
-puts f.print
+puts "===> :c1 context activated -> combined c2,c3 and c1,c2 are activated"
+activate_context :c1
+puts f.my_instance_method
 
-deactivate_context :c
-puts "============= DEFAULT"
-puts f.print
-deactivate_context :b
-puts "============= DEFAULT"
-puts f.print
+puts "===> :c2 context deactivated -> combined c2,c3 and c1,c2 are deactivated"
+deactivate_context :c2
+puts f.my_instance_method
 
+puts "===> :c3 context deactivated -> no change"
+deactivate_context :c3
 
-activate_context :c
-activate_context :b
-activate_context :a
+puts "===> :f1 feature activated"
+activate_context :f1
+puts f.my_instance_method
 
+puts "===> :c1 and c2 contexts activated"
+activate_context :c1,:c2
+puts f.my_instance_method
 
-
-puts "============= A+B+C"
-puts f.print
-
-deactivate_context :b
-puts "============= A"
-puts f.print
-
-deactivate_context :c
-activate_context :e
-activate_context:b
-puts "============= A"
-puts f.print
-
-puts ""
-puts "Contexts"
-phen_defined_contexts.each do |c|
-  puts "#{c.class.name}  | #{c.information[:name]|| "?"} | #{c.information[:activation_age]}  | #{c.information[:adaptations]} | #{c.information[:active]}"
-end
 

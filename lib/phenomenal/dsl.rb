@@ -47,14 +47,22 @@ module Phenomenal::DSL
       end
       
       # Activate Context
-      def phen_activate_context(context)
-        Phenomenal::Manager.instance.find_context(context).activate
+      def phen_activate_context(context,*contexts)
+        contexts=[] if contexts.nil?
+        contexts.push(context)
+        contexts.each do |c|
+          Phenomenal::Manager.instance.find_context(c).activate
+        end
       end
       Phenomenal::DSL.phen_alias(:activate_context,klass)
       
       # Deactivate Context
-      def phen_deactivate_context(context)
-        Phenomenal::Manager.instance.find_context(context).deactivate   
+      def phen_deactivate_context(context,*contexts)
+        contexts=[] if contexts.nil?
+        contexts.push(context)
+        contexts.each do |c|
+          Phenomenal::Manager.instance.find_context(c).deactivate 
+        end 
       end
       Phenomenal::DSL.phen_alias(:deactivate_context,klass)
       

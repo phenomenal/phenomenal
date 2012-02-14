@@ -1,5 +1,6 @@
 # Context conflict resolution policies
 module Phenomenal::ConflictPolicies
+  
   # Prefer not default adaptation, error if two not default ones
     def no_resolution_conflict_policy(adaptation1,adaptation2)
       if adaptation1.context==default_context()
@@ -8,7 +9,7 @@ module Phenomenal::ConflictPolicies
         -1
       else #Fail if two non default adaptations
         Phenomenal::Logger.instance.error(
-            "Error: Illegal duplicate adapation of #{adaptation1.to_s}"
+            "Illegal duplicate adapation of #{adaptation1.to_s}"
         )
       end
     end

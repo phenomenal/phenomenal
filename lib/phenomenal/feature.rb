@@ -1,3 +1,4 @@
+# Represents a first class feature from context
 class Phenomenal::Feature < Phenomenal::Context
   include Phenomenal::FeatureRelationships
 

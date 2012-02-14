@@ -1,3 +1,4 @@
+# Define the way to generate a textual representation of the system
 class Phenomenal::Viewer::Textual
   attr_reader :manager, :rmanager
   

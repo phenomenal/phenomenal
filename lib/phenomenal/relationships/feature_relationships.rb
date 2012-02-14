@@ -1,3 +1,5 @@
+# Define the methods that can be called by a feature to
+# define relationships
 module Phenomenal::FeatureRelationships 
   attr_accessor :relationships
   

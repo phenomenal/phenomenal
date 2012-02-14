@@ -1,6 +1,11 @@
+# Define the behavior of the Requirement relationship
 class Phenomenal::Requirement < Phenomenal::Relationship
+  
   def activate_feature
     check_requirement
+  end
+  
+  def deactivate_feature
   end
   
   def activate_context(context)
