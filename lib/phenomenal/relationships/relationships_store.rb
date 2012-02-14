@@ -1,3 +1,5 @@
+# Define the class where all the actives relationships are
+# efficiently stored
 class Phenomenal::RelationshipsStore
   attr_accessor :sources, :targets
   
@@ -34,16 +36,20 @@ class Phenomenal::RelationshipsStore
   def update_references(context)
     # Do nothing when anonymous, references are already valid
     return if context.anonymous?
-    # Update sources 
-    @sources[context.name].each do |relationship|
-      relationship.source=context
+    # Update sources
+    if not @sources[context.name].nil?
+      @sources[context.name].each do |relationship|
+        relationship.source=context
+      end
+      @sources[context]=@source.delete(context.name)
     end
-    @sources[context]=@source.delete(context.name)
     # Update targets
-    @targets[context.name].each do |relationship|
-      relationship.target=context
+    if not @targets[context.name].nil?
+      @targets[context.name].each do |relationship|
+        relationship.target=context
+      end
+      @targets[context]=@targets.delete(context.name)
     end
-    @targets[context]=@targets.delete(context.name)
   end
   
   def get_for(context)

@@ -1,3 +1,5 @@
+# Define the way to generate a representation of the system
+# using the graphical library graphviz
 class Phenomenal::Viewer::Graphical
   require "graphviz"
   attr_reader :manager, :rmanager

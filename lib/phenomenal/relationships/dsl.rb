@@ -1,3 +1,4 @@
+# Define the DSL methods for relationships
 module Phenomenal::DSL
   def self.define_relationships(klass)
     klass.class_eval do

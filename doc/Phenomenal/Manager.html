@@ -1,0 +1,866 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Phenomenal::Manager</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/phenomenal/manager_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/phenomenal/manager.rb">lib/phenomenal/manager.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link"><a href="../Object.html">Object</a></p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-activate_context">#activate_context</a></li>
+          
+          <li><a href="#method-i-change_conflict_policy">#change_conflict_policy</a></li>
+          
+          <li><a href="#method-i-context_defined-3F">#context_defined?</a></li>
+          
+          <li><a href="#method-i-deactivate_context">#deactivate_context</a></li>
+          
+          <li><a href="#method-i-find_context">#find_context</a></li>
+          
+          <li><a href="#method-i-proceed">#proceed</a></li>
+          
+          <li><a href="#method-i-register_adaptation">#register_adaptation</a></li>
+          
+          <li><a href="#method-i-register_context">#register_context</a></li>
+          
+          <li><a href="#method-i-unregister_adaptation">#unregister_adaptation</a></li>
+          
+          <li><a href="#method-i-unregister_context">#unregister_context</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+      <!-- Included Modules -->
+      <div id="includes-section" class="section">
+        <h3 class="section-header">Included Modules</h3>
+        <ul class="link-list">
+        
+        
+          <li><span class="include">Singleton</span></li>
+        
+        
+        
+          <li><a class="include" href="ConflictPolicies.html">Phenomenal::ConflictPolicies</a></li>
+        
+        
+        </ul>
+      </div>
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../Gemfile.html">Gemfile</a></li>
+        
+          <li class="file"><a href="../Guardfile.html">Guardfile</a></li>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+          <li class="file"><a href="../README.html">README</a></li>
+        
+          <li class="file"><a href="../Rakefile.html">Rakefile</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Phenomenal.html">Phenomenal</a></li>
+        
+          <li><a href="../Phenomenal/Adaptation.html">Phenomenal::Adaptation</a></li>
+        
+          <li><a href="../Phenomenal/ConflictPolicies.html">Phenomenal::ConflictPolicies</a></li>
+        
+          <li><a href="../Phenomenal/Context.html">Phenomenal::Context</a></li>
+        
+          <li><a href="../Phenomenal/ContextRelationships.html">Phenomenal::ContextRelationships</a></li>
+        
+          <li><a href="../Phenomenal/DSL.html">Phenomenal::DSL</a></li>
+        
+          <li><a href="../Phenomenal/Error.html">Phenomenal::Error</a></li>
+        
+          <li><a href="../Phenomenal/Feature.html">Phenomenal::Feature</a></li>
+        
+          <li><a href="../Phenomenal/FeatureRelationships.html">Phenomenal::FeatureRelationships</a></li>
+        
+          <li><a href="../Phenomenal/Implication.html">Phenomenal::Implication</a></li>
+        
+          <li><a href="../Phenomenal/Logger.html">Phenomenal::Logger</a></li>
+        
+          <li><a href="../Phenomenal/Manager.html">Phenomenal::Manager</a></li>
+        
+          <li><a href="../Phenomenal/Relationship.html">Phenomenal::Relationship</a></li>
+        
+          <li><a href="../Phenomenal/RelationshipsManager.html">Phenomenal::RelationshipsManager</a></li>
+        
+          <li><a href="../Phenomenal/RelationshipsStore.html">Phenomenal::RelationshipsStore</a></li>
+        
+          <li><a href="../Phenomenal/Requirement.html">Phenomenal::Requirement</a></li>
+        
+          <li><a href="../Phenomenal/Suggestion.html">Phenomenal::Suggestion</a></li>
+        
+          <li><a href="../Phenomenal/Viewer.html">Phenomenal::Viewer</a></li>
+        
+          <li><a href="../Phenomenal/Viewer/Graphical.html">Phenomenal::Viewer::Graphical</a></li>
+        
+          <li><a href="../Phenomenal/Viewer/Textual.html">Phenomenal::Viewer::Textual</a></li>
+        
+          <li><a href="../Call.html">Call</a></li>
+        
+          <li><a href="../Foo.html">Foo</a></li>
+        
+          <li><a href="../Kernel.html">Kernel</a></li>
+        
+          <li><a href="../Object.html">Object</a></li>
+        
+          <li><a href="../Phone.html">Phone</a></li>
+        
+          <li><a href="../Plop.html">Plop</a></li>
+        
+          <li><a href="../Proc.html">Proc</a></li>
+        
+          <li><a href="../TestClass.html">TestClass</a></li>
+        
+          <li><a href="../TestCop.html">TestCop</a></li>
+        
+          <li><a href="../TestCopAdaptation.html">TestCopAdaptation</a></li>
+        
+          <li><a href="../TestCopComposition.html">TestCopComposition</a></li>
+        
+          <li><a href="../TestCopConflictPolicy.html">TestCopConflictPolicy</a></li>
+        
+          <li><a href="../TestCopInfrastructure.html">TestCopInfrastructure</a></li>
+        
+          <li><a href="../TestString.html">TestString</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Phenomenal::Manager</h1>
+
+    <div id="description" class="description">
+      
+<p>This class manage the different contexts in the system and their
+interactions</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="active_adaptations-attribute-method" class="method-detail">
+          <a name="active_adaptations"></a>
+          
+          <a name="active_adaptations="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">active_adaptations</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="combined_contexts-attribute-method" class="method-detail">
+          <a name="combined_contexts"></a>
+          
+          <a name="combined_contexts="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">combined_contexts</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="contexts-attribute-method" class="method-detail">
+          <a name="contexts"></a>
+          
+          <a name="contexts="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">contexts</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="default_context-attribute-method" class="method-detail">
+          <a name="default_context"></a>
+          
+          <a name="default_context="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">default_context</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="deployed_adaptations-attribute-method" class="method-detail">
+          <a name="deployed_adaptations"></a>
+          
+          <a name="deployed_adaptations="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">deployed_adaptations</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="rmanager-attribute-method" class="method-detail">
+          <a name="rmanager"></a>
+          
+          <a name="rmanager="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">rmanager</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="shared_contexts-attribute-method" class="method-detail">
+          <a name="shared_contexts"></a>
+          
+          <a name="shared_contexts="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">shared_contexts</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Private constructor because this is a singleton object</p>
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 308</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
+  <span class="ruby-ivar">@contexts</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@deployed_adaptations</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@active_adaptations</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@combined_contexts</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@shared_contexts</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@rmanager</span> = <span class="ruby-constant">Phenomenal</span><span class="ruby-operator">::</span><span class="ruby-constant">RelationshipsManager</span>.<span class="ruby-identifier">instance</span>
+  <span class="ruby-identifier">init_default</span>()
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="activate_context-method" class="method-detail ">
+          <a name="method-i-activate_context"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">activate_context</span><span
+              class="method-args">(context)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Activate the context ‘context’ and deploy the related adaptation</p>
+            
+
+            
+            <div class="method-source-code" id="activate_context-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">activate_context</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-comment"># Relationships managment</span>
+    <span class="ruby-identifier">rmanager</span>.<span class="ruby-identifier">activate_relationships</span>(<span class="ruby-identifier">context</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">just_activated?</span>
+    
+    <span class="ruby-comment"># Activation of adaptations</span>
+    <span class="ruby-identifier">context</span>.<span class="ruby-identifier">adaptations</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">activate_adaptation</span>(<span class="ruby-identifier">i</span>) }
+    <span class="ruby-comment">#puts &quot;activation of #{context}&quot;</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">shared_contexts</span>[<span class="ruby-identifier">context</span>]
+      <span class="ruby-comment">#puts &quot;trigger activation of #{shared_contexts[context].first.information}&quot;</span>
+      <span class="ruby-identifier">shared_contexts</span>[<span class="ruby-identifier">context</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">combined_context</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">need_activation</span>=<span class="ruby-keyword">true</span>
+        <span class="ruby-identifier">combined_contexts</span>[<span class="ruby-identifier">combined_context</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">shared_context</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">need_activation</span>=<span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">shared_context</span>.<span class="ruby-identifier">active?</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">combined_context</span>.<span class="ruby-identifier">activate</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">need_activation</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Phenomenal</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>
+    <span class="ruby-identifier">context</span>.<span class="ruby-identifier">deactivate</span> <span class="ruby-comment"># rollback the deployed adaptations</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-comment"># throw up the exception</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- activate_context-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- activate_context-method -->
+
+      
+        <div id="change_conflict_policy-method" class="method-detail ">
+          <a name="method-i-change_conflict_policy"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">change_conflict_policy</span><span
+              class="method-args">(&block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Change the conflict resolution policy. These can be ones from the <a
+href="ConflictPolicies.html">ConflictPolicies</a> module or other ones
+Other one should return -1 or +1 following the resolution order</p>
+            
+
+            
+            <div class="method-source-code" id="change_conflict_policy-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_conflict_policy</span> (&amp;<span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_eval</span>{<span class="ruby-identifier">define_method</span>(<span class="ruby-value">:conflict_policy</span>,&amp;<span class="ruby-identifier">block</span>)}
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- change_conflict_policy-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- change_conflict_policy-method -->
+
+      
+        <div id="context_defined-3F-method" class="method-detail ">
+          <a name="method-i-context_defined-3F"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">context_defined?</span><span
+              class="method-args">(context, *contexts)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Check wether context ‘context’ exist in the context manager <a
+href="Context.html">Context</a> can be either the context name or the
+context instance itself Return the context if found, or nil otherwise</p>
+            
+
+            
+            <div class="method-source-code" id="context_defined-3F-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 146</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">context_defined?</span>(<span class="ruby-identifier">context</span>, *<span class="ruby-identifier">contexts</span>)
+  <span class="ruby-identifier">c</span>=<span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">c</span> = <span class="ruby-identifier">find_context</span>(<span class="ruby-identifier">context</span>,*<span class="ruby-identifier">contexts</span>)
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Phenomenal</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">c</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- context_defined-3F-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- context_defined-3F-method -->
+
+      
+        <div id="deactivate_context-method" class="method-detail ">
+          <a name="method-i-deactivate_context"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">deactivate_context</span><span
+              class="method-args">(context)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Deactivate the adaptations (undeploy if needed)</p>
+            
+
+            
+            <div class="method-source-code" id="deactivate_context-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 91</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">deactivate_context</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-comment">#Relationships managment</span>
+  <span class="ruby-identifier">rmanager</span>.<span class="ruby-identifier">deactivate_relationships</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-comment">#Adaptations deactivation</span>
+  <span class="ruby-identifier">context</span>.<span class="ruby-identifier">adaptations</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> 
+    <span class="ruby-identifier">deactivate_adaptation</span>(<span class="ruby-identifier">i</span>) 
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">shared_contexts</span>[<span class="ruby-identifier">context</span>]
+    <span class="ruby-identifier">shared_contexts</span>[<span class="ruby-identifier">context</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">combined_context</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">while</span> <span class="ruby-identifier">combined_context</span>.<span class="ruby-identifier">active?</span> <span class="ruby-keyword">do</span>
+       <span class="ruby-identifier">combined_context</span>.<span class="ruby-identifier">deactivate</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- deactivate_context-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- deactivate_context-method -->
+
+      
+        <div id="find_context-method" class="method-detail ">
+          <a name="method-i-find_context"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">find_context</span><span
+              class="method-args">(context, *contexts)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Return the corresponding context or raise an error if the context isn’t 
+currently registered. The ‘context’ parameter can be either a reference to
+a context instance or a Symbol with the name of a named (not anonymous)
+context.</p>
+            
+
+            
+            <div class="method-source-code" id="find_context-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 134</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_context</span>(<span class="ruby-identifier">context</span>, *<span class="ruby-identifier">contexts</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">contexts</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">==</span><span class="ruby-value">0</span>
+    <span class="ruby-identifier">find_simple_context</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-keyword">else</span> <span class="ruby-comment">#Combined contexts</span>
+    <span class="ruby-identifier">contexts</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-value">0</span>,<span class="ruby-identifier">context</span>)
+    <span class="ruby-identifier">find_combined_context</span>(<span class="ruby-identifier">contexts</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- find_context-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- find_context-method -->
+
+      
+        <div id="proceed-method" class="method-detail ">
+          <a name="method-i-proceed"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">proceed</span><span
+              class="method-args">(calling_stack,instance,*args,&block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p><a href="../Call.html">Call</a> the old implementation of the method
+'caller.caller_method'</p>
+            
+
+            
+            <div class="method-source-code" id="proceed-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 108</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">proceed</span>(<span class="ruby-identifier">calling_stack</span>,<span class="ruby-identifier">instance</span>,*<span class="ruby-identifier">args</span>,&amp;<span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">calling_adaptation</span> = <span class="ruby-identifier">find_adapatation</span>(<span class="ruby-identifier">calling_stack</span>)
+  <span class="ruby-comment"># IMPROVE Problems will appears if proceed called in a file where</span>
+  <span class="ruby-comment"># adaptations are defined but not in one of them=&gt; how to check?</span>
+  <span class="ruby-comment"># IMPROVE Problems will also appears if two adaptations are defined on the same</span>
+  <span class="ruby-comment"># line using the ';' some check needed at add_adaptation ?</span>
+  <span class="ruby-identifier">adaptations_stack</span> = <span class="ruby-identifier">sorted_adaptations_for</span>(<span class="ruby-identifier">calling_adaptation</span>.<span class="ruby-identifier">klass</span>,  
+    <span class="ruby-identifier">calling_adaptation</span>.<span class="ruby-identifier">method_name</span>,<span class="ruby-identifier">calling_adaptation</span>.<span class="ruby-identifier">instance_adaptation?</span>)
+  <span class="ruby-identifier">calling_adaptation_index</span> = <span class="ruby-identifier">adaptations_stack</span>.<span class="ruby-identifier">find_index</span>(<span class="ruby-identifier">calling_adaptation</span>)
+
+  <span class="ruby-identifier">next_adaptation</span> = <span class="ruby-identifier">adaptations_stack</span>[<span class="ruby-identifier">calling_adaptation_index</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>]
+
+  <span class="ruby-identifier">next_adaptation</span>.<span class="ruby-identifier">bind</span>(<span class="ruby-identifier">instance</span>,*<span class="ruby-identifier">args</span>, &amp;<span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- proceed-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- proceed-method -->
+
+      
+        <div id="register_adaptation-method" class="method-detail ">
+          <a name="method-i-register_adaptation"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">register_adaptation</span><span
+              class="method-args">(adaptation)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Register a new adaptation for a registered context</p>
+            
+
+            
+            <div class="method-source-code" id="register_adaptation-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">register_adaptation</span>(<span class="ruby-identifier">adaptation</span>)
+  <span class="ruby-identifier">default_adaptation</span> = <span class="ruby-identifier">default_context</span>.<span class="ruby-identifier">adaptations</span>.<span class="ruby-identifier">find</span> <span class="ruby-keyword">do</span><span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> 
+    <span class="ruby-identifier">i</span>.<span class="ruby-identifier">concern?</span>(<span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">klass</span>,<span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">method_name</span>,<span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">instance_adaptation?</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">context!</span>=<span class="ruby-identifier">default_context</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">default_adaptation</span>
+    <span class="ruby-identifier">save_default_adaptation</span>(<span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">method_name</span>,<span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">instance_adaptation?</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">activate_adaptation</span>(<span class="ruby-identifier">adaptation</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">context</span>.<span class="ruby-identifier">active?</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- register_adaptation-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- register_adaptation-method -->
+
+      
+        <div id="register_context-method" class="method-detail ">
+          <a name="method-i-register_context"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">register_context</span><span
+              class="method-args">(context)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Register a new context</p>
+            
+
+            
+            <div class="method-source-code" id="register_context-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">register_context</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">context_defined?</span>(<span class="ruby-identifier">context</span>)
+    <span class="ruby-constant">Phenomenal</span><span class="ruby-operator">::</span><span class="ruby-constant">Logger</span>.<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">error</span>(
+      <span class="ruby-node">&quot;The context #{context} is already registered&quot;</span>
+    )
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">context_defined?</span>(<span class="ruby-identifier">context</span>.<span class="ruby-identifier">name</span>)
+    <span class="ruby-constant">Phenomenal</span><span class="ruby-operator">::</span><span class="ruby-constant">Logger</span>.<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">error</span>(
+      <span class="ruby-node">&quot;There is already a context with name: #{context.name}.&quot;</span> <span class="ruby-operator">+</span> 
+      <span class="ruby-string">&quot; If you want to have named context it has to be a globally unique name&quot;</span>
+    )
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">contexts</span>[<span class="ruby-identifier">context</span>]=<span class="ruby-identifier">context</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- register_context-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- register_context-method -->
+
+      
+        <div id="unregister_adaptation-method" class="method-detail ">
+          <a name="method-i-unregister_adaptation"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">unregister_adaptation</span><span
+              class="method-args">(adaptation)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Unregister an adaptation for a registered context</p>
+            
+
+            
+            <div class="method-source-code" id="unregister_adaptation-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unregister_adaptation</span>(<span class="ruby-identifier">adaptation</span>)
+  <span class="ruby-identifier">deactivate_adaptation</span>(<span class="ruby-identifier">adaptation</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">adaptation</span>.<span class="ruby-identifier">context</span>.<span class="ruby-identifier">active?</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- unregister_adaptation-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- unregister_adaptation-method -->
+
+      
+        <div id="unregister_context-method" class="method-detail ">
+          <a name="method-i-unregister_context"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">unregister_context</span><span
+              class="method-args">(context)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Unregister a context (forget)</p>
+            
+
+            
+            <div class="method-source-code" id="unregister_context-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/manager.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unregister_context</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">context</span><span class="ruby-operator">==</span><span class="ruby-identifier">default_context</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">contexts</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>
+    <span class="ruby-constant">Phenomenal</span><span class="ruby-operator">::</span><span class="ruby-constant">Logger</span>.<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">error</span>(
+      <span class="ruby-string">&quot;Default context can only be forgotten when alone&quot;</span>
+    )
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">contexts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">context</span>)
+    
+    <span class="ruby-comment"># Forgot combined contexts</span>
+    <span class="ruby-identifier">combined_contexts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">context</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">shared_contexts</span>[<span class="ruby-identifier">context</span>]
+      <span class="ruby-identifier">shared_contexts</span>[<span class="ruby-identifier">context</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">forget</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-comment"># Restore default context</span>
+    <span class="ruby-identifier">init_default</span>() <span class="ruby-keyword">if</span> <span class="ruby-identifier">context</span><span class="ruby-operator">==</span><span class="ruby-identifier">default_context</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- unregister_context-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- unregister_context-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+

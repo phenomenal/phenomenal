@@ -2,6 +2,7 @@
 class  Phenomenal::Adaptation
   attr_accessor :context, :klass, :method_name, :implementation, :src_file,
                 :src_line,:instance_adaptation
+  alias_method :instance_adaptation?, :instance_adaptation
                 
   def initialize(context,klass, method_name,instance_adapatation,implementation)
     @context = context
@@ -9,11 +10,10 @@ class  Phenomenal::Adaptation
     @method_name = method_name
     @implementation = implementation
     @instance_adaptation=instance_adapatation
-    
     check_validity
     # Save the source location if any, this is used to find again the adaptation
-    # in a ctxt_proceed call. It always exists except for method directly
-    # implemented in C -> Not a problem because these one never use ctxt_proceed
+    # in a proceed call. It always exists except for method directly
+    # implemented in C -> Not a problem because these one never use proceed
     source_location = implementation.source_location
     if source_location
       @src_file = implementation.source_location[0]
@@ -33,9 +33,9 @@ class  Phenomenal::Adaptation
     end
   end
   
-  # IMPROVE check for better implementation
+  # IMPROVE try to find a better implementation
   # Bind the implementation corresponding to this adaptation to 'instance' when
-  # instance_method or to implementation klass when class method 
+  # instance_adaptation or to implementation class when class method 
   def bind(instance,*args,&block)
     if instance_adaptation?
       if implementation.class==Proc
@@ -58,9 +58,7 @@ class  Phenomenal::Adaptation
     self.method_name==method_name && 
     self.instance_adaptation==instance_adaptation
   end
-
-  alias_method :instance_adaptation?, :instance_adaptation
-  
+    
   # String representation
   def to_s
    ":#{context.name} => #{klass.name}.#{method_name} :: #{src_file}:#{src_line}"

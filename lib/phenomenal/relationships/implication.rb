@@ -1,3 +1,4 @@
+# Define the behavior of the Implication relationship
 class Phenomenal::Implication < Phenomenal::Relationship  
   attr_accessor :activation_counter
   def initialize(source,target,feature)

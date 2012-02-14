@@ -1,7 +1,12 @@
-# Represent a first class context
+# Represents a first class context
 class Phenomenal::Context
   include Phenomenal::ContextRelationships
   @@total_activations = 0
+  
+  attr_accessor :activation_age, :activation_frequency, :adaptations, 
+    :activation_count, :parent,:forgotten
+  attr_reader :manager,:name
+  
   def self.create(context,*contexts,nested,closest_feature,&block)
     manager = Phenomenal::Manager.instance
     contexts.insert(0,context)
@@ -12,7 +17,7 @@ class Phenomenal::Context
         context = manager.find_context(context)
         if !context.instance_of?(self)
           Phenomenal::Logger.instance.error(
-            "Only #{self.name} can be used with this keyword"
+            "Only #{self.name} can be used with this keyword."
           )
         end
       end
@@ -29,7 +34,7 @@ class Phenomenal::Context
             c = manager.find_context(c) 
             if !nested && c!=first && !c.instance_of?(self)
               Phenomenal::Logger.instance.error(
-                "Only #{self.name} can be used with this keyword"
+                "Only #{self.name} can be used with this keyword."
               )
             end
           else
@@ -44,7 +49,7 @@ class Phenomenal::Context
         context = manager.find_context(*contexts)
         if !context.instance_of?(self)
           Phenomenal::Logger.instance.error(
-            "Only #{self.name} can be used with this keyword"
+            "Only #{self.name} can be used with this keyword."
           )
         end
       end
@@ -52,10 +57,6 @@ class Phenomenal::Context
     context.add_adaptations(&block)
     context
   end
-  
-  attr_accessor :activation_age, :activation_frequency, :adaptations, 
-    :activation_count, :parent,:forgotten
-  attr_reader :manager,:name
   
   def initialize(name=nil, manager=nil)
     @manager = manager || Phenomenal::Manager.instance
@@ -69,7 +70,7 @@ class Phenomenal::Context
   end
   
   # Unregister the context from the context manager,
-  # This context shoudn't be used after.
+  # This context shouldn't be used after.
   # The context has to be inactive before being forgetted
   # TODO handle relationships references
   def forget
@@ -92,31 +93,29 @@ class Phenomenal::Context
     end
     if adaptations.find{ |i| i.concern?(klass,method_name,instance) }
       Phenomenal::Logger.instance.error(
-        "Error: Illegal duplicated adaptation in context: #{self} for " + 
-        "#{klass.name}:#{method_name}"
+        "Illegal duplicated adaptation in context: #{self} for " + 
+        "#{klass.name}:#{method_name}."
       )
     else
       if klass.instance_methods.include?(method_name) && instance
         method = klass.instance_method(method_name)
       elsif klass.methods.include?(method_name) && !instance
         method = klass.method(method_name)
-
       else
         Phenomenal::Logger.instance.error(
-          "Error: Illegal adaptation for context #{self},a method with "+
+          "Illegal adaptation for context #{self},a method with "+
           "name: #{method_name} should exist in class #{klass.name} to "+ 
-          "be adapted"
+          "be adapted."
         )
       end
       if method.arity != implementation.arity
         Phenomenal::Logger.instance.error(
-          "Error: Illegal adaptation for context #{self},the adaptation "+ 
+          "Illegal adaptation for context #{self},the adaptation "+ 
           "have to keep the original method arity for method: " +
           "#{klass.name}.#{method_name}: (#{method.arity} instead of " +
-          "#{implementation.arity})" 
+          "#{implementation.arity})." 
         )
       end
-      
       adaptation = Phenomenal::Adaptation.new(
         self, klass, method_name,instance, implementation
       )
@@ -155,7 +154,7 @@ class Phenomenal::Context
     add_adaptation(@current_adapted_class,method,true,&block)
   end
   
-  # Adapt a method for @current_adapted_class
+  # Adapt a class method for @current_adapted_class
   def adapt_class(method,&block)
     add_adaptation(@current_adapted_class,method,false,&block)
   end
@@ -166,8 +165,8 @@ class Phenomenal::Context
       adaptations.find_index{ |i| i.concern?(klass, method_name,instance) }
     if !adaptation_index
       Phenomenal::Logger.instance.error(
-        "Error: Illegal deleting of an inexistent adaptation in context: " +
-        "#{self} for #{klass.name}.#{method_name})"
+        "Illegal deleting of an inexistent adaptation in context: " +
+        "#{self} for #{klass.name}.#{method_name})."
       )
     end
     
@@ -215,18 +214,18 @@ class Phenomenal::Context
   end
   
   # Return the activation age of the context:
-  #  The age counter minus the age counter when the context was activated
-  #  for the last time
+  # (The age counter minus the age counter when the context was activated
+  # for the last time)
   def age
     @@total_activations-activation_age
   end
   
   # Return context informations:
-  #   - Name
-  #   - List of the adaptations
-  #   - Active state
-  #   - Activation age
-  #   - Activation count
+  # - Name
+  # - List of the adaptations
+  # - Active state
+  # - Activation age
+  # - Activation count
   def information
     {
       :name=>name,
@@ -268,7 +267,7 @@ class Phenomenal::Context
   def check_validity
     if forgotten
       Phenomenal::Logger.instance.error(
-        "Action not allowed anymore when context has been forgotten"
+        "Action not allowed anymore when context has been forgotten."
       )
     end
   end

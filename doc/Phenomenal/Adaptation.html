@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+  <title>Class: Phenomenal::Adaptation</title>
+
+  <link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+  <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/darkfish.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body id="top" class="class">
+
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
+
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="../lib/phenomenal/adaptation_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/phenomenal/adaptation.rb">lib/phenomenal/adaptation.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
+
+      
+    </div>
+
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link"><a href="../Object.html">Object</a></p>
+        
+      </div>
+      
+
+      
+
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-bind">#bind</a></li>
+          
+          <li><a href="#method-i-concern-3F">#concern?</a></li>
+          
+          <li><a href="#method-i-deploy">#deploy</a></li>
+          
+          <li><a href="#method-i-to_s">#to_s</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+      <div id="fileindex-section" class="section project-section">
+        <h3 class="section-header">Files</h3>
+        <ul>
+        
+          <li class="file"><a href="../Gemfile.html">Gemfile</a></li>
+        
+          <li class="file"><a href="../Guardfile.html">Guardfile</a></li>
+        
+          <li class="file"><a href="../LICENSE.html">LICENSE</a></li>
+        
+          <li class="file"><a href="../README.html">README</a></li>
+        
+          <li class="file"><a href="../Rakefile.html">Rakefile</a></li>
+        
+        </ul>
+      </div>
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="../images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="../Phenomenal.html">Phenomenal</a></li>
+        
+          <li><a href="../Phenomenal/Adaptation.html">Phenomenal::Adaptation</a></li>
+        
+          <li><a href="../Phenomenal/ConflictPolicies.html">Phenomenal::ConflictPolicies</a></li>
+        
+          <li><a href="../Phenomenal/Context.html">Phenomenal::Context</a></li>
+        
+          <li><a href="../Phenomenal/ContextRelationships.html">Phenomenal::ContextRelationships</a></li>
+        
+          <li><a href="../Phenomenal/DSL.html">Phenomenal::DSL</a></li>
+        
+          <li><a href="../Phenomenal/Error.html">Phenomenal::Error</a></li>
+        
+          <li><a href="../Phenomenal/Feature.html">Phenomenal::Feature</a></li>
+        
+          <li><a href="../Phenomenal/FeatureRelationships.html">Phenomenal::FeatureRelationships</a></li>
+        
+          <li><a href="../Phenomenal/Implication.html">Phenomenal::Implication</a></li>
+        
+          <li><a href="../Phenomenal/Logger.html">Phenomenal::Logger</a></li>
+        
+          <li><a href="../Phenomenal/Manager.html">Phenomenal::Manager</a></li>
+        
+          <li><a href="../Phenomenal/Relationship.html">Phenomenal::Relationship</a></li>
+        
+          <li><a href="../Phenomenal/RelationshipsManager.html">Phenomenal::RelationshipsManager</a></li>
+        
+          <li><a href="../Phenomenal/RelationshipsStore.html">Phenomenal::RelationshipsStore</a></li>
+        
+          <li><a href="../Phenomenal/Requirement.html">Phenomenal::Requirement</a></li>
+        
+          <li><a href="../Phenomenal/Suggestion.html">Phenomenal::Suggestion</a></li>
+        
+          <li><a href="../Phenomenal/Viewer.html">Phenomenal::Viewer</a></li>
+        
+          <li><a href="../Phenomenal/Viewer/Graphical.html">Phenomenal::Viewer::Graphical</a></li>
+        
+          <li><a href="../Phenomenal/Viewer/Textual.html">Phenomenal::Viewer::Textual</a></li>
+        
+          <li><a href="../Call.html">Call</a></li>
+        
+          <li><a href="../Foo.html">Foo</a></li>
+        
+          <li><a href="../Kernel.html">Kernel</a></li>
+        
+          <li><a href="../Object.html">Object</a></li>
+        
+          <li><a href="../Phone.html">Phone</a></li>
+        
+          <li><a href="../Plop.html">Plop</a></li>
+        
+          <li><a href="../Proc.html">Proc</a></li>
+        
+          <li><a href="../TestClass.html">TestClass</a></li>
+        
+          <li><a href="../TestCop.html">TestCop</a></li>
+        
+          <li><a href="../TestCopAdaptation.html">TestCopAdaptation</a></li>
+        
+          <li><a href="../TestCopComposition.html">TestCopComposition</a></li>
+        
+          <li><a href="../TestCopConflictPolicy.html">TestCopConflictPolicy</a></li>
+        
+          <li><a href="../TestCopInfrastructure.html">TestCopInfrastructure</a></li>
+        
+          <li><a href="../TestString.html">TestString</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
+  </div>
+
+  <div id="documentation">
+    <h1 class="class">Phenomenal::Adaptation</h1>
+
+    <div id="description" class="description">
+      
+<p>Represent a method adaptation for a particular context</p>
+
+    </div><!-- description -->
+
+    
+    
+    
+    <div id="5Buntitled-5D" class="documentation-section">
+      
+
+      
+
+      
+
+      
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
+
+        
+        <div id="context-attribute-method" class="method-detail">
+          <a name="context"></a>
+          
+          <a name="context="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">context</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="implementation-attribute-method" class="method-detail">
+          <a name="implementation"></a>
+          
+          <a name="implementation="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">implementation</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="instance_adaptation-attribute-method" class="method-detail">
+          <a name="instance_adaptation"></a>
+          
+          <a name="instance_adaptation="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">instance_adaptation</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="instance_adaptation-3F-attribute-method" class="method-detail">
+          <a name="instance_adaptation?"></a>
+          
+          <a name="instance_adaptation?="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">instance_adaptation?</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="klass-attribute-method" class="method-detail">
+          <a name="klass"></a>
+          
+          <a name="klass="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">klass</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="method_name-attribute-method" class="method-detail">
+          <a name="method_name"></a>
+          
+          <a name="method_name="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">method_name</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="src_file-attribute-method" class="method-detail">
+          <a name="src_file"></a>
+          
+          <a name="src_file="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">src_file</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="src_line-attribute-method" class="method-detail">
+          <a name="src_line"></a>
+          
+          <a name="src_line="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">src_line</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(context,klass, method_name,instance_adapatation,implementation)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/adaptation.rb, line 6</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">context</span>,<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">method_name</span>,<span class="ruby-identifier">instance_adapatation</span>,<span class="ruby-identifier">implementation</span>)
+  <span class="ruby-ivar">@context</span> = <span class="ruby-identifier">context</span>
+  <span class="ruby-ivar">@klass</span> = <span class="ruby-identifier">klass</span>
+  <span class="ruby-ivar">@method_name</span> = <span class="ruby-identifier">method_name</span>
+  <span class="ruby-ivar">@implementation</span> = <span class="ruby-identifier">implementation</span>
+  <span class="ruby-ivar">@instance_adaptation</span>=<span class="ruby-identifier">instance_adapatation</span>
+  
+  <span class="ruby-identifier">check_validity</span>
+  <span class="ruby-comment"># Save the source location if any, this is used to find again the adaptation</span>
+  <span class="ruby-comment"># in a ctxt_proceed call. It always exists except for method directly</span>
+  <span class="ruby-comment"># implemented in C -&gt; Not a problem because these one never use ctxt_proceed</span>
+  <span class="ruby-identifier">source_location</span> = <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">source_location</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">source_location</span>
+    <span class="ruby-ivar">@src_file</span> = <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">source_location</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-ivar">@src_line</span> = <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">source_location</span>[<span class="ruby-value">1</span>]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="bind-method" class="method-detail ">
+          <a name="method-i-bind"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">bind</span><span
+              class="method-args">(instance,*args,&block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>IMPROVE check for better implementation Bind the implementation
+corresponding to this adaptation to ‘instance’ when instance_method or to
+implementation klass when class method</p>
+            
+
+            
+            <div class="method-source-code" id="bind-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/adaptation.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">bind</span>(<span class="ruby-identifier">instance</span>,*<span class="ruby-identifier">args</span>,&amp;<span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">instance_adaptation?</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Proc</span>
+      <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">phenomenal_bind</span>(<span class="ruby-identifier">instance</span>).<span class="ruby-identifier">call</span>(*<span class="ruby-identifier">args</span>,&amp;<span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">bind</span>(<span class="ruby-identifier">instance</span>).<span class="ruby-identifier">call</span>(*<span class="ruby-identifier">args</span>,&amp;<span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">==</span><span class="ruby-constant">Proc</span>
+      <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">phenomenal_class_bind</span>(<span class="ruby-identifier">klass</span>).<span class="ruby-identifier">call</span>(*<span class="ruby-identifier">args</span>,&amp;<span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">implementation</span>.<span class="ruby-identifier">call</span>(*<span class="ruby-identifier">args</span>,&amp;<span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- bind-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- bind-method -->
+
+      
+        <div id="concern-3F-method" class="method-detail ">
+          <a name="method-i-concern-3F"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">concern?</span><span
+              class="method-args">(klass,method_name,instance_adaptation)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>True if the adaptation concern the class n_klass and method n_method</p>
+            
+
+            
+            <div class="method-source-code" id="concern-3F-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/adaptation.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">concern?</span>(<span class="ruby-identifier">klass</span>,<span class="ruby-identifier">method_name</span>,<span class="ruby-identifier">instance_adaptation</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">klass</span><span class="ruby-operator">==</span><span class="ruby-identifier">klass</span> <span class="ruby-operator">&amp;&amp;</span> 
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">method_name</span><span class="ruby-operator">==</span><span class="ruby-identifier">method_name</span> <span class="ruby-operator">&amp;&amp;</span> 
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">instance_adaptation</span><span class="ruby-operator">==</span><span class="ruby-identifier">instance_adaptation</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- concern-3F-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- concern-3F-method -->
+
+      
+        <div id="deploy-method" class="method-detail ">
+          <a name="method-i-deploy"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">deploy</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Deploy actually the adaptation in the target class by overriding the
+current implementation</p>
+            
+
+            
+            <div class="method-source-code" id="deploy-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/adaptation.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">deploy</span>
+  <span class="ruby-identifier">method_name</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">method_name</span>
+  <span class="ruby-identifier">implementation</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">implementation</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">instance_adaptation?</span>
+    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">class_eval</span> { <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">implementation</span>) }
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">define_singleton_method</span>(<span class="ruby-identifier">method_name</span>,<span class="ruby-identifier">implementation</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- deploy-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- deploy-method -->
+
+      
+        <div id="to_s-method" class="method-detail ">
+          <a name="method-i-to_s"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">to_s</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>String representation</p>
+            
+
+            
+            <div class="method-source-code" id="to_s-source">
+<pre>
+<span class="ruby-comment"># File lib/phenomenal/adaptation.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>
+ <span class="ruby-node">&quot;:#{context.name} =&gt; #{klass.name}.#{method_name} :: #{src_file}:#{src_line}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- to_s-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- to_s-method -->
+
+      
+      </div><!-- public-instance-method-details -->
+    
+    </div><!-- 5Buntitled-5D -->
+  
+
+  </div><!-- documentation -->
+
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
+
+</body>
+</html>
+
