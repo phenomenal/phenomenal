@@ -113,10 +113,8 @@ class Phenomenal::Viewer::Graphical
     end
     # Define node color
     if context.active?
-      puts "ACT #{context.to_s}"
       node[:color]="red"
     else
-      puts "UNACT #{context.to_s}"
       node[:color]="black"
     end
     
