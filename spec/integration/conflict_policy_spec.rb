@@ -1,8 +1,9 @@
 require "spec_helper"
 
 describe "Conflict policies" do
-  phen_change_conflict_policy { |a,b| no_resolution_conflict_policy(a,b) }
+  
   before :each do
+    phen_change_conflict_policy { |a,b| no_resolution_conflict_policy(a,b) }
     context(:screening) do
       adaptations_for Phone
       adapt :advertise do |a_call|
@@ -21,7 +22,7 @@ describe "Conflict policies" do
   after :each do
     force_forget_context(:screening)
     force_forget_context(:quiet)
-    phen_change_conflict_policy { |a,b| no_resolution_conflict_policy(a,b) }
+    phen_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
   end
   
   it "should not allow two contexts with an adaptation for the same method to be active at the same time" do

@@ -2,6 +2,9 @@
 class TestString < String
 end
 
+class TestString2 < String
+end
+
 class TestClass < String
   @klass_inst_var = 2
   @@klass_var = 1
