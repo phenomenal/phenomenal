@@ -42,9 +42,11 @@ puts "===> :c1 context deactivated"
 deactivate_context :c1
 puts show_active_contexts
 
+Phenomenal::Viewer::Graphical.new("demo_relationships.png").generate
+#puts Phenomenal::Viewer::Textual.new.generate
+
 puts "===> :c2 context activated"
 activate_context :c2
 puts show_active_contexts
 
-Phenomenal::Viewer::Graphical.new("demo_relationships.png").generate
-#puts Phenomenal::Viewer::Textual.new.generate
+
