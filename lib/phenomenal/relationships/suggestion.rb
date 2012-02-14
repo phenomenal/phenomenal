@@ -21,21 +21,29 @@ class Phenomenal::Suggestion < Phenomenal::Relationship
     begin
       if activation_counter>0
         target.deactivate
-        self.activation_coutner-=1
+        self.activation_counter-=1
       end
     rescue
     end
   end
   
   def activate_context(context)
-    if source==context
-      target.activate
+    begin
+      if source==context
+        target.activate
+        self.activation_counter+=1
+      end
+    rescue
     end
   end
   
   def deactivate_context(context)
-    if source==context
-      target.deactivate
+    begin
+      if source==context && activation_counter>0
+        target.deactivate
+        self.activation_counter-=1
+      end
+    rescue
     end
   end
 end
