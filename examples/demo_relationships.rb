@@ -11,7 +11,7 @@ def show_active_contexts
 end
 
 context :c1 do
-  implies :c2
+  #implies :c2
   suggests :c3
 end
 
