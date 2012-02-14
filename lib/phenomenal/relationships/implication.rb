@@ -9,28 +9,33 @@ class Phenomenal::Implication < Phenomenal::Relationship
   def activate_feature
     if source.active?
       target.activate
-      activation_counter+=1
+      self.activation_counter+=1
     end
   end
   
   def deactivate_feature
     if activation_counter>0
       target.deactivate
-      activation_coutner-=1
+      self.activation_counter-=1
     end
   end
   
   def activate_context(context)
     if source==context
       target.activate
+      self.activation_counter+=1
     end
   end
   
   def deactivate_context(context)
-    if source==context
+    if source==context && activation_counter>0
       target.deactivate
-    else
+      self.activation_counter-=1
+    elsif activation_counter>0
       source.deactivate
+      self.activation_counter-=1
+    else
+      # Nothing to do
     end
   end
 end
