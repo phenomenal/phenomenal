@@ -161,7 +161,6 @@ describe "Relationships" do
         expect {deactivate_context :a}.to_not raise_error
         context(:a).active?.should be_false
         context(:b).active?.should be_false
-        #TODO forget default
       end
       
       it "should be possible to add relationships on active features" do

@@ -1,5 +1,4 @@
 class Phenomenal::Viewer::Textual
-  require "graphviz"
   attr_reader :manager, :rmanager
   
   def initialize()

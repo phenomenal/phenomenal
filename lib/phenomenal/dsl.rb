@@ -91,6 +91,8 @@ module Phenomenal::DSL
     end
     # Add relationships specific DSL
     define_relationships(klass)
+    # Add Viewers specific DSL
+    define_viewers(klass)
   end
   
   private

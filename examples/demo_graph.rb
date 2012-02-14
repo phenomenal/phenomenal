@@ -21,5 +21,5 @@ end
 
 phen_activate_context(:f1)
 
-Phenomenal::Viewer::Graphical.new("test.png").generate
-puts Phenomenal::Viewer::Textual.new.generate
+phen_graphical_view
+puts phen_textual_view

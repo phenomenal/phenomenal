@@ -21,10 +21,13 @@ require_relative "./phenomenal/logger.rb"
 require_relative "./phenomenal/manager.rb"
 require_relative "./phenomenal/proc.rb"
 
-# DSL
-require_relative "./phenomenal/relationships/dsl.rb"
-require_relative "./phenomenal/dsl.rb"
-
 # Viewer
 require_relative "./phenomenal/viewer/graphical.rb"
 require_relative "./phenomenal/viewer/textual.rb"
+
+# DSL
+require_relative "./phenomenal/relationships/dsl.rb"
+require_relative "./phenomenal/viewer/dsl.rb"
+require_relative "./phenomenal/dsl.rb"
+
+

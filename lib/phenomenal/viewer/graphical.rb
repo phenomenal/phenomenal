@@ -1,9 +1,22 @@
 class Phenomenal::Viewer::Graphical
-  require "graphviz"
+  begin
+    require "graphviz"
+    @@graphviz=true
+  rescue LoadError
+    @@graphviz=false
+  end  
+  
   attr_reader :manager, :rmanager
   attr_accessor :main_graph, :feature_nodes, :r_feature_nodes, :context_nodes, :destination_file
   
   def initialize(destination_file)
+    if !@@graphviz
+      Phenomenal::Logger.instance.error(
+        "The 'ruby-graphviz' gem isn't available. Please install it to generate graphic visualitations\n"+
+        " Otherwise use the text version"
+      )
+    end
+    
     @manager=Phenomenal::Manager.instance
     @rmanager=Phenomenal::RelationshipsManager.instance
     @destination_file=destination_file
@@ -39,6 +52,8 @@ class Phenomenal::Viewer::Graphical
     if context.is_a?(Phenomenal::Feature)
       context.relationships.each do |relationship|
         # Get source and destionation node
+        ltail=""
+        lhead=""
         relationship.refresh
         if self.feature_nodes.include?(relationship.source)
           source_node=self.r_feature_nodes[relationship.source]
@@ -113,6 +128,5 @@ class Phenomenal::Viewer::Graphical
     if context.active?
       node[:color]="red"
     end
-    
   end
 end
