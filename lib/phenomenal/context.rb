@@ -4,7 +4,7 @@ class Phenomenal::Context
   @@total_activations = 0
   
   attr_accessor :activation_age, :activation_frequency, :adaptations, 
-    :activation_count, :parent,:forgotten
+    :activation_count, :parent, :forgotten
   attr_reader :manager,:name
   
   def self.create(context,*contexts,nested,closest_feature,&block)

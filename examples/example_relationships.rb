@@ -33,9 +33,8 @@ end
 
 puts "===> Contexts defined + graph generated at example_relationships.png"
 puts show_active_contexts
-Phenomenal::Viewer::Graphical.new("example_relationships.png").generate
-#puts Phenomenal::Viewer::Textual.new.generate
-
+phen_graphical_view
+puts phen_textual_view
 puts "===> :c1 context activated"
 activate_context :c1
 puts show_active_contexts
