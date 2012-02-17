@@ -106,7 +106,7 @@ class Phenomenal::Manager
   
   # Call the old implementation of the method 'caller.caller_method'
   def proceed(calling_stack,instance,*args,&block)
-    calling_adaptation = find_adapatation(calling_stack)
+    calling_adaptation = find_adaptation(calling_stack)
     # IMPROVE Problems will appears if proceed called in a file where
     # adaptations are defined but not in one of them=> how to check?
     # IMPROVE Problems will also appears if two adaptations are defined on the same
@@ -253,7 +253,7 @@ class Phenomenal::Manager
   # Return the adaptation that math the calling_stack, on the basis of the
   # file and the line number --> proceed is always called under an
   # adaptation definition
-  def find_adapatation(calling_stack)
+  def find_adaptation(calling_stack)
     source = calling_stack[0]
     source_info = source.scan(/(.+\.rb):(\d+)/)[0]
     call_file = source_info[0]

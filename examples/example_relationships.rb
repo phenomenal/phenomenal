@@ -33,11 +33,13 @@ end
 
 puts "===> Contexts defined + graph generated at example_relationships.png"
 puts show_active_contexts
-phen_graphical_view
+
 puts phen_textual_view
+
 puts "===> :c1 context activated"
 activate_context :c1
 puts show_active_contexts
+phen_graphical_view
 
 puts "===> :c1 context deactivated"
 deactivate_context :c1
