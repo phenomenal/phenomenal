@@ -150,6 +150,12 @@ class Phenomenal::Manager
     end
     return c
   end
+  
+  
+  # Resolution policy
+  def conflict_policy(adaptation1, adaptation2)
+    age_conflict_policy(adaptation1, adaptation2)
+  end
 
   private
   def find_simple_context(context)
@@ -289,11 +295,6 @@ class Phenomenal::Manager
     relevant_adaptations =
       active_adaptations.find_all { |i| i.concern?(klass, method_name,instance) }
     relevant_adaptations.sort!{|a,b| conflict_policy(a,b)}
-  end
-  
-  # Resolution policy
-  def conflict_policy(adaptation1, adaptation2)
-    age_conflict_policy(adaptation1, adaptation2)
   end
   
    # Set the default context
