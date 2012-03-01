@@ -2,20 +2,20 @@
 module Phenomenal::ConflictPolicies
   
   # Prefer not default adaptation, error if two not default ones
-    def no_resolution_conflict_policy(adaptation1,adaptation2)
-      if adaptation1.context==default_context()
+    def no_resolution_conflict_policy(context1,context2)
+      if context1==default_context()
         1
-      elsif adaptation2.context.name==default_context()
+      elsif context2==default_context()
         -1
       else #Fail if two non default adaptations
         Phenomenal::Logger.instance.error(
-            "Illegal duplicate adapation of #{adaptation1.to_s}"
+            "Illegal duplicate adapation between contexts #{context1} and #{context2} "
         )
       end
     end
 
     # Age based conflict resolution
-    def age_conflict_policy(adaptation1, adaptation2)
-       adaptation1.context.age <=> adaptation2.context.age
+    def age_conflict_policy(context1, context2)
+       context1.age <=> context2.age
     end
 end
