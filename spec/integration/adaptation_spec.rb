@@ -49,6 +49,8 @@ describe "Simple adaptations" do
     force_forget_context(context(:test))
     force_forget_context(context(:test_2))
     force_forget_context(context(:test_3))
+    
+    phen_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
   end
   
   it "should override default behavior" do
