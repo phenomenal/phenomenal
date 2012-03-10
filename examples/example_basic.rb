@@ -1,5 +1,5 @@
 require "../lib/phenomenal"
-require "./foo"
+require "./Foo"
 
 context :demo do 
   adaptations_for Foo

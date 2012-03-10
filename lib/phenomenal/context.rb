@@ -87,6 +87,11 @@ class Phenomenal::Context
   # Add a new method adaptation to the context
   # Return the adaptation just created
   def add_adaptation(klass, method_name,instance,umeth=nil, &implementation)
+    if klass.nil? # Not defined class
+      Phenomenal::Logger.instance.error(
+        "The class to be adapted wasn't specified. Don't forget to use 'adaptations_for(Klass)' before adapting a method"
+      )
+    end
     if umeth
       implementation = umeth
       instance = klass.instance_methods.include?(method_name)
@@ -142,6 +147,7 @@ class Phenomenal::Context
   # Add multiple adaptations at definition time
   def add_adaptations(&block)
     instance_eval(&block) if block
+    @current_adapted_class=nil #Reset adapted class after context closed
   end
   
   # Set the current adapted class for the next adapt calls

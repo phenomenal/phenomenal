@@ -1,5 +1,5 @@
 require_relative "../lib/phenomenal.rb"
-require "./foo"
+require "./Foo"
 
 # Define a combined base contexts
 feature :f1
