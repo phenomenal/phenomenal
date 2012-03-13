@@ -39,13 +39,13 @@ class  Phenomenal::Adaptation
   def bind(instance,*args,&block)
     if instance_adaptation?
       if implementation.class==Proc
-        implementation.phenomenal_bind(instance).call(*args,&block)
+        instance.instance_exec(*args,block,&implementation)
       else
         implementation.bind(instance).call(*args,&block)
       end
     else
       if implementation.class==Proc
-        implementation.phenomenal_class_bind(klass).call(*args,&block)
+        klass.instance_exec(*args,block,&implementation)
       else
         implementation.call(*args,&block)
       end
