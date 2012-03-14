@@ -10,14 +10,17 @@ module Phenomenal::FeatureRelationships
   def requirements_for(source,targets)
     add_relationship(source,targets,Phenomenal::Requirement)
   end  
+  alias_method :phen_requirements_for,:requirements_for
   
   def implications_for(source,targets)
     add_relationship(source,targets,Phenomenal::Implication)
   end  
+  alias_method :phen_implications_for,:implications_for
   
   def suggestions_for(source,targets)
     add_relationship(source,targets,Phenomenal::Suggestion)
   end  
+  alias_method :phen_suggestions_for,:suggestions_for
   
   private 
   def add_relationship(source,targets,type)
