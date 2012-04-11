@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
    s.version = Phenomenal::VERSION
    s.authors = "Loic Vigneron - Thibault Poncelet"
    s.email = "team@phenomenal-gem.com"
-   s.date = "2011-11-24"
    s.platform = Gem::Platform::RUBY
    s.required_ruby_version = '>=1.9.2'
    s.files = Dir["{lib}/**/*"] + ["LICENSE", "Rakefile", "README"]
