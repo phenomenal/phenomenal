@@ -19,7 +19,6 @@ require_relative "./phenomenal/context.rb"
 require_relative "./phenomenal/feature.rb"
 require_relative "./phenomenal/logger.rb"
 require_relative "./phenomenal/manager.rb"
-require_relative "./phenomenal/proc.rb"
 
 # Viewer
 require_relative "./phenomenal/viewer/graphical.rb"
