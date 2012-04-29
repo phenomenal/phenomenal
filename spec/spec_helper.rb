@@ -1,6 +1,9 @@
 require 'simplecov'
-SimpleCov.start do
-  add_filter "/spec/"
+if ENV["COVERAGE"]
+  SimpleCov.start do
+    add_filter "/spec/"
+    add_filter "/lib/phenomenal/viewer"
+  end
 end
 
 require 'rspec'

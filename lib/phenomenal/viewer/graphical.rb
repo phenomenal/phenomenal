@@ -58,28 +58,15 @@ class Phenomenal::Viewer::Graphical
     if context.is_a?(Phenomenal::Feature)
       context.relationships.each do |relationship|
         # Get source and destionation node
-        ltail=""
-        lhead=""
         relationship.refresh
-        
         source_node,ltail = node(relationship.source)
         target_node,lhead = node(relationship.target)
-        
         # Get graph container
         graph = graph_container(relationship)
-        
         # Add edge
-        edge=graph.add_edges(source_node,target_node,:ltail=>ltail,:lhead=>lhead)   
-        # Define edge label
-        if context!=manager.default_context
-          edge[:label]=context.to_s
-         end
-        # Define edge color
-        if rmanager.relationships.include?(relationship)
-          edge[:color]="red"
-        end
-        # Define arrow type
-        set_arrow_type(edge,relationship)
+        edge = graph.add_edges(source_node,target_node,:ltail=>ltail,:lhead=>lhead)   
+        # Define edge type
+        set_edge(context,edge,relationship)
       end
     end
   end
@@ -102,7 +89,15 @@ class Phenomenal::Viewer::Graphical
     end
   end
   
-  def set_arrow_type(edge,relationship)
+  def set_edge(context,edge,relationship)
+    # Define edge label
+    if context!=manager.default_context
+      edge[:label]=context.to_s
+     end
+    # Define edge color
+    if rmanager.relationships.include?(relationship)
+      edge[:color]="red"
+    end
     # Define arrow type
     if relationship.is_a?(Phenomenal::Implication)
       edge[:arrowhead]="normal"
@@ -128,11 +123,7 @@ class Phenomenal::Viewer::Graphical
       current_graph=feature_nodes[context.parent_feature]
     end
     # Add node
-    if context.is_a?(Phenomenal::Feature)
-      node = add_node_for_feature(context,current_graph)
-    else
-      node = add_node_for_context(context,current_graph)
-    end
+    node  = new_node_for(context,current_graph)
     # Define node color
     if context.active?
       node[:color]="red"
@@ -141,23 +132,23 @@ class Phenomenal::Viewer::Graphical
     end
   end
   
-  def add_node_for_feature(feature,current_graph)
-    node=current_graph.add_graph("cluster_#{feature.to_s}")
-    node[:label]="#{feature.to_s}"
-    # Add hidden node for feature relationship
-    fr=node.add_nodes("#{feature.to_s}_relationship")
-    fr[:style]="invis"
-    fr[:height]=0.02
-    fr[:width]=0.02
-    fr[:fixedsize]=true
-    self.feature_nodes[feature]=node
-    self.r_feature_nodes[feature]=fr
-    node
-  end
-  
-  def add_node_for_context(context,current_graph)
-    node=current_graph.add_nodes(context.to_s) 
-    self.context_nodes[context]=node
+  def new_node_for(context,current_graph)
+    if context.is_a?(Phenomenal::Feature)
+      node=current_graph.add_graph("cluster_#{context.to_s}")
+      node[:label]="#{context.to_s}"
+      # Add hidden node for feature relationship
+      fr=node.add_nodes("#{context.to_s}_relationship")
+      fr[:style]="invis"
+      fr[:height]=0.02
+      fr[:width]=0.02
+      fr[:fixedsize]=true
+      self.feature_nodes[context]=node
+      self.r_feature_nodes[context]=fr
+      node
+    else
+      node=current_graph.add_nodes(context.to_s) 
+      self.context_nodes[context]=node
+    end
     node
   end
 end
