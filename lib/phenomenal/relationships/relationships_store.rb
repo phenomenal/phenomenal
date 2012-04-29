@@ -37,39 +37,34 @@ class Phenomenal::RelationshipsStore
     # Do nothing when anonymous, references are already valid
     return if context.anonymous?
     # Update sources
-    if not @sources[context.name].nil?
-      @sources[context.name].each do |relationship|
-        relationship.source=context
-      end
-      @sources[context]=@source.delete(context.name)
+    set_references(@sources,context) do
+      relationship.source=context
     end
     # Update targets
-    if not @targets[context.name].nil?
-      @targets[context.name].each do |relationship|
-        relationship.target=context
-      end
-      @targets[context]=@targets.delete(context.name)
+    set_references(@sources,context) do
+      relationship.target=context 
     end
   end
   
+  # Return all relationships for 'context'
   def get_for(context)
-    get_for_source(context).concat(get_for_target(context))
+    array_for(@sources,context).concat(array_for(@targets,context))
   end
   
   private
-  # Return an array of relationships
-  def get_for_source(source)
-    rel = @sources[source]
-    if rel.nil?
-      Array.new
-    else
-      rel
+  # Set the references for 'context' (according to 'block')
+  def set_references(contexts,context,&block)
+    if !contexts[context.name].nil?
+      contexts[context.name].each do |relationship|
+        yield
+      end
+      contexts[context]=contexts.delete(context.name)
     end
   end
   
   # Return an array of relationships
-  def get_for_target(target)
-    rel = @targets[target]
+  def array_for(contexts,context)
+    rel = contexts[context]
     if rel.nil?
       Array.new
     else

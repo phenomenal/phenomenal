@@ -1,4 +1,5 @@
 GEM
+  remote: http://rubygems.org/
   specs:
     diff-lcs (1.1.3)
     ffi (1.0.9)
@@ -9,6 +10,7 @@ GEM
       guard (>= 0.10.0)
     libnotify (0.7.2)
       ffi (~> 1.0.0)
+    multi_json (1.3.4)
     rspec (2.8.0)
       rspec-core (~> 2.8.0)
       rspec-expectations (~> 2.8.0)
@@ -17,6 +19,10 @@ GEM
     rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.8.0)
+    simplecov (0.6.2)
+      multi_json (~> 1.3)
+      simplecov-html (~> 0.5.3)
+    simplecov-html (0.5.3)
     thor (0.14.6)
 
 PLATFORMS
@@ -27,3 +33,4 @@ DEPENDENCIES
   guard-rspec
   libnotify
   rspec
+  simplecov

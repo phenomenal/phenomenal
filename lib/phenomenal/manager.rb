@@ -34,13 +34,7 @@ class Phenomenal::Manager
       )
     else
       contexts.delete(context)
-      # Forgot combined contexts
-      combined_contexts.delete(context)
-      if shared_contexts[context]
-        shared_contexts[context].each do |c|
-          c.forget
-        end
-      end
+      unregister_combined_contexts(context)
       # Restore default context
       init_default() if context==default_context
     end
@@ -69,18 +63,8 @@ class Phenomenal::Manager
       rmanager.activate_relationships(context) if context.just_activated?   
       # Activation of adaptations
       context.adaptations.each{ |i| activate_adaptation(i) }
-      #puts "activation of #{context}"
-      if shared_contexts[context]
-        #puts "trigger activation of #{shared_contexts[context].first.information}"
-        shared_contexts[context].each do |combined_context|
-          need_activation=true
-          combined_contexts[combined_context].each do |shared_context|
-            need_activation=false if !shared_context.active?
-          end
-          combined_context.activate if need_activation
-        end
-      end
-      
+      # Activate combined contexts
+      activate_combined_contexts(context)
     rescue Phenomenal::Error
       context.deactivate # rollback the deployed adaptations
       raise # throw up the exception
@@ -95,13 +79,7 @@ class Phenomenal::Manager
     context.adaptations.each do |i| 
       deactivate_adaptation(i) 
     end
-    if shared_contexts[context]
-      shared_contexts[context].each do |combined_context|
-        while combined_context.active? do
-         combined_context.deactivate
-        end
-      end
-    end
+    deactivate_combined_contexts(context)
   end
   
   # Call the old implementation of the method 'caller.caller_method'
@@ -157,7 +135,41 @@ class Phenomenal::Manager
     age_conflict_policy(context1, context2)
   end
 
+  # PRIVATE METHODS
   private
+  
+  def unregister_combined_contexts(context)
+    # Forgot combined contexts
+    combined_contexts.delete(context)
+    if shared_contexts[context]
+      shared_contexts[context].each do |c|
+        c.forget
+      end
+    end
+  end
+  
+  def activate_combined_contexts(context)
+    if shared_contexts[context]
+      shared_contexts[context].each do |combined_context|
+        need_activation=true
+        combined_contexts[combined_context].each do |shared_context|
+          need_activation=false if !shared_context.active?
+      end
+      combined_context.activate if need_activation
+      end
+    end
+  end
+  
+  def deactivate_combined_contexts(context)
+    if shared_contexts[context]
+      shared_contexts[context].each do |combined_context|
+        while combined_context.active? do
+         combined_context.deactivate
+        end
+      end
+    end
+  end
+  
   def find_simple_context(context)
     find=nil
     if !context.kind_of?(Phenomenal::Context)
@@ -260,16 +272,9 @@ class Phenomenal::Manager
   # file and the line number --> proceed is always called under an
   # adaptation definition
   def find_adaptation(calling_stack)
-    source = calling_stack[0]
-    source_info = source.scan(/(.+\.rb):(\d+)/)[0]
-    call_file = source_info[0]
-    call_line = source_info[1].to_i
-    i = 0
+    call_file,call_line = parse_stack(calling_stack)
     match = nil
-    relevants = active_adaptations.select{ |i| i.src_file == call_file }
-    # Sort by src_line DESC
-    relevants.sort!{ |a,b| b.src_line <=> a.src_line }
-    relevants.each do |adaptation|
+    relevant_adaptations(call_file).each do |adaptation|
       if adaptation.src_line <= call_line # Find first matching line
         match = adaptation
         break
@@ -282,6 +287,22 @@ class Phenomenal::Manager
       )
     end
     match
+  end
+  
+  # Parse calling stack to find the calling line and file
+  def parse_stack(calling_stack)
+    source = calling_stack[0]
+    source_info = source.scan(/(.+\.rb):(\d+)/)[0]
+    call_file = source_info[0]
+    call_line = source_info[1].to_i
+    [call_file,call_line]
+  end
+  
+  # Gets the relevants adaptations for a file in DESC order of line number
+  def relevant_adaptations(call_file)
+    relevants = active_adaptations.select{ |i| i.src_file == call_file }
+    # Sort by src_line DESC order
+    relevants.sort!{ |a,b| b.src_line <=> a.src_line }
   end
   
    # Return the best adaptation according to the resolution policy
