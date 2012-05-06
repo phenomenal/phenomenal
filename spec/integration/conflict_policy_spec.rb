@@ -107,7 +107,7 @@ describe "Conflict policies" do
     phone.advertise(call).should=="ringtone"
   end
   
-  it "should PPPPPPPPPPPPPPPPPPPP" do
+  it "should proceed adaptations in the rigth order" do
     phen_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
     context(:level1)
     phen_add_adaptation(:level1,TestClass,:print) do |arg|

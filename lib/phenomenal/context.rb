@@ -114,7 +114,6 @@ class Phenomenal::Context
     end
     if umeth
       implementation = umeth
-      instance = klass.instance_methods.include?(method_name)
     end
     if adaptations.find{ |i| i.concern?(klass,method_name,instance) }
       Phenomenal::Logger.instance.error(
