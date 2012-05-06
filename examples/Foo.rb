@@ -10,6 +10,3 @@ class Foo
     "Base class : #{self.name}"
   end
 end
-
-
-puts Foo.instance_method(:my_instance_method).arity
