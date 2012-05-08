@@ -313,9 +313,9 @@ class Phenomenal::Manager
   # Return the adaptations for a particular method sorted with the
   # conflict policy
   def sorted_adaptations_for(klass,method_name,instance)
-    relevant_adaptations =
+    relevants =
       active_adaptations.find_all { |i| i.concern?(klass, method_name,instance) }
-    relevant_adaptations.sort!{|a,b| conflict_policy(a.context,b.context)}
+    relevants.sort!{|a,b| conflict_policy(a.context,b.context)}
   end
   
    # Set the default context
