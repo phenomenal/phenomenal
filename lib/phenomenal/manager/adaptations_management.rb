@@ -1,5 +1,6 @@
 module Phenomenal::AdaptationsManagement
   attr_accessor :active_adaptations, :deployed_adaptations
+  
   # Register a new adaptation for a registered context
   def register_adaptation(adaptation)
     default_adaptation = default_context.adaptations.find do|i| 

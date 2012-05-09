@@ -17,4 +17,16 @@ module Phenomenal::ConflictPolicies
     def age_conflict_policy(context1, context2)
        context1.age <=> context2.age
     end
+    
+    # Resolution policy
+    def conflict_policy(context1, context2)
+      age_conflict_policy(context1, context2)
+    end
+
+    # Change the conflict resolution policy.
+    # These can be ones from the ConflictPolicies module or other ones
+    # Other one should return -1 or +1 following the resolution order
+    def change_conflict_policy (&block)
+      self.class.class_eval{define_method(:conflict_policy,&block)}
+    end
 end
