@@ -9,7 +9,7 @@ class Phenomenal::Context
   
   # Class metods
   class << self
-    def create(context,*contexts,nested,closest_feature,&block)
+    def create(nested,closest_feature,context,*contexts,&block)
       manager = Phenomenal::Manager.instance
       contexts.insert(0,context)
       if contexts.length==1
@@ -152,14 +152,14 @@ class Phenomenal::Context
   # Catch nested context calls and transform them in nested contexts creation
   def context(context,*contexts,&block)
     check_validity
-    Phenomenal::Context.create(self,context,*contexts,true,self,&block)
+    Phenomenal::Context.create(true,self,self,context,*contexts,&block)
   end
   alias_method :phen_context,:context
   
   # Catch nested feature calls and transform them in nested contexts creation
   def feature(feature,*features, &block)
     check_validity
-    Phenomenal::Feature.create(self,feature,*features,true,self,&block)
+    Phenomenal::Feature.create(true,self,self,feature,*features,&block)
   end
   alias_method :phen_feature,:feature
 
