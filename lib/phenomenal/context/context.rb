@@ -1,82 +1,13 @@
 # Represents a first class context
 class Phenomenal::Context
+  extend Phenomenal::ContextCreation
   include Phenomenal::ContextRelationships
+  
   @@total_activations = 0
   
   attr_accessor :activation_age, :activation_frequency, :adaptations, 
     :activation_count, :parent, :forgotten
-  attr_reader :manager,:name
-  
-  # Class metods
-  class << self
-    def create(nested,closest_feature,context,*contexts,&block)
-      manager = Phenomenal::Manager.instance
-      contexts.insert(0,context)
-      if contexts.length==1
-        context = find_or_create_simple_context(manager,context)
-      else #Combined contexts
-        context = find_or_create_combined_context(manager,contexts,nested,closest_feature)
-      end
-      context.add_adaptations(&block)
-      context
-    end
-    
-    private
-    def find_or_create_simple_context(manager,context)
-      if !manager.context_defined?(context)
-        self.new(context) 
-      else
-        context = manager.find_context(context)
-        if !context.instance_of?(self)
-          Phenomenal::Logger.instance.error(
-            "Only #{self.name} can be used with this keyword."
-          )
-        end
-        context
-      end
-    end
-    
-    def find_or_create_combined_context(manager,contexts,nested,closest_feature)
-      if !manager.context_defined?(*contexts) # New combined context
-        context = create_combined_context(manager,contexts,nested,closest_feature)
-      else
-        context = manager.find_context(*contexts)
-        if !context.instance_of?(self)
-          Phenomenal::Logger.instance.error(
-            "Only #{self.name} can be used with this keyword."
-          )
-        end
-      end
-      context
-    end
-    
-    def create_combined_context(manager,contexts,nested,closest_feature)
-      context = self.new
-      context.parent=closest_feature # Set parent
-      instances = Array.new
-      first = contexts.first
-      contexts.each do |c|
-        # Use the object instance if already available
-        # otherwise create it
-        if manager.context_defined?(c)
-          c = manager.find_context(c) 
-          if !nested && c!=first && !c.instance_of?(self)
-            Phenomenal::Logger.instance.error(
-              "Only #{self.name} can be used with this keyword."
-            )
-          end
-        else
-          c = self.new(c) 
-        end
-        instances.push(c)
-        manager.shared_contexts[c]= Array.new if !manager.shared_contexts[c]
-        manager.shared_contexts[c].push(context)
-      end
-      manager.combined_contexts[context] = instances
-      context
-    end
-  end
-  
+  attr_reader :manager,:name  
   # Instance methods
   def initialize(name=nil, manager=nil)
     @manager = manager || Phenomenal::Manager.instance
@@ -112,36 +43,14 @@ class Phenomenal::Context
         "The class to be adapted wasn't specified. Don't forget to use 'adaptations_for(Klass)' before adapting a method"
       )
     end
-    if umeth
-      implementation = umeth
-    end
     if adaptations.find{ |i| i.concern?(klass,method_name,instance) }
       Phenomenal::Logger.instance.error(
         "Illegal duplicated adaptation in context: #{self} for " + 
         "#{klass.name}:#{method_name}."
       )
     else
-      if klass.instance_methods.include?(method_name) && instance
-        method = klass.instance_method(method_name)
-      elsif klass.methods.include?(method_name) && !instance
-        method = klass.method(method_name)
-      else
-        Phenomenal::Logger.instance.error(
-          "Illegal adaptation for context #{self},a method with "+
-          "name: #{method_name} should exist in class #{klass.name} to "+ 
-          "be adapted."
-        )
-      end
-      if method.arity != implementation.arity
-        Phenomenal::Logger.instance.error(
-          "Illegal adaptation for context #{self},the adaptation "+ 
-          "have to keep the original method arity for method: " +
-          "#{klass.name}.#{method_name}: (#{method.arity} instead of " +
-          "#{implementation.arity})." 
-        )
-      end
       adaptation = Phenomenal::Adaptation.new(
-        self, klass, method_name,instance, implementation
+        self, klass, method_name,instance, umeth||implementation
       )
       adaptations.push(adaptation)
       manager.register_adaptation(adaptation)

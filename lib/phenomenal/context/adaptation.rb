@@ -32,25 +32,16 @@ class  Phenomenal::Adaptation
       klass.define_singleton_method(method_name,implementation)
     end
   end
-  
-  # IMPROVE try to find a better implementation
+
   # Bind the implementation corresponding to this adaptation to 'instance' when
   # instance_adaptation or to implementation class when class method 
   def bind(instance,*args,&block)
-    if instance_adaptation?
-      if implementation.class==Proc
-        args.push(block)
-        instance.instance_exec(*args,&implementation)
-      else
-        implementation.bind(instance).call(*args,&block)
-      end
+    target = instance_adaptation? ? instance : klass
+    if implementation.is_a?(Proc)
+      args.push(block)
+      target.instance_exec(*args,&implementation)
     else
-      if implementation.class==Proc
-        args.push(block)
-        klass.instance_exec(*args,&implementation)
-      else
-        implementation.call(*args,&block)
-      end
+      implementation.bind(target).call(*args,&block)
     end
   end
   
@@ -68,12 +59,36 @@ class  Phenomenal::Adaptation
   
   private
   def check_validity
-    if klass.instance_methods.include?(method_name) && !instance_adaptation? ||
-      !klass.instance_methods.include?(method_name) &&  instance_adaptation?
+    method = get_original_method
+    if method.arity != implementation.arity
+      Phenomenal::Logger.instance.error(
+        "Illegal adaptation for context #{context},the adaptation "+ 
+        "have to keep the original method arity for method: " +
+        "#{klass.name}.#{method_name}: (#{method.arity} instead of " +
+        "#{implementation.arity})." 
+      )
+    elsif klass.instance_methods.include?(method_name) ^ instance_adaptation?
       Phenomenal::Logger.instance.error(
         "Illegal adaptation for context: #{context}" +
         " for #{klass.name}.#{method_name}, type mismatch"
       )
     end
+  end
+  
+  def get_original_method
+    begin
+      if instance_adaptation?
+        method = klass.instance_method(method_name)
+      else
+        method = klass.method(method_name)
+      end
+    rescue NameError
+      Phenomenal::Logger.instance.error(
+        "Illegal adaptation for context #{context},a method with "+
+        "name: #{method_name} should exist in class #{klass.name} to "+ 
+        "be adapted."
+      )
+    end
+    method
   end
 end
