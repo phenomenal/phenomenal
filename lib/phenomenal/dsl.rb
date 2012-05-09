@@ -48,21 +48,13 @@ module Phenomenal::DSL
       
       # Activate Context
       def phen_activate_context(context,*contexts)
-        contexts=[] if contexts.nil?
-        contexts.push(context)
-        contexts.each do |c|
-          Phenomenal::Manager.instance.find_context(c).activate
-        end
+        Phenomenal::DSL.phen_switch_context_state(true,context,*contexts)
       end
       Phenomenal::DSL.phen_alias(:activate_context,klass)
       
       # Deactivate Context
       def phen_deactivate_context(context,*contexts)
-        contexts=[] if contexts.nil?
-        contexts.push(context)
-        contexts.each do |c|
-          Phenomenal::Manager.instance.find_context(c).deactivate 
-        end 
+        Phenomenal::DSL.phen_switch_context_state(false,context,*contexts)
       end
       Phenomenal::DSL.phen_alias(:deactivate_context,klass)
       
@@ -104,6 +96,18 @@ module Phenomenal::DSL
   end
   
   private
+  def self.phen_switch_context_state(activate,context,*contexts)
+    contexts=[] if contexts.nil?
+    contexts.push(context)
+    contexts.each do |c|
+      if activate
+        Phenomenal::Manager.instance.find_context(c).activate 
+      else
+        Phenomenal::Manager.instance.find_context(c).deactivate 
+      end
+    end 
+  end
+  
   def self.phen_alias(method,klass)
     if Kernel.respond_to? method
       Phenomenal::Logger.instance.warn(
