@@ -5,13 +5,13 @@ module Phenomenal::DSL
     klass.class_eval do
       # Define context with adaptations
       def phen_context(context,*contexts,&block)
-        Phenomenal::Context.create(context,*contexts,false,nil,&block)
+        Phenomenal::Context.create(false,nil,context,*contexts,&block)
       end
       Phenomenal::DSL.phen_alias(:context,klass)
       
       # Define context with adaptations
       def phen_feature(context,*contexts,&block)
-        Phenomenal::Feature.create(context,*contexts,false,nil,&block)
+        Phenomenal::Feature.create(false,nil,context,*contexts,&block)
       end
       Phenomenal::DSL.phen_alias(:feature,klass)
       
