@@ -14,11 +14,16 @@ require_relative "./phenomenal/relationships/suggestion.rb"
 
 # Core
 require_relative "./phenomenal/adaptation.rb"
-require_relative "./phenomenal/conflict_policies.rb"
+
 require_relative "./phenomenal/context.rb"
 require_relative "./phenomenal/feature.rb"
 require_relative "./phenomenal/logger.rb"
-require_relative "./phenomenal/manager.rb"
+
+#Manager
+require_relative "./phenomenal/manager/adaptations_management.rb"
+require_relative "./phenomenal/manager/contexts_management.rb"
+require_relative "./phenomenal/manager/conflict_policies.rb"
+require_relative "./phenomenal/manager/manager.rb"
 
 # Viewer
 require_relative "./phenomenal/viewer/graphical.rb"
