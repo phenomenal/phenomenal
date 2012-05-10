@@ -114,7 +114,7 @@ module Phenomenal::AdaptationsManagement
   
   # Gets the relevants adaptations for a file in DESC order of line number
   def relevant_adaptations(call_file)
-    relevants = active_adaptations.select{ |i| i.src_file == call_file }
+    relevants = active_adaptations.find_all{ |i| i.src_file == call_file }
     # Sort by src_line DESC order
     relevants.sort!{ |a,b| b.src_line <=> a.src_line }
   end
@@ -128,7 +128,7 @@ module Phenomenal::AdaptationsManagement
   # conflict policy
   def sorted_adaptations_for(klass,method_name,instance)
     relevants =
-      active_adaptations.find_all { |i| i.concern?(klass, method_name,instance) }
+      active_adaptations.find_all{ |i| i.concern?(klass, method_name,instance) }
     relevants.sort!{|a,b| conflict_policy(a.context,b.context)}
   end
 end
