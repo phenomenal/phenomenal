@@ -38,14 +38,9 @@ class  Phenomenal::Adaptation
   def bind(instance,*args,&block)
     target = instance_adaptation? ? instance : klass
     if implementation.is_a?(Proc)
-      args.push(block)
-      target.instance_exec(*args,&implementation)
+      bind_proc(target,*args,&block)
     else
-      if instance_adaptation?
-        implementation.bind(target).call(*args,&block)
-      else
-        implementation.call(*args,&block)
-      end
+      bind_method(target,*args,&block)
     end
   end
   
@@ -62,6 +57,19 @@ class  Phenomenal::Adaptation
   end
   
   private
+  def bind_proc(target,*args,&block)
+    args.push(block)
+    target.instance_exec(*args,&implementation)
+  end
+  
+  def bind_method(target,*args,&block)
+    if instance_adaptation?
+      implementation.bind(target).call(*args,&block)
+    else
+      implementation.call(*args,&block)
+    end
+  end
+  
   def check_validity
     method = get_original_method
     if method.arity != implementation.arity
