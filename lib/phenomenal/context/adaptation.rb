@@ -41,7 +41,11 @@ class  Phenomenal::Adaptation
       args.push(block)
       target.instance_exec(*args,&implementation)
     else
-      implementation.bind(target).call(*args,&block)
+      if instance_adaptation?
+        implementation.bind(target).call(*args,&block)
+      else
+        implementation.call(*args,&block)
+      end
     end
   end
   
