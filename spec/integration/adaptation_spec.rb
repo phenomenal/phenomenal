@@ -32,6 +32,10 @@ describe "Simple adaptations" do
       adapt_class :klass_var_access do
         @@klass_var+1
       end
+      
+      adapt :instance_klass_var_access do
+        @@klass_var+1
+      end
     end
 
     context(:test_3) do
@@ -107,13 +111,19 @@ describe "Simple adaptations" do
   end
   
   it "sould be possible to access class variables" do
+    t = TestClass.new("VAR")
+    t.instance_klass_var_access.should==1
+    
     TestClass.klass_var_access.should==1
     activate_context(:test_2)
     
+    
     pending "Adaptations doesn't have access to class variables, seems to be a Ruby bug"
+    t.instance_klass_var_access.should==2
     TestClass.klass_var_access.should==2
     
     deactivate_context(:test_2)
+    t.instance_klass_var_access.should==1
     TestClass.klass_var_access.should==1
   end
   

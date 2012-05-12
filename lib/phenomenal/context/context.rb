@@ -119,7 +119,7 @@ class Phenomenal::Context
   end  
   
   # Deactivate the context
-  def deactivate(caller_context=nil)
+  def deactivate
     check_validity
     was_active = active?
     if self.activation_count>0

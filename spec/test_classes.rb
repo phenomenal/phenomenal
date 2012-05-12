@@ -22,6 +22,10 @@ class TestClass < String
   def self.klass_var_access
     @@klass_var
   end
+  
+  def instance_klass_var_access
+    @@klass_var
+  end
 
   def self.klass_inst_var_access
     @klass_inst_var
