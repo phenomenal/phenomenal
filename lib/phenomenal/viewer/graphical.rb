@@ -82,7 +82,7 @@ class Phenomenal::Viewer::Graphical
   def graph_container(relationship)
     s_parent_feature=relationship.source.parent_feature
     t_parent_feature=relationship.target.parent_feature
-    if s_parent_feature==t_parent_feature && s_parent_feature!=manager.default_context
+    if s_parent_feature==t_parent_feature && s_parent_feature!=manager.default_feature
       feature_nodes[relationship.source.parent_feature]
     else
       main_graph
@@ -91,7 +91,7 @@ class Phenomenal::Viewer::Graphical
   
   def set_edge(context,edge,relationship)
     # Define edge label
-    if context!=manager.default_context
+    if context!=manager.default_feature
       edge[:label]=context.to_s
      end
     # Define edge color
@@ -113,8 +113,8 @@ class Phenomenal::Viewer::Graphical
   end
   
   def add_node_for(context)
-    # The default context is the first to be added to the main graph
-    if feature_nodes[context.parent_feature].nil? && context==manager.default_context 
+    # The default feature is the first to be added to the main graph
+    if feature_nodes[context.parent_feature].nil? && context==manager.default_feature 
       current_graph=main_graph
     # Always add the parent_feature before the contexts inside
     elsif feature_nodes[context.parent_feature].nil?

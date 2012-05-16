@@ -10,10 +10,10 @@ class Phenomenal::Manager
   
   # PRIVATE METHODS
   private
-   # Set the default context
+   # Set the default feature
   def init_default
-    self.default_context= Phenomenal::Feature.new(nil,self)
-    self.default_context.activate
+    self.default_feature = Phenomenal::Feature.new(nil,self)
+    self.default_feature.activate
   end
 
   # Private constructor because this is a singleton object

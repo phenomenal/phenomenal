@@ -3,10 +3,10 @@ module Phenomenal::AdaptationsManagement
   
   # Register a new adaptation for a registered context
   def register_adaptation(adaptation)
-    default_adaptation = default_context.adaptations.find do|i| 
+    default_adaptation = default_feature.adaptations.find do|i| 
       i.concern?(adaptation.klass,adaptation.method_name,adaptation.instance_adaptation?)
     end
-    if adaptation.context!=default_context && !default_adaptation
+    if adaptation.context!=default_feature && !default_adaptation
       save_default_adaptation(adaptation.klass, adaptation.method_name,adaptation.instance_adaptation?)
     end
     activate_adaptation(adaptation) if adaptation.context.active?
@@ -22,8 +22,8 @@ module Phenomenal::AdaptationsManagement
     calling_adaptation = find_adaptation(calling_stack)
     # IMPROVE Problems will appears if proceed called in a file where
     # adaptations are defined but not in one of them=> how to check?
-    # IMPROVE Problems will also appears if two adaptations are defined on the same
-    # line using the ';' some check needed at add_adaptation ?
+    # IMPROVE Problems will also appears if two adaptations are defined on the 
+    # same line using the ';' some check needed at add_adaptation ?
     adaptations_stack = sorted_adaptations_for(calling_adaptation.klass,  
       calling_adaptation.method_name,calling_adaptation.instance_adaptation?)
     calling_adaptation_index = adaptations_stack.find_index(calling_adaptation)
@@ -54,7 +54,7 @@ module Phenomenal::AdaptationsManagement
   # conflict policy
   def redeploy_adaptation(klass, method_name,instance)
     to_deploy = resolve_conflict(klass,method_name,instance)
-    # Do nothing when to_deploy==nil to break at default context deactivation
+    # Do nothing when to_deploy==nil to break at default feature deactivation
     if !deployed_adaptations.include?(to_deploy) && to_deploy!=nil
       deploy_adaptation(to_deploy)
     end
@@ -79,7 +79,7 @@ module Phenomenal::AdaptationsManagement
     else
       method = klass.method(method_name)
     end
-    adaptation = default_context.add_adaptation(klass,method_name,instance,method)
+    adaptation = default_feature.add_adaptation(klass,method_name,instance,method)
   end
   
   # Return the adaptation that math the calling_stack, on the basis of the

@@ -4,9 +4,9 @@ describe Phenomenal::RelationshipsStore do
   before :each do
     @source = context :source
     @target = context :target
-    @relationship = Phenomenal::Relationship.new(:source,:target,phen_default_context)
-    @relationship2 = Phenomenal::Relationship.new(:source2,:target2,phen_default_context)
-    @relationship12 = Phenomenal::Relationship.new(:source,:target2,phen_default_context)
+    @relationship = Phenomenal::Relationship.new(:source,:target,phen_default_feature)
+    @relationship2 = Phenomenal::Relationship.new(:source2,:target2,phen_default_feature)
+    @relationship12 = Phenomenal::Relationship.new(:source,:target2,phen_default_feature)
     @store = Phenomenal::RelationshipsStore.new
   end
   
