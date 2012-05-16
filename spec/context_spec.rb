@@ -40,8 +40,8 @@ describe Phenomenal::Context do
       force_forget_context(context)
     end
     
-    it "should be anonymous if it is the default context" do
-      Phenomenal::Manager.instance.default_context.name.should be_nil
+    it "should be anonymous if it is the default feature" do
+      Phenomenal::Manager.instance.default_feature.name.should be_nil
     end
   end
   
@@ -65,11 +65,11 @@ describe Phenomenal::Context do
   end
   
   describe "#add_adaptation" do
-    it "should save the default behavior in the default context" do
+    it "should save the default behavior in the default feature" do
       @context.add_adaptation(TestString, :size,true) do
         42
       end
-      a = phen_default_context.adaptations.find{|a| a.concern?(TestString,:size,true)}
+      a = phen_default_feature.adaptations.find{|a| a.concern?(TestString,:size,true)}
       a.bind(TestString.new("1234")).should==4
     end
     
@@ -261,8 +261,8 @@ describe Phenomenal::Context do
       @context.anonymous?.should be_false
     end
     
-    it "should be true for the default context" do
-      Phenomenal::Manager.instance.default_context.anonymous?.should be_true
+    it "should be true for the default feature" do
+      Phenomenal::Manager.instance.default_feature.anonymous?.should be_true
     end
     
     it "should be true when the context has no name" do
@@ -278,7 +278,7 @@ describe Phenomenal::Context do
     end
     it "should have a matching :name field" do
       @context.information[:name].should==:test
-      default = Phenomenal::Manager.instance.default_context
+      default = Phenomenal::Manager.instance.default_feature
       default.information[:name].should be_nil
     end
     it "should have a matching :adaptation field" do
@@ -314,7 +314,7 @@ describe Phenomenal::Context do
   describe "#parent_feature" do
     it "should be the default feature parent for simple contexts" do
       c = context :b
-      c.parent_feature.should be Phenomenal::Manager.instance.default_context
+      c.parent_feature.should be Phenomenal::Manager.instance.default_feature
       c.forget
     end
     

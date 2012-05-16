@@ -15,8 +15,8 @@ describe "Relationships" do
     @context_names.each do |name|
       force_forget_context(name)
     end
-    @manager.default_context.deactivate
-    @manager.default_context.forget
+    @manager.default_feature.deactivate
+    @manager.default_feature.forget
   end
   
   describe Phenomenal::Feature do
@@ -75,10 +75,10 @@ describe "Relationships" do
         phen_context_active?(:feature).should be_false
       end
       
-      it "should be possible to add requirements to the default context" do
+      it "should be possible to add requirements to the default feature" do
         requirements_for :a, :on=>[:b,:c,:d]
         requirements_for :a, :on=>:e
-        @manager.default_context.relationships.should have(4).items
+        @manager.default_feature.relationships.should have(4).items
       end
       
       it "should be possible to put requirements in the nested contexts" do
@@ -152,7 +152,7 @@ describe "Relationships" do
     describe "Suggestions" do
       it "should be working on the default feature" do
         suggestions_for :a,:on=>:b
-        @manager.default_context.relationships.should have(1).items
+        @manager.default_feature.relationships.should have(1).items
         context(:a).active?.should be_false
         context(:b).active?.should be_false
         expect {activate_context :a}.to_not raise_error
@@ -168,7 +168,7 @@ describe "Relationships" do
         context(:b).active?.should be_false
         expect {activate_context :a}.to_not raise_error
         suggestions_for :a,:on=>:b
-        @manager.default_context.relationships.should have(1).items
+        @manager.default_feature.relationships.should have(1).items
         context(:a).active?.should be_true
         context(:b).active?.should be_true
         expect {deactivate_context :a}.to_not raise_error

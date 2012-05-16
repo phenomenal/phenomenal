@@ -178,7 +178,7 @@ class Phenomenal::Context
       p=p.parent
     end
     if p.nil?
-      manager.default_context
+      manager.default_feature
     else
       p
     end
@@ -188,8 +188,8 @@ class Phenomenal::Context
   def to_s
     if name
       name.to_s
-    elsif self==manager.default_context
-      "Default context"
+    elsif self==manager.default_feature
+      "Default feature"
     elsif manager.combined_contexts[self]
        "#{manager.combined_contexts[self].flatten}"
     else

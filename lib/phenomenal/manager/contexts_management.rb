@@ -1,5 +1,5 @@
 module Phenomenal::ContextsManagement
-  attr_accessor :contexts, :default_context, :combined_contexts, :shared_contexts
+  attr_accessor :contexts, :default_feature, :combined_contexts,:shared_contexts
   
   # Register a new context 
   def register_context(context)
@@ -22,15 +22,15 @@ module Phenomenal::ContextsManagement
   
   # Unregister a context (forget)
   def unregister_context(context)
-    if context==default_context && contexts.size>1
+    if context==default_feature && contexts.size>1
       Phenomenal::Logger.instance.error(
-        "Default context can only be forgotten when alone"
+        "Default feature can only be forgotten when alone"
       )
     else
       contexts.delete(context)
       unregister_combined_contexts(context)
-      # Restore default context
-      init_default() if context==default_context
+      # Restore default feature
+      init_default() if context==default_feature
     end
   end
   
@@ -75,8 +75,9 @@ module Phenomenal::ContextsManagement
     end
   end
   
-  # Check wether context 'context' (or combined context) exist in the context manager
-  # Context can be either the context name or the context instance itself
+  # Check wether context 'context' (or combined context) exist in the context 
+  # manager. Context can be either the context name or the context instance 
+  # itself.
   # Return the context if found, or nil otherwise
   def context_defined?(context, *contexts)
     c=nil
