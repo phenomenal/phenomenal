@@ -68,9 +68,9 @@ module Phenomenal::DSL
         Phenomenal::Manager.instance.find_context(context).information
       end
       
-      # Default Context
-      def phen_default_context
-        Phenomenal::Manager.instance.default_context
+      # Default Feature
+      def phen_default_feature
+        Phenomenal::Manager.instance.default_feature
       end
       
       # Defined context registered in the manager

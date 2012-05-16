@@ -34,13 +34,13 @@ describe Phenomenal::Manager do
       @manager.contexts[context].should be_nil
     end
     
-    it "should allow to forget default context only when it is the only defined context" do
+    it "should allow to forget default feature only when it is the only defined context" do
       @manager.contexts.size.should==4
-      expect{@manager.unregister_context(@manager.default_context)}.to raise_error Phenomenal::Error
+      expect{@manager.unregister_context(@manager.default_feature)}.to raise_error Phenomenal::Error
       force_forget_context(@context)
       force_forget_context(@context2)
       @manager.contexts.size.should==1
-      expect{@manager.unregister_context(@manager.default_context)}.to_not raise_error
+      expect{@manager.unregister_context(@manager.default_feature)}.to_not raise_error
       @context = Phenomenal::Context.new(:test)
       @context2 = Phenomenal::Context.new(:test2)
     end

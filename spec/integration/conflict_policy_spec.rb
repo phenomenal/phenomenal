@@ -34,14 +34,14 @@ describe "Conflict policies" do
   it "should set the age of the context such that the most recent one has the smaller age" do
     phen_change_conflict_policy { |a,b| age_conflict_policy(a,b) }
     
-    phen_context_active?(phen_default_context).should be_true
+    phen_context_active?(phen_default_feature).should be_true
     phen_context_active?(:screening).should be_false
     phen_context_active?(:quiet).should be_false
 
     phen_activate_context(:screening)
     
     (phen_context_information(:screening)[:age] <
-            phen_context_information(phen_default_context)[:age]).should be_true,
+            phen_context_information(phen_default_feature)[:age]).should be_true,
             "screening context has been activated more recently than default"
 
     phen_activate_context(:quiet)
@@ -49,7 +49,7 @@ describe "Conflict policies" do
             phen_context_information(:screening)[:age]).should be_true
             "quiet context has been activated more recently than screening"
     (phen_context_information(:screening)[:age] <
-            phen_context_information(phen_default_context)[:age]).should be_true,
+            phen_context_information(phen_default_feature)[:age]).should be_true,
             "quiet context has still been activated more recently than default"
     phen_deactivate_context(:quiet)
     phen_deactivate_context(:screening)

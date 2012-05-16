@@ -106,9 +106,9 @@ describe Phenomenal::DSL do
     end
   end
   
-  describe "#phen_default_context" do
+  describe "#phen_default_feature" do
     it "should exist in Kernel" do 
-      Kernel.should respond_to :phen_default_context
+      Kernel.should respond_to :phen_default_feature
     end
   end
   
