@@ -40,7 +40,6 @@ describe "Simple adaptations" do
         @klass_inst_var+1
       end
     end
-    
   end
   
   after :each do
@@ -108,12 +107,14 @@ describe "Simple adaptations" do
   
   it "sould be possible to access class variables" do
     TestClass.klass_var_access.should==1
-    activate_context(:test_2)
-    
+  
     pending "Adaptations doesn't have access to class variables, seems to be a Ruby bug"
+    activate_context(:test_2)
+    t.instance_klass_var_access.should==2
     TestClass.klass_var_access.should==2
     
     deactivate_context(:test_2)
+    t.instance_klass_var_access.should==1
     TestClass.klass_var_access.should==1
   end
   
