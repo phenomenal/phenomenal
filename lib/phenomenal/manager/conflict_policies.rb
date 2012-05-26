@@ -7,7 +7,7 @@ module Phenomenal::ConflictPolicies
       elsif context2==default_feature()
         -1
       else #Fail if two non default adaptations
-        Phenomenal::Logger.instance.error(
+        raise(Phenomenal::Error,
           "Illegal duplicate adapation between contexts #{context1}"+ 
           "and #{context2} "
         )

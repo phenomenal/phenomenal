@@ -26,7 +26,7 @@ class Phenomenal::Context
   # TODO handle relationships references
   def forget
     if active?
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Active context cannot be forgotten"
       )
     else
@@ -39,12 +39,12 @@ class Phenomenal::Context
   # Return the adaptation just created
   def add_adaptation(klass, method_name,instance,umeth=nil, &implementation)
     if klass.nil? # Not defined class
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "The class to be adapted wasn't specified. Don't forget to use 'adaptations_for(Klass)' before adapting a method"
       )
     end
     if adaptations.find{ |i| i.concern?(klass,method_name,instance) }
-      Phenomenal::Logger.instance.error(
+     raise(Phenomenal::Error,
         "Illegal duplicated adaptation in context: #{self} for " + 
         "#{klass.name}:#{method_name}."
       )
@@ -98,7 +98,7 @@ class Phenomenal::Context
     adaptation_index =
       adaptations.find_index{ |i| i.concern?(klass, method_name,instance) }
     if !adaptation_index
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Illegal deleting of an inexistent adaptation in context: " +
         "#{self} for #{klass.name}.#{method_name})."
       )
@@ -200,7 +200,7 @@ class Phenomenal::Context
   private
   def check_validity
     if forgotten
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Action not allowed anymore when context has been forgotten."
       )
     end

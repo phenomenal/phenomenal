@@ -1,13 +1,13 @@
 require "spec_helper"
 
-describe Phenomenal::RelationshipsStore do
+describe Phenomenal::RelationshipStore do
   before :each do
     @source = context :source
     @target = context :target
     @relationship = Phenomenal::Relationship.new(:source,:target,phen_default_feature)
     @relationship2 = Phenomenal::Relationship.new(:source2,:target2,phen_default_feature)
     @relationship12 = Phenomenal::Relationship.new(:source,:target2,phen_default_feature)
-    @store = Phenomenal::RelationshipsStore.new
+    @store = Phenomenal::RelationshipStore.new
   end
   
   after :each do

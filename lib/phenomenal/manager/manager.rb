@@ -3,8 +3,8 @@ require 'singleton'
 class Phenomenal::Manager
   include Singleton
   include Phenomenal::ConflictPolicies
-  include Phenomenal::AdaptationsManagement
-  include Phenomenal::ContextsManagement
+  include Phenomenal::AdaptationManagement
+  include Phenomenal::ContextManagement
   
   attr_accessor :rmanager
   
@@ -23,7 +23,7 @@ class Phenomenal::Manager
     @active_adaptations = Array.new
     @combined_contexts = Hash.new
     @shared_contexts = Hash.new
-    @rmanager = Phenomenal::RelationshipsManager.instance
+    @rmanager = Phenomenal::RelationshipManager.instance
     init_default()
   end
 end

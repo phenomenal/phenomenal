@@ -23,7 +23,7 @@ class Phenomenal::Requirement < Phenomenal::Relationship
   private
   def check_requirement
     if source.active? && !target.active?
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Requirement of #{target} for #{source} is not satisfied"
       )
     end
