@@ -73,14 +73,14 @@ class  Phenomenal::Adaptation
   def check_validity
     method = get_original_method
     if method.arity != implementation.arity
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Illegal adaptation for context #{context},the adaptation "+ 
         "have to keep the original method arity for method: " +
         "#{klass.name}.#{method_name}: (#{method.arity} instead of " +
         "#{implementation.arity})." 
       )
     elsif klass.instance_methods.include?(method_name) ^ instance_adaptation?
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Illegal adaptation for context: #{context}" +
         " for #{klass.name}.#{method_name}, type mismatch"
       )
@@ -95,7 +95,7 @@ class  Phenomenal::Adaptation
         method = klass.method(method_name)
       end
     rescue NameError
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Illegal adaptation for context #{context},a method with "+
         "name: #{method_name} should exist in class #{klass.name} to "+ 
         "be adapted."

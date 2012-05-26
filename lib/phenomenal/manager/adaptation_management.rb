@@ -1,4 +1,4 @@
-module Phenomenal::AdaptationsManagement
+module Phenomenal::AdaptationManagement
   attr_accessor :active_adaptations, :deployed_adaptations
   
   # Register a new adaptation for a registered context
@@ -96,7 +96,7 @@ module Phenomenal::AdaptationsManagement
     end
 
     if  match==nil
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Inexistant adaptation for proceed call at #{call_file}:#{call_line}"
       )
     end

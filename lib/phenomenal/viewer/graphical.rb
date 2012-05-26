@@ -13,14 +13,14 @@ class Phenomenal::Viewer::Graphical
   
   def initialize(destination_file)
     if !@@graphviz
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "The 'ruby-graphviz' gem isn't available. Please install it to generate graphic visualisations\n"+
         " Otherwise use the text version: phen_textual_view"
       )
     end
     
     @manager=Phenomenal::Manager.instance
-    @rmanager=Phenomenal::RelationshipsManager.instance
+    @rmanager=Phenomenal::RelationshipManager.instance
     @destination_file=destination_file
     @main_graph=nil
     @feature_nodes={}
@@ -106,7 +106,7 @@ class Phenomenal::Viewer::Graphical
     elsif relationship.is_a?(Phenomenal::Requirement)
       edge[:arrowhead]="inv"
     else
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "This relationship hasn't been defined yet in the graphical viewer"
       )
     end

@@ -110,7 +110,7 @@ module Phenomenal::DSL
   
   def self.phen_alias(method,klass)
     if Kernel.respond_to? method
-      Phenomenal::Logger.instance.warn(
+      raise(Phenomenal::Error,
         "The Phenomenal DSL keyword #{method} wasn't defined, use"+
         " phen_#{method} instead"
       )
