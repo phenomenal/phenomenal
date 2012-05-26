@@ -18,7 +18,7 @@ module Phenomenal::ContextCreation
     else
       context = manager.find_context(context)
       if !context.instance_of?(self)
-        Phenomenal::Logger.instance.error(
+        raise(Phenomenal::Error,
           "Only #{self.name} can be used with this keyword."
         )
       end
@@ -32,7 +32,7 @@ module Phenomenal::ContextCreation
     else
       context = manager.find_context(*contexts)
       if !context.instance_of?(self)
-        Phenomenal::Logger.instance.error(
+        raise(Phenomenal::Error,
           "Only #{self.name} can be used with this keyword."
         )
       end
@@ -51,7 +51,7 @@ module Phenomenal::ContextCreation
       if manager.context_defined?(c)
         c = manager.find_context(c) 
         if !nested && c!=first && !c.instance_of?(self)
-          Phenomenal::Logger.instance.error(
+          raise(Phenomenal::Error,
             "Only #{self.name} can be used with this keyword."
           )
         end

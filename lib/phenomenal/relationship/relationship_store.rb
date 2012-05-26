@@ -1,6 +1,6 @@
 # Define the class where all the actives relationships are
 # efficiently stored
-class Phenomenal::RelationshipsStore
+class Phenomenal::RelationshipStore
   attr_accessor :sources, :targets
   
   def initialize

@@ -1,6 +1,6 @@
 require 'singleton'
 # This class manage the different relatiohsips in the system between contexts
-class Phenomenal::RelationshipsManager
+class Phenomenal::RelationshipManager
   include Singleton
   
   attr_accessor :relationships
@@ -41,10 +41,8 @@ class Phenomenal::RelationshipsManager
         relationships.add(relationship)
       end
     rescue Phenomenal::Error => m
+      # Unable to activate the feature #{feature} \n #{m}
       feature.deactivate
-      Phenomenal::Logger.instance.debug(
-        "Unable to activate the feature #{feature} \n #{m}"
-      )
     end
   end
   
@@ -58,6 +56,6 @@ class Phenomenal::RelationshipsManager
   end
   
   def initialize
-    @relationships = Phenomenal::RelationshipsStore.new
+    @relationships = Phenomenal::RelationshipStore.new
   end
 end

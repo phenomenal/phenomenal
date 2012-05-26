@@ -4,7 +4,7 @@ class Phenomenal::Viewer::Textual
   
   def initialize()
     @manager=Phenomenal::Manager.instance
-    @rmanager=Phenomenal::RelationshipsManager.instance
+    @rmanager=Phenomenal::RelationshipManager.instance
   end
   
   def generate()

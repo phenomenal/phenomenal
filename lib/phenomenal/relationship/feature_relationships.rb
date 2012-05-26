@@ -27,7 +27,7 @@ module Phenomenal::FeatureRelationships
   def add_relationship(source,targets,type)
     targets[:on]=Array.new.push(targets[:on]) if !targets[:on].is_a?(Array)
     if targets[:on].nil?
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Invalid relationship, missing target context"
       )
     end

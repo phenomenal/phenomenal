@@ -1,4 +1,4 @@
 require "spec_helper"
 
-describe Phenomenal::RelationshipsManager do
+describe Phenomenal::RelationshipManager do
 end

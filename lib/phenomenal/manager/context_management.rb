@@ -1,15 +1,15 @@
-module Phenomenal::ContextsManagement
+module Phenomenal::ContextManagement
   attr_accessor :contexts, :default_feature, :combined_contexts,:shared_contexts
   
   # Register a new context 
   def register_context(context)
     if context_defined?(context)
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "The context #{context} is already registered"
       )
     end
     if context.name && context_defined?(context.name)
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "There is already a context with name: #{context.name}." + 
         " If you want to have named context it has to be a globally unique name"
       )
@@ -23,7 +23,7 @@ module Phenomenal::ContextsManagement
   # Unregister a context (forget)
   def unregister_context(context)
     if context==default_feature && contexts.size>1
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Default feature can only be forgotten when alone"
       )
     else
@@ -135,7 +135,7 @@ module Phenomenal::ContextsManagement
     if find
       find
     else
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Unknown context #{context}"
       )
     end
@@ -158,13 +158,13 @@ module Phenomenal::ContextsManagement
       end
     end
     if list.length==0
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Unknown combined context #{contexts}"
       )
     elsif list.length==1
       return list.first
     else
-      Phenomenal::Logger.instance.error(
+      raise(Phenomenal::Error,
         "Multiple definition of combined context #{contexts}"
       )
     end

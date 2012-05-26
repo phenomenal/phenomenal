@@ -4,3 +4,6 @@
 *.png
 coverage
 .rbx
+*.dat
+*.png
+*.eps
