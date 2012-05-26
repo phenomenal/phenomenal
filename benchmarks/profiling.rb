@@ -61,3 +61,4 @@ LOOP_COUNT = 1000
 require 'profile'
 
 LOOP_COUNT.times {f.meth_proceed}
+
