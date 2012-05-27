@@ -4,6 +4,17 @@ Phenomenal Gem is a context-oriented framework implemented in Ruby that allows c
 
 See www.phenomenal-gem.com for more details
 
-Architecture
-===
-![architecture](http://www.phenomenal-gem.com/assets/project/phenomenal_use_diagram.png)
+## Contributions
+If you want to contribute, please:
+
+  * Fork the project.
+  * Make your feature addition or bug fix.
+  * Add tests for it. This is *very* important.
+  * Send a pull request on Github with a clear description.
+
+Tests are simply run with
+        rake        
+  
+## Copyright
+
+Copyright (c) 2011-2012 Loïc Vigneron - Thibault Poncelet. See LICENSE for details.
