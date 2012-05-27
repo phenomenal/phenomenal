@@ -12,7 +12,8 @@ If you want to contribute, please:
   * Add tests for it. This is *very* important.
   * Send a pull request on Github with a clear description.
 
-Tests are simply run with
+Tests are executed with
+
         rake        
   
 ## Copyright
