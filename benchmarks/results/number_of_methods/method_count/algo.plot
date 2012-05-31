@@ -9,4 +9,4 @@ set xlabel "Number of adapted methods"
 #set logscale y
 set terminal  postscript eps color "Times-Roman" 16
 set output "method_count.eps"
-plot "method.dat" using 1:4 with lines title "Method"
+plot "method.dat" using 1:4 with lines linewidth 3  title "Method"

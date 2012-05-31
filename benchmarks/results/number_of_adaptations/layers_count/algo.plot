@@ -9,4 +9,4 @@ set xlabel "Number of activated contexts"
 #set logscale y
 set terminal  postscript eps color "Times-Roman" 16
 set output "layers_count.eps"
-plot "same_method.dat" using 1:4 with lines title "Same method", "different_method.dat" using 1:4 with lines title "Different method"
+plot "same_method.dat" using 1:4 with lines linewidth 3  title "Same method", "different_method.dat" using 1:4 with lines linewidth 3  title "Different method"

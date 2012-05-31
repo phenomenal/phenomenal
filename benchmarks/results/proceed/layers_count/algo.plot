@@ -9,4 +9,4 @@ set xlabel "Number of active adaptations"
 #set logscale y
 set terminal  postscript eps color "Times-Roman" 16
 set output "layers_count.eps"
-plot "proceed.dat" using 1:4 with lines title "proceed"
+plot "proceed.dat" using 1:4 with lines linewidth 3  title "proceed"
