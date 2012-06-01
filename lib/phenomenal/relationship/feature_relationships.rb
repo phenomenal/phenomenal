@@ -38,6 +38,7 @@ module Phenomenal::FeatureRelationships
         set_relationship(r)
       end
     end
+    nil
   end
   
   # Refresh the references (replace symbol by actual object reference)

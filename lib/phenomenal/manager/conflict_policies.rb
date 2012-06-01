@@ -29,5 +29,6 @@ module Phenomenal::ConflictPolicies
     # Other one should return -1 or +1 following the resolution order
     def change_conflict_policy (&block)
       self.class.class_eval{define_method(:conflict_policy,&block)}
+      nil
     end
 end

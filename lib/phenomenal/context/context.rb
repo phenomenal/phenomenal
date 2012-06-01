@@ -32,6 +32,7 @@ class Phenomenal::Context
     else
       manager.unregister_context(self)
       self.forgotten=true
+      nil
     end
   end
   
@@ -76,6 +77,7 @@ class Phenomenal::Context
   def add_adaptations(&block)
     instance_eval(&block) if block
     @current_adapted_class=nil #Reset adapted class after context closed
+    nil
   end
   
   # Set the current adapted class for the next adapt calls
@@ -106,6 +108,7 @@ class Phenomenal::Context
     
     adaptation = adaptations.delete_at(adaptation_index)
     manager.unregister_adaptation(adaptation)
+    adaptation
   end
   
   # Activate the context

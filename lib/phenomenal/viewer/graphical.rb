@@ -41,6 +41,7 @@ class Phenomenal::Viewer::Graphical
       add_edges_for(context)
     end
     self.main_graph.output(:png => destination_file)
+    nil
   end
   
   private
