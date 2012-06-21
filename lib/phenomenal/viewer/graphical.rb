@@ -50,6 +50,7 @@ class Phenomenal::Viewer::Graphical
     self.main_graph = GraphViz::new("")
     # Default options
     self.main_graph[:compound] = "true"
+    self.main_graph[:rankdir]="LR"
     self.main_graph.edge[:lhead] = ""
     self.main_graph.edge[:ltail] = ""
     self.main_graph.edge[:fontsize] = 10.0
