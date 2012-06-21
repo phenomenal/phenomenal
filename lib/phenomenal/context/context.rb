@@ -7,7 +7,7 @@ class Phenomenal::Context
   
   attr_accessor :activation_age, :activation_frequency, :adaptations, 
     :activation_count, :parent, :forgotten
-  attr_reader :manager,:name  
+  attr_reader :manager,:name, :priority  
   # Instance methods
   def initialize(name=nil, manager=nil)
     @manager = manager || Phenomenal::Manager.instance
@@ -18,6 +18,7 @@ class Phenomenal::Context
     @manager.register_context(self)
     @parent=nil
     @forgotten=false
+    @priority=nil
   end
   
   # Unregister the context from the context manager,
@@ -200,6 +201,13 @@ class Phenomenal::Context
     end
   end
   
+  def priority=(priority)
+    @priority=priority
+    return unless manager.shared_contexts[self]
+    manager.shared_contexts[self].each do |shared_context|
+      shared_context.priority=[priority,shared_context.priority].compact.min
+    end
+  end
   private
   def check_validity
     if forgotten

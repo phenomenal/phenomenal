@@ -58,6 +58,9 @@ module Phenomenal::ContextCreation
       else
         c = self.new(c) 
       end
+      # Inherit from parent priority
+      context.priority=[c.priority,context.priority].compact.min
+      
       instances.push(c)
       manager.shared_contexts[c]= Array.new if !manager.shared_contexts[c]
       manager.shared_contexts[c].push(context)
