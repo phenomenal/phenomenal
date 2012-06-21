@@ -1,4 +1,3 @@
-require 'singleton'
 # This class manage the different contexts in the system and their interactions
 class Phenomenal::Manager
   include Singleton

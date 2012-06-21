@@ -1,3 +1,4 @@
+require 'singleton'
 # Load the gem files in the system
 module Phenomenal 
   module Viewer end
