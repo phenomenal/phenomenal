@@ -6,8 +6,8 @@ class Phenomenal::Context
   @@total_activations = 0
   
   attr_accessor :activation_age, :activation_frequency, :adaptations, 
-    :activation_count, :parent, :forgotten
-  attr_reader :manager,:name, :priority  
+    :activation_count, :parent, :forgotten, :priority  
+  attr_reader :manager,:name
   # Instance methods
   def initialize(name=nil, manager=nil)
     @manager = manager || Phenomenal::Manager.instance
@@ -201,8 +201,8 @@ class Phenomenal::Context
     end
   end
   
-  def priority=(priority)
-    @priority=priority
+  def set_priority(p)
+    self.priority=p
     return unless manager.shared_contexts[self]
     manager.shared_contexts[self].each do |shared_context|
       shared_context.priority=[priority,shared_context.priority].compact.min

@@ -171,8 +171,8 @@ describe "Conflict policies" do
       phen_change_conflict_policy { |a,b| priority_conflict_policy(a,b) }
       phone = Phone.new
       call = Call.new("Alice")
-      context(:quiet).priority=1
-      context(:screening).priority=2
+      context(:quiet).set_priority 1
+      context(:screening).set_priority 2
 
       phone.receive(call)
 
@@ -194,8 +194,8 @@ describe "Conflict policies" do
       phen_change_conflict_policy { |a,b| priority_conflict_policy(a,b) }
       phone = Phone.new
       call = Call.new("Alice")
-      context(:quiet).priority=2
-      context(:screening).priority=2
+      context(:quiet).set_priority 2
+      context(:screening).set_priority 2
       phone.receive(call)
 
       phone.advertise(call).should=="ringtone"
@@ -217,7 +217,7 @@ describe "Conflict policies" do
       phen_change_conflict_policy { |a,b| priority_conflict_policy(a,b) }
       phone = Phone.new
       call = Call.new("Alice")
-      context(:quiet).priority=1
+      context(:quiet).set_priority 1
 
       phone.receive(call)
 
@@ -246,8 +246,8 @@ describe "Conflict policies" do
           "combined"
         end
       end
-      context(:quiet).priority=1
-      context(:screening).priority=2
+      context(:quiet).set_priority 1
+      context(:screening).set_priority 2
       
       
       phone.receive(call)
