@@ -19,6 +19,19 @@ module Phenomenal::ConflictPolicies
        context1.age <=> context2.age
     end
     
+    # Priority based conflict resolution
+    def priority_conflict_policy(context1, context2)
+      if context1.priority && !context2.priority
+        -1
+      elsif context2.priority && !context1.priority
+        1
+      elsif context1.priority!=context2.priority
+        context1.priority <=> context2.priority
+      else
+        context1.age <=> context2.age
+      end
+    end
+    
     # Resolution policy
     def conflict_policy(context1, context2)
       age_conflict_policy(context1, context2)
